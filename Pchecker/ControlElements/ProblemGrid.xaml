@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Pchecker.ControlElements.ProblemGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pchecker.ControlElements"
+             mc:Ignorable="d" 
+             x:Name="MyProblemGrid"
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance Type=local:ProblemGrid}">
+
+    <Grid>
+        <DataGrid  x:Name="myDataGrid"  Margin="0,-1,10,12" AutoGenerateColumns="False" RenderTransformOrigin="0.5,0.5" >
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding PID}" Header="PID"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding AuftritsDatum, StringFormat=dd.MM.yyyy}" Header="Auftritsdatum"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding KW}" Header="KW"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Thema}" Header="Thema"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Kategorie}" Header="Kategorie"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Bewertung}" Header="Bewertung"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Maßnahme}" Header="Maßname"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Termin, StringFormat=dd.MM.yyyy}" Header="Termin"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding ReTermin, StringFormat=dd.MM.yyyy}" Header="Realer-Termin"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Prozess}" Header="Prozess"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Bezug}" Header="Bezug"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Abteilung}" Header="Abteilung"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Initiator}" Header="Initiator"></DataGridTextColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
+</UserControl>
