@@ -1,18 +1,17 @@
 ﻿using LiveChartsCore;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ProjektManager.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 
 namespace Pchecker.Models
 {
-    public class Projekt
+    public class Projekt : Entity
     {
         
+
+
+
         private string _auftraggeber;
         public string Auftraggeber
         {
@@ -55,14 +54,16 @@ namespace Pchecker.Models
             set { _deadLine = value; }
         }
 
-        private List<Abteilungen> _abteilungenList;
-        public List<Abteilungen> AbteilungenList
+        private List<Abteilung> _abteilungen;
+        public List<Abteilung> Abteilungen
         {
-            get { return _abteilungenList; }
-            set { _abteilungenList = value; }
+            get { return _abteilungen; }
+            set { _abteilungen = value; }
         }
-
+        [NotMapped]
         private List<string> _kategorien = new List<string>() { "I", "FF", "LF", "SF", "BBÜ" };
+
+        [NotMapped]
         public List<string> Kategorien
         {
             get { return _kategorien; }
@@ -90,7 +91,7 @@ namespace Pchecker.Models
             this._projektLeiter = projektLeiter;
             this._auftraggeber = auftraggeber;
             this._deadLine = deadLine;
-            this._abteilungenList = new List<Abteilungen> { };
+            this._abteilungen = new List<Abteilung> { };
 
 
 
@@ -98,7 +99,7 @@ namespace Pchecker.Models
 
         public Projekt()
         {
-            this._abteilungenList = new List<Abteilungen>();
+            this._abteilungen = new List<Abteilung>();
         }
 
         public void addAbteilungen()
@@ -106,8 +107,10 @@ namespace Pchecker.Models
             throw new NotImplementedException();
         }
 
+        [NotMapped]
         private IEnumerable<ISeries> problemStatus;
 
+        [NotMapped]
         public IEnumerable<ISeries> ProblemStatus
         {
             get { return problemStatus; }

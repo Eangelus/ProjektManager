@@ -11,6 +11,9 @@ using System.Windows.Shapes;
 using Pchecker.Logic;
 using Pchecker.Models;
 using Pchecker.ViewModel;
+using ProjektManager.DataBaseAPI;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Pchecker.View
 {
@@ -24,6 +27,9 @@ namespace Pchecker.View
 
             InitializeComponent();
             DataContext = new ViewModelMainWindow();
+            var MyContext = new DBContext();
+
+
         }
 
         private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -32,6 +38,7 @@ namespace Pchecker.View
             ProjektDetailsWindow detailWindow = new ProjektDetailsWindow();
             ((ViewModelProjektDetails)detailWindow.DataContext).Projekt = clickedProjekt;
             detailWindow.Show();
+            
         }
 
         private void PieChart_MouseDown(object sender, MouseButtonEventArgs e)

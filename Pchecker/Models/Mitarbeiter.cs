@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProjektManager.Models;
+
 
 namespace Pchecker.Models
 {
-    public class Mitarbeiter
-    {
+    public class Mitarbeiter : Entity
+    { 
         private string _name;
+
+        
         public string Name
         {
             get { return _name; }

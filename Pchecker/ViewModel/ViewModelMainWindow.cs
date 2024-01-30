@@ -5,7 +5,6 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Pchecker.Commands;
-using Pchecker.Logic;
 using Pchecker.Models;
 using SkiaSharp;
 using System;
@@ -15,6 +14,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ProjektManager.Logic;
+using ProjektManager.DataBaseAPI;
+using System.Drawing;
 
 namespace Pchecker.ViewModel
 {
@@ -27,10 +29,13 @@ namespace Pchecker.ViewModel
         public ICommand ShowChartDetailsCommand { get; private set; }
         public ViewModelMainWindow()
         {
+
             projekte = new ObservableCollection<Projekt>(ExcelConnection.ReadAllExcelFiles());
 
             foreach (var projekt in projekte)
             {
+
+
                 foreach (var series in projekt.ProblemStatus)
                 {
                     PieSeries<int> casted = (PieSeries<int>)series;
@@ -43,9 +48,13 @@ namespace Pchecker.ViewModel
                         FilterProblems = new ObservableCollection<Problem>(filtered);
                     };
                 }
+
             }
 
             projekte.Add(new Projekt(DateTime.Now, "ich", "JP", DateTime.Now.AddYears(2)));
+            
+
+            
             OpenWindowCommand = new OpenWinNewProjektCommmand();
 
         }

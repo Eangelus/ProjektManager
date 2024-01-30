@@ -91,7 +91,7 @@ namespace Pchecker.ViewModel
 
 
 
-        private List<Abteilungen> abteilungenList = new List<Abteilungen> { };
+        private List<Abteilung> abteilungenList = new List<Abteilung> { };
         private List<string> kategorien = new List<string>() { "I", "FF", "LF", "SF", "BBÜ" };
 
 

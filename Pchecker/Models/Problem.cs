@@ -1,18 +1,17 @@
-﻿using LiveChartsCore.SkiaSharpView.Painting;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using ProjektManager.Models;
+
+using System.ComponentModel.DataAnnotations;
+
 
 namespace Pchecker.Models
 {
-    public class Problem
+    public class Problem : Entity
 
     {
         private int _pID = 0;
+
+
         public int PID
         {
             get { return _pID; }
@@ -110,13 +109,6 @@ namespace Pchecker.Models
             set { _prozessStatus = value; }
         }
 
-        private SolidColorPaint myProblemColor;
-
-        public SolidColorPaint MyProblemColor
-        {
-            get { return myProblemColor; }
-            set { myProblemColor = value; }
-        }
 
 
 

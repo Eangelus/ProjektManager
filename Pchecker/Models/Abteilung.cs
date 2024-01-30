@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProjektManager.Models;
+
 
 namespace Pchecker.Models
 {
-    public class Abteilungen
+    public class Abteilung : Entity
     {
-
-        public Abteilungen(string abLeiter, int abID) { 
         
-            this._abLeiter = abLeiter;
-            this._abID = abID;
 
-        }
-        private int _abID = 0;
-        public int AbID
-        {
-            get { return _abID; }
-            set { _abID = value; }
-        }
+        
 
         private string _abBezeichung = "";
         public string AbBezeichung
@@ -36,7 +23,7 @@ namespace Pchecker.Models
             set { _abLeiter = value; }
         }
 
-        private List<Mitarbeiter> _mitarbeiterList;
+        private List<Mitarbeiter>? _mitarbeiterList;
         public List<Mitarbeiter> MitarbeiterList
         {
             get { return _mitarbeiterList; }

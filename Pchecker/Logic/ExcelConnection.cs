@@ -6,7 +6,7 @@ using SkiaSharp;
 using System.Globalization;
 using System.IO;
 
-namespace Pchecker.Logic
+namespace ProjektManager.Logic
 {
     public class ExcelConnection
     {
@@ -135,7 +135,7 @@ namespace Pchecker.Logic
 
                 try
                 {
-                    problem.ReTermin = sheet.Cell($"M{counter}").IsEmpty() || sheet.Cell($"M{counter}").Value.ToString().Trim() == String.Empty ? null : sheet.Cell($"M{counter}").Value.GetDateTime();
+                    problem.ReTermin = sheet.Cell($"M{counter}").IsEmpty() || sheet.Cell($"M{counter}").Value.ToString().Trim() == string.Empty ? null : sheet.Cell($"M{counter}").Value.GetDateTime();
                 }
                 catch { }
                 projekt.Probleme.Add(problem);
