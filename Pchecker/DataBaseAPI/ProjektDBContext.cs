@@ -15,7 +15,7 @@ using SkiaSharp;
 
 namespace ProjektManager.DataBaseAPI
 {
-    public class DBContext : DbContext
+    public class ProjektDBContext : DbContext
     {
 
         public DbSet<Projekt> Projekte { get; set; }
@@ -24,12 +24,9 @@ namespace ProjektManager.DataBaseAPI
         public DbSet<Problem> Probleme { get; set; }
 
 
-        public DBContext()
-        {
+ 
 
-        }
-
-        public DBContext(DbContextOptions<DBContext> options): base(options)
+        public ProjektDBContext(DbContextOptions options): base(options)
         {
 
         }
@@ -39,24 +36,30 @@ namespace ProjektManager.DataBaseAPI
         //private string pwd = "123456789";
         //MySqlConnection sql = new MySqlConnection($"server=localhost; database=projekte; uid=root; Password=123456789");
 
-        protected override void OnConfiguring(DbContextOptionsBuilder ob)
-        {
-            if (!ob.IsConfigured)
-            {
-                var conString = "server=localhost; database=projekte; uid=root; Password=123456789";
-                var serverVersion = new MySqlServerVersion(new Version(8, 3, 0));
-                ob.UseMySql(conString, serverVersion);
-                //sql.Open();
-            }
-            
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder ob)
+        //{
+        //    if (!ob.IsConfigured)
+        //    {
 
+        //        ob.UseMySql(conString, serverVersion);
+        //        //sql.Open();
+        //    }
+            
+        //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Problem>()
+                .HasOne(p => p.Projekt)
+                .WithMany(b => b.Probleme)
+                .HasForeignKey(p => p.ProjektNr); // Definiert den Fremdschlüssel
+        }
 
 
         public IEnumerable<Projekt> getAllProjekts()
         {
-            var db = new DBContext();
-            List<Projekt> projekte = db.Projekte.Include(p=>p.Probleme).ToList();
+            
+            List<Projekt> projekte = Projekte.Include(p=>p.Probleme).ToList();
 
             
 
@@ -128,34 +131,7 @@ namespace ProjektManager.DataBaseAPI
 
 
 
-            //var result = (from p in db.Projekte
-            //           join pro in db.Probleme
-            //           on p.ProjektNr equals pro.ProjketNr
-            //           select new { Projekte = p, Probleme = p }).ToList();
-            //IEnumerable<Projekt> projekte = ((IEnumerable<Projekt>)(db. select * From projekte inner join probleme on projekte.ProjektNr = probleme.ProjektNr;));
-            //IEnumerable< Problem> Probleme = ((IEnumerable<Problem>)(from p in db.Probleme select new {  p }));
-
-            //foreach (var projekt in projekte)
-            //{
-            //    projekt.Probleme.Add((IEnumerable<Problem>)(from p in db.Probleme where db.Projekte.ProjektNr = db.Probleme.ProjektNr  select new { p }))
-            //}
-
-
-            //using (var db = new DBContext() ){
-            //    List<Projekt> projekte = db.Projekte.ToList();
-
-            //    foreach (var projekt in projekte)
-            //    {
-            //        var prob = db.Probleme.Where(p => p.ProjketNr == projekt.ProjektNr).ToList();
-
-
-            //        //Problem pro = prob;
-            //        projekt.Probleme.Add(prob);
-            //    }
-
-            //    return projekte;
-            //}
-
+   
 
 
 
@@ -164,45 +140,6 @@ namespace ProjektManager.DataBaseAPI
 
 
 
-        //protected override void OnModelCreating(ModelBuilder mb)
-        //{
-
-
-
-        //    var projekt = Setup<Projekt>(mb);
-        //    projekt.Property(x => x.ProjektNr)
-        //        .IsRequired();
-        //    projekt.OwnsMany(x => x.Probleme);
-        //    projekt.HasMany(x => x.Abteilungen);
-
-        //    base.OnModelCreating(mb);
-
-        //    //var problem = Setup<Problem>(mb);
-        //    //problem.Property(Probleme => Probleme.).IsRequired();
-
-        //    //var abteilungen = Setup<Abteilung>(mb);
-        //    //abteilungen.Property(x => x.Abteilungen)
-        //    //    .IsRequired();
-
-
-
-        //    base.OnModelCreating(mb);
-        //}
-
-
-
-        //private static EntityTypeBuilder<Projekt> Setup<T>(ModelBuilder mb)
-        //where T: Entity
-        //{ 
-        //    var entity = mb.Entity<Projekt>();
-        //    entity.HasKey(x => x.Id);
-        //    entity.ToTable(typeof(T).Name + "s");
-
-
-
-        //    return entity;
-
-        //}
 
 
 

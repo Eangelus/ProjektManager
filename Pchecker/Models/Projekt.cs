@@ -9,9 +9,6 @@ namespace Pchecker.Models
 {
     public class Projekt 
     {
-        
-
-
 
         private string _auftraggeber;
         public string Auftraggeber

@@ -110,15 +110,9 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PID")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProjektNr")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ProjketNr")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProzessStatus")
                         .IsRequired()
@@ -187,9 +181,13 @@ namespace ProjektManager.Migrations
 
             modelBuilder.Entity("Pchecker.Models.Problem", b =>
                 {
-                    b.HasOne("Pchecker.Models.Projekt", null)
+                    b.HasOne("Pchecker.Models.Projekt", "Projekt")
                         .WithMany("Probleme")
-                        .HasForeignKey("ProjektNr");
+                        .HasForeignKey("ProjektNr")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Projekt");
                 });
 
             modelBuilder.Entity("Pchecker.Models.Abteilung", b =>

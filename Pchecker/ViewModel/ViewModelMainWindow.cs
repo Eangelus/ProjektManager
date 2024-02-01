@@ -19,6 +19,10 @@ using ProjektManager.DataBaseAPI;
 using System.Drawing;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using System.Windows.Controls;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using ProjektManager.Commands;
+using System.Diagnostics;
 
 namespace Pchecker.ViewModel
 {
@@ -29,10 +33,12 @@ namespace Pchecker.ViewModel
         public ICommand OpenWindowCommand { get; private set; }
 
         public ICommand ShowChartDetailsCommand { get; private set; }
+
+        public ICommand PartSaveCommand { get; private set; }
         public ViewModelMainWindow()
         {
 
-            DBContext db = new DBContext();
+            
 
             //projekte = new ObservableCollection<Projekt>(ExcelConnection.ReadAllExcelFiles());
 
@@ -41,7 +47,7 @@ namespace Pchecker.ViewModel
             //IEnumerable<Projekt> projekte = projekte;
 
 
-            projekte = new ObservableCollection<Projekt>(db.getAllProjekts());
+            projekte = new ObservableCollection<Projekt>(getAllProjekts());
 
             foreach (var projekt in projekte)
             {
@@ -67,6 +73,8 @@ namespace Pchecker.ViewModel
 
             
             OpenWindowCommand = new OpenWinNewProjektCommmand();
+
+            PartSaveCommand = new PartSaveCommand(SaveChanges);
 
         }
 
@@ -177,7 +185,7 @@ namespace Pchecker.ViewModel
                     IEnumerable<Problem> problems = new List<Problem>();
 
                     problems = problems.Concat(SelectedProjekt.Probleme);
-                    problems = problems.OrderBy(problem => problem.PID);
+                    problems = problems.OrderBy(problem => problem.Id);
                     return new ObservableCollection<Problem>(problems.TakeLast(5));
                 }
                 else
@@ -225,10 +233,20 @@ namespace Pchecker.ViewModel
         public void addProjekt(Projekt p)
         {
             projekte.Add(p);
-            DBContext db = new DBContext();
-            db.SaveChanges(); //    <<<<<<<<<<<<<<<<<<   geht das?
+            
+            SaveChanges(); //    <<<<<<<<<<<<<<<<<<   geht das?
 
             OnPropertyChanged(nameof(Projekte));
+        }
+
+        private void SaveChanges(DataGridRowEditEndingEventArgs entity)
+        {
+
+            Debug.WriteLine(entity);
+
+            //DBContext db = new DBContext();
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
 

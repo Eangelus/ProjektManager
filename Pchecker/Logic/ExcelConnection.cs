@@ -37,11 +37,12 @@ namespace ProjektManager.Logic
 
             Projekt projekt = new Projekt();
 
-            DBContext dB = new DBContext();
+            
 
             Console.WriteLine(path);
             var workbook = new XLWorkbook(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read));
             var sheet = workbook.Worksheet(1);
+
 
             projekt.ProjektNr = sheet.Cell("C7").Value.GetText();
             projekt.Auftraggeber = sheet.Cell("C8").Value.GetText();
@@ -61,6 +62,7 @@ namespace ProjektManager.Logic
             while (true)
             {
                 Problem problem = new Problem();
+
                 XLCellValue problemNummerZumPrüfen = sheet.Cell($"A{counter}").Value;
                 if (problemNummerZumPrüfen.IsBlank || problemNummerZumPrüfen.ToString() == "")
                 {
@@ -71,8 +73,12 @@ namespace ProjektManager.Logic
                     throw new Exception();
                 }
 
-                problem.PID = Convert.ToInt32(problemNummerZumPrüfen.ToString());
-                problem.Bezug = sheet.Cell($"B{counter}").Value.ToString();
+
+                problem.ProjektNr = sheet.Cell("C7").Value.GetText();
+                
+                problem.Bezug = sheet.Cell($"B{counter}").Value.GetText();
+
+
                 problem.AuftritsDatum = sheet.Cell($"C{counter}").IsEmpty() ? null : sheet.Cell($"C{counter}").Value.GetDateTime();
 
                 if (problem.AuftritsDatum != null)
@@ -161,7 +167,7 @@ namespace ProjektManager.Logic
             if(projekt != null) { 
             dB.Projekte.Add(projekt);
 
-            //dB.SaveChanges();
+            dB.SaveChanges();
             }
             return projekt;
         }

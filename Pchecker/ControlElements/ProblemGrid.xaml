@@ -12,7 +12,7 @@
         <DataGrid  x:Name="myDataGrid"  Margin="0,-1,10,12" AutoGenerateColumns="False" RenderTransformOrigin="0.5,0.5" >
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding PID}" Header="PID"></DataGridTextColumn>
+                
                 <DataGridTextColumn Binding="{Binding AuftritsDatum, StringFormat=dd.MM.yyyy}" Header="Auftritsdatum"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding KW}" Header="KW"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Thema}" Header="Thema"></DataGridTextColumn>
@@ -21,7 +21,7 @@
                 <DataGridTextColumn Binding="{Binding Maßnahme}" Header="Maßname"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Termin, StringFormat=dd.MM.yyyy}" Header="Termin"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding ReTermin, StringFormat=dd.MM.yyyy}" Header="Realer-Termin"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Prozess}" Header="Prozess"></DataGridTextColumn>
+
                 <DataGridTextColumn Binding="{Binding Bezug}" Header="Bezug"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Abteilung}" Header="Abteilung"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Initiator}" Header="Initiator"></DataGridTextColumn>

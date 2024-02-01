@@ -2,6 +2,7 @@
 using ProjektManager.Models;
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Pchecker.Models
@@ -9,14 +10,7 @@ namespace Pchecker.Models
     public class Problem : Entity
 
     {
-        private int _pID = 0;
 
-        
-        public int PID
-        {
-            get { return _pID; }
-            set { _pID = value; }
-        }
 
         private string _bezug = "";
         public string Bezug
@@ -111,13 +105,13 @@ namespace Pchecker.Models
 
         private string projektNr;
 
-        public string ProjketNr
+        public string ProjektNr
         {
             get { return projektNr; }
             set { projektNr = value; }
         }
 
-
+        public Projekt Projekt { get; set; }
 
         public Problem(DateTime auftritsDatum, string initiator,string thema,  string bewertung )
         {

@@ -11,6 +11,6 @@
         <vm:ViewModelProjektDetails></vm:ViewModelProjektDetails>
     </Window.DataContext>
     <Grid>
-        <DataGrid ItemsSource="{Binding Projekt.Probleme}"/>
+        <DataGrid ItemsSource="{Binding Projekt}"/>
     </Grid>
 </Window>

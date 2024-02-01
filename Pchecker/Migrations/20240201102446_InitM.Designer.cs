@@ -11,8 +11,8 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240130152139_Initz")]
-    partial class Initz
+    [Migration("20240201102446_InitM")]
+    partial class InitM
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,15 +113,9 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PID")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProjektNr")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ProjketNr")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProzessStatus")
                         .IsRequired()
@@ -190,9 +184,13 @@ namespace ProjektManager.Migrations
 
             modelBuilder.Entity("Pchecker.Models.Problem", b =>
                 {
-                    b.HasOne("Pchecker.Models.Projekt", null)
+                    b.HasOne("Pchecker.Models.Projekt", "Projekt")
                         .WithMany("Probleme")
-                        .HasForeignKey("ProjektNr");
+                        .HasForeignKey("ProjektNr")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Projekt");
                 });
 
             modelBuilder.Entity("Pchecker.Models.Abteilung", b =>
