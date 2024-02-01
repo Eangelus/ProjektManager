@@ -2,6 +2,7 @@
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Pchecker.Models;
+using ProjektManager.DataBaseAPI;
 using SkiaSharp;
 using System.Globalization;
 using System.IO;
@@ -36,6 +37,7 @@ namespace ProjektManager.Logic
 
             Projekt projekt = new Projekt();
 
+            DBContext dB = new DBContext();
 
             Console.WriteLine(path);
             var workbook = new XLWorkbook(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read));
@@ -44,6 +46,7 @@ namespace ProjektManager.Logic
             projekt.ProjektNr = sheet.Cell("C7").Value.GetText();
             projekt.Auftraggeber = sheet.Cell("C8").Value.GetText();
             projekt.Startpunkt = DateTime.Now;
+            projekt.ProjektLeiter = "None";   // ToDo : zu verändern !
 
             int counter = 11;
             //         //        ◔ - Problem erkannt
@@ -143,7 +146,7 @@ namespace ProjektManager.Logic
                 counter++;
             }
             IEnumerable<PieSeries<int>> chartData = new[]
-{
+                    {
                 new PieSeries<int> {Values= new[]{values[0]}, Name=ProzessStatus.Problem_Erkannt, Fill=new SolidColorPaint(SKColors.DarkRed) },
                 new PieSeries<int> {Values= new[]{values[1]}, Name=ProzessStatus.Umsetzung_Eingeleitet, Fill=new SolidColorPaint(SKColors.Red)},
                 new PieSeries<int> {Values= new[]{values[2]}, Name=ProzessStatus.Umsetzung_Laufend, Fill=new SolidColorPaint(SKColors.Yellow)},
@@ -151,12 +154,15 @@ namespace ProjektManager.Logic
                 new PieSeries<int> {Values= new[]{values[4]}, Name=ProzessStatus.Vorgang_Abgeschlossen, Fill=new SolidColorPaint(SKColors.Green)},
                 new PieSeries<int> {Values= new[]{values[5]}, Name=ProzessStatus.Info, Fill=new SolidColorPaint(SKColors.AntiqueWhite)},
                 new PieSeries<int> {Values= new[]{values[6]}, Name=ProzessStatus.Entscheidung, Fill=new SolidColorPaint(SKColors.Violet)},
-            };
+                    };
             chartData = chartData.Where(x => x.Values.ToList()[0] != 0);
             projekt.ProblemStatus = chartData;
 
+            if(projekt != null) { 
+            dB.Projekte.Add(projekt);
 
-
+            //dB.SaveChanges();
+            }
             return projekt;
         }
 

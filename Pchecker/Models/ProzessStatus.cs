@@ -13,13 +13,22 @@ namespace Pchecker.Models
         //◕ - Umsetzung in Arbeit
         // ● - Umsetzung beendet
 
-        public static string Problem_Erkannt = "Problem erkannt";
-        public static string Umsetzung_Eingeleitet = "Umsetzung eingeleitet";
-        public static string Umsetzung_Laufend = "Umsetzung Laufend";
-        public static string Vorgang_Abgeschlossen = "Vorgang Abgeschlossen";
-        public static string Umsetzung_Beendet = "Umsetzung Beendet";
-        public static string Entscheidung = "Entscheidung";
-        public static string Info = "Inforamtiv";
+        public const string Problem_Erkannt = "Problem erkannt";
+        public const string Umsetzung_Eingeleitet = "Umsetzung eingeleitet";
+        public const string Umsetzung_Laufend = "Umsetzung Laufend";
+        public const string Vorgang_Abgeschlossen = "Vorgang Abgeschlossen";
+        public const string Umsetzung_Beendet = "Umsetzung Beendet";
+        public const string Entscheidung = "Entscheidung";
+        public const string Info = "Inforamtiv";
+
+        //public static string Problem_Erkannt = "Problem erkannt";
+        //public static string Umsetzung_Eingeleitet = "Umsetzung eingeleitet";
+        //public static string Umsetzung_Laufend = "Umsetzung Laufend";
+        //public static string Vorgang_Abgeschlossen = "Vorgang Abgeschlossen";
+        //public static string Umsetzung_Beendet = "Umsetzung Beendet";
+        //public static string Entscheidung = "Entscheidung";
+        //public static string Info = "Inforamtiv";
+
 
     }
 }

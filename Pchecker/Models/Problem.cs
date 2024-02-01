@@ -11,7 +11,7 @@ namespace Pchecker.Models
     {
         private int _pID = 0;
 
-
+        
         public int PID
         {
             get { return _pID; }
@@ -109,6 +109,13 @@ namespace Pchecker.Models
             set { _prozessStatus = value; }
         }
 
+        private string projektNr;
+
+        public string ProjketNr
+        {
+            get { return projektNr; }
+            set { projektNr = value; }
+        }
 
 
 

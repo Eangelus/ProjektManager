@@ -1,4 +1,5 @@
 ﻿using ProjektManager.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Pchecker.Models
@@ -28,23 +29,8 @@ namespace Pchecker.Models
             set { _projektStunden = value; }
         }
 
-        private int _mitarbeiterID = 0;
-        public int MitarbeiterID
-        {
-            get { return _mitarbeiterID; }
-            set { _mitarbeiterID = value; }
-        }
 
 
-
-        public Mitarbeiter(string name, string nachName, int mitarbeiterID) { 
-        
-            this._name = name;
-            this._nachName = nachName;
-            this._mitarbeiterID = mitarbeiterID;
-            
-        
-        }
 
         public void addProjektStunde(int stunden)
         {

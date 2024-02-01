@@ -17,6 +17,8 @@ using System.Windows.Input;
 using ProjektManager.Logic;
 using ProjektManager.DataBaseAPI;
 using System.Drawing;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace Pchecker.ViewModel
 {
@@ -30,7 +32,16 @@ namespace Pchecker.ViewModel
         public ViewModelMainWindow()
         {
 
-            projekte = new ObservableCollection<Projekt>(ExcelConnection.ReadAllExcelFiles());
+            DBContext db = new DBContext();
+
+            //projekte = new ObservableCollection<Projekt>(ExcelConnection.ReadAllExcelFiles());
+
+
+            //var projekte = ;
+            //IEnumerable<Projekt> projekte = projekte;
+
+
+            projekte = new ObservableCollection<Projekt>(db.getAllProjekts());
 
             foreach (var projekt in projekte)
             {
@@ -51,7 +62,7 @@ namespace Pchecker.ViewModel
 
             }
 
-            projekte.Add(new Projekt(DateTime.Now, "ich", "JP", DateTime.Now.AddYears(2)));
+            //projekte.Add(new Projekt(DateTime.Now, "ich", "JP", DateTime.Now.AddYears(2)));
             
 
             
@@ -68,6 +79,8 @@ namespace Pchecker.ViewModel
         {
             get { return _isNewProjektButtonEnabled; }
             set { _isNewProjektButtonEnabled = value; OnPropertyChanged(nameof(IsNewProjektButtonEnabled)); }
+
+            // 
         }
 
 
@@ -212,6 +225,9 @@ namespace Pchecker.ViewModel
         public void addProjekt(Projekt p)
         {
             projekte.Add(p);
+            DBContext db = new DBContext();
+            db.SaveChanges(); //    <<<<<<<<<<<<<<<<<<   geht das?
+
             OnPropertyChanged(nameof(Projekte));
         }
 

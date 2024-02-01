@@ -1,12 +1,13 @@
 ﻿using LiveChartsCore;
 using ProjektManager.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 
 namespace Pchecker.Models
 {
-    public class Projekt : Entity
+    public class Projekt 
     {
         
 
@@ -20,6 +21,8 @@ namespace Pchecker.Models
         }
 
         private string _projektNr;
+
+        [Key]
         public string ProjektNr
         {
             get { return _projektNr; }

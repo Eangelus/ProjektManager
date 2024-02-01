@@ -12,7 +12,7 @@
         Title="ProjektChecker" Height="890" Width="1280"
         >
 
-    <Grid Margin="0,0,0,-6" >
+    <Grid Margin="0,0,0,3" >
         <Label HorizontalAlignment="Left" Margin="375,20,0,0" VerticalAlignment="Top" Content="{Binding SelectedProjekt.ProjektNr}" />
         <Button Content="+" HorizontalAlignment="Left" Margin="23,20,0,0" VerticalAlignment="Top" Height="26" Width="26"  Command="{Binding OpenWindowCommand}" CommandParameter="{Binding .}" RenderTransformOrigin="0.524,0.581" IsEnabled="{Binding IsNewProjektButtonEnabled}"/>
 
@@ -23,9 +23,9 @@
             </lvc:PieChart>
         </Grid>
 
-        <Grid HorizontalAlignment="Left" Width="445" RenderTransformOrigin="0.5,0.5" Margin="6,76,0,22">
+        <Grid RenderTransformOrigin="0.5,0.5" Margin="23,51,0,0" Height="810" VerticalAlignment="Top" HorizontalAlignment="Left" Width="384">
 
-            <ListBox MouseDoubleClick="ListBox_MouseDoubleClick" ItemsSource="{Binding Projekte}" Width="425" SelectedItem="{Binding SelectedProjekt}" Background="White" Margin="0,5,0,130" HorizontalAlignment="Center">
+            <ListBox MouseDoubleClick="ListBox_MouseDoubleClick" ItemsSource="{Binding Projekte}" Width="373" SelectedItem="{Binding SelectedProjekt}" Background="White" Margin="4,5,0,72" HorizontalAlignment="Left">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,4,0">
@@ -45,7 +45,9 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="Mitarbeiterliste" HorizontalAlignment="Right" Margin="0,676,351,0" Command="{Binding }" CommandParameter="{Binding .}" IsEnabled="{Binding IsNewProjektButtonEnabled}" Height="24" VerticalAlignment="Top" />
+
+            <Button Content="Mitarbeiterliste" Margin="10,769,0,0" Command="{Binding }" CommandParameter="{Binding .}" IsEnabled="{Binding IsNewProjektButtonEnabled}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" />
+
 
         </Grid>
 

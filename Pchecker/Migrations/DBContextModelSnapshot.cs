@@ -33,12 +33,12 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ProjektId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProjektNr")
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjektId");
+                    b.HasIndex("ProjektNr");
 
                     b.ToTable("Abteilungen");
                 });
@@ -50,9 +50,6 @@ namespace ProjektManager.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("AbteilungId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MitarbeiterID")
                         .HasColumnType("int");
 
                     b.Property<string>("NachName")
@@ -116,8 +113,12 @@ namespace ProjektManager.Migrations
                     b.Property<int>("PID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProjektId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProjektNr")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ProjketNr")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ProzessStatus")
                         .IsRequired()
@@ -135,16 +136,15 @@ namespace ProjektManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjektId");
+                    b.HasIndex("ProjektNr");
 
                     b.ToTable("Probleme");
                 });
 
             modelBuilder.Entity("Pchecker.Models.Projekt", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ProjektNr")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Auftraggeber")
                         .IsRequired()
@@ -157,10 +157,6 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ProjektNr")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("Stand")
                         .HasColumnType("datetime(6)");
 
@@ -170,7 +166,7 @@ namespace ProjektManager.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProjektNr");
 
                     b.ToTable("Projekte");
                 });
@@ -179,7 +175,7 @@ namespace ProjektManager.Migrations
                 {
                     b.HasOne("Pchecker.Models.Projekt", null)
                         .WithMany("Abteilungen")
-                        .HasForeignKey("ProjektId");
+                        .HasForeignKey("ProjektNr");
                 });
 
             modelBuilder.Entity("Pchecker.Models.Mitarbeiter", b =>
@@ -193,7 +189,7 @@ namespace ProjektManager.Migrations
                 {
                     b.HasOne("Pchecker.Models.Projekt", null)
                         .WithMany("Probleme")
-                        .HasForeignKey("ProjektId");
+                        .HasForeignKey("ProjektNr");
                 });
 
             modelBuilder.Entity("Pchecker.Models.Abteilung", b =>
