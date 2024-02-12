@@ -2,7 +2,7 @@
 
 namespace ProjektManager.DataBaseAPI
 {
-    class ProjektDBContextFactory
+    public class ProjektDBContextFactory
     {
         private readonly string _connString;
 

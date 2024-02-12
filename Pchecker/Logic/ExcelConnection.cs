@@ -1,8 +1,10 @@
 ﻿using ClosedXML.Excel;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Pchecker.Models;
+using Microsoft.EntityFrameworkCore;
+using ProjektManager.Models;
 using ProjektManager.DataBaseAPI;
+using ProjektManager.DTOs;
 using SkiaSharp;
 using System.Globalization;
 using System.IO;
@@ -20,34 +22,29 @@ namespace ProjektManager.Logic
 
             IEnumerable<Projekt> projekte = new List<Projekt>();
 
-            return files.AsParallel().Select(ReadExcelFile);
+            //return files.AsParallel().Select(ReadExcelFile);
 
-            //foreach (string file in files)
-            //{
-            //    projekte = projekte.Append(ReadExcelFile(file));
+            foreach (string file in files)
+            {
+                projekte = projekte.Append(ReadExcelFile(file));
 
-            //}
+            }
 
-            //return projekte;
+            return projekte;
 
         }
 
         public static Projekt ReadExcelFile(string path)
         {
-
-            Projekt projekt = new Projekt();
-
-            
-
             Console.WriteLine(path);
             var workbook = new XLWorkbook(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read));
             var sheet = workbook.Worksheet(1);
 
 
-            projekt.ProjektNr = sheet.Cell("C7").Value.GetText();
-            projekt.Auftraggeber = sheet.Cell("C8").Value.GetText();
-            projekt.Startpunkt = DateTime.Now;
-            projekt.ProjektLeiter = "None";   // ToDo : zu verändern !
+            string ProjektNr = sheet.Cell("C7").Value.GetText();
+            string Auftraggeber = sheet.Cell("C8").Value.GetText();
+            DateTime Startpunkt = DateTime.Now;
+            string ProjektLeiter = "None";   // ToDo : zu verändern !
 
             int counter = 11;
             //         //        ◔ - Problem erkannt
@@ -57,6 +54,8 @@ namespace ProjektManager.Logic
             //
             // 
             int[] values = [0, 0, 0, 0, 0, 0, 0,];
+
+            List<Problem> problems = new List<Problem>();
 
 
             while (true)
@@ -73,29 +72,33 @@ namespace ProjektManager.Logic
                     throw new Exception();
                 }
 
-
-                problem.ProjektNr = sheet.Cell("C7").Value.GetText();
-                
-                problem.Bezug = sheet.Cell($"B{counter}").Value.GetText();
+                string Bezug = sheet.Cell($"B{counter}").Value.GetText();
 
 
-                problem.AuftritsDatum = sheet.Cell($"C{counter}").IsEmpty() ? null : sheet.Cell($"C{counter}").Value.GetDateTime();
+                DateTime? AuftrittsDatum = sheet.Cell($"C{counter}").IsEmpty() ? null : sheet.Cell($"C{counter}").Value.GetDateTime();
+                int KW = 0;
 
-                if (problem.AuftritsDatum != null)
+
+                if (!AuftrittsDatum.HasValue)
                 {
-                    problem.KW = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(problem.AuftritsDatum.Value, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                    AuftrittsDatum = DateTime.Now;
                 }
 
-                problem.Termin = sheet.Cell($"L{counter}").IsEmpty() ? null : sheet.Cell($"L{counter}").Value.GetDateTime();
+                if (AuftrittsDatum != null)
+                {
+                    KW = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(AuftrittsDatum.Value, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                }
 
-                problem.Bewertung = sheet.Cell($"K{counter}").Value.ToString();
+                DateTime? Termin = sheet.Cell($"L{counter}").IsEmpty() ? null : sheet.Cell($"L{counter}").Value.GetDateTime();
 
-                problem.Abteilung = sheet.Cell($"E{counter}").Value.ToString();
-                problem.Name = sheet.Cell($"F{counter}").Value.ToString();
-                problem.Initiator = sheet.Cell($"G{counter}").Value.ToString();
-                problem.Kategorie = sheet.Cell($"H{counter}").Value.ToString();
-                problem.Thema = sheet.Cell($"I{counter}").Value.ToString();
-                problem.Maßnahme = sheet.Cell($"J{counter}").Value.ToString();
+                string Bewertung = sheet.Cell($"K{counter}").Value.ToString();
+
+                string Abteilung = sheet.Cell($"E{counter}").Value.ToString();
+                string Name = sheet.Cell($"F{counter}").Value.ToString();
+                string Initiator = sheet.Cell($"G{counter}").Value.ToString();
+                string Kategorie = sheet.Cell($"H{counter}").Value.ToString();
+                string Thema = sheet.Cell($"I{counter}").Value.ToString();
+                string Maßnahme = sheet.Cell($"J{counter}").Value.ToString();
 
                 // Dic for Specail text in the Excel of the status
                 //var myColors = new List<SKColors>
@@ -109,45 +112,48 @@ namespace ProjektManager.Logic
 
 
                 string statusChar = sheet.Cell($"N{counter}").Value.ToString();
+                string ProblemProzessStatus = "";
                 switch (statusChar)
                 {
 
                     case "◔":
-                        problem.ProzessStatus = ProzessStatus.Problem_Erkannt;
+                        ProblemProzessStatus = ProzessStatus.Problem_Erkannt;
                         values[0]++;
                         break;
                     case "✓":
-                        problem.ProzessStatus = ProzessStatus.Vorgang_Abgeschlossen;
+                        ProblemProzessStatus = ProzessStatus.Vorgang_Abgeschlossen;
                         values[4]++;
                         break;
                     case "●":
-                        problem.ProzessStatus = ProzessStatus.Umsetzung_Beendet;
+                        ProblemProzessStatus = ProzessStatus.Umsetzung_Beendet;
                         values[3]++;
                         break;
                     case "◕":
-                        problem.ProzessStatus = ProzessStatus.Umsetzung_Laufend;
+                        ProblemProzessStatus = ProzessStatus.Umsetzung_Laufend;
                         values[2]++;
                         break;
                     case "◑":
-                        problem.ProzessStatus = ProzessStatus.Umsetzung_Eingeleitet;
+                        ProblemProzessStatus = ProzessStatus.Umsetzung_Eingeleitet;
                         values[1]++;
                         break;
                     case "I":
-                        problem.ProzessStatus = ProzessStatus.Info;
+                        ProblemProzessStatus = ProzessStatus.Info;
                         values[5]++;
                         break;
                     case "E":
-                        problem.ProzessStatus = ProzessStatus.Entscheidung;
+                        ProblemProzessStatus = ProzessStatus.Entscheidung;
                         values[6]++;
                         break;
                 }
 
+                DateTime ReTermin = DateTime.Now;
                 try
                 {
-                    problem.ReTermin = sheet.Cell($"M{counter}").IsEmpty() || sheet.Cell($"M{counter}").Value.ToString().Trim() == string.Empty ? null : sheet.Cell($"M{counter}").Value.GetDateTime();
+                    ReTermin = sheet.Cell($"M{counter}").IsEmpty() || sheet.Cell($"M{counter}").Value.ToString().Trim() == string.Empty ? DateTime.Now : sheet.Cell($"M{counter}").Value.GetDateTime();
                 }
                 catch { }
-                projekt.Probleme.Add(problem);
+
+                problems.Add(new Problem(Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), KW, Abteilung, Name, Initiator, Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr));
 
                 counter++;
             }
@@ -162,12 +168,17 @@ namespace ProjektManager.Logic
                 new PieSeries<int> {Values= new[]{values[6]}, Name=ProzessStatus.Entscheidung, Fill=new SolidColorPaint(SKColors.Violet)},
                     };
             chartData = chartData.Where(x => x.Values.ToList()[0] != 0);
-            projekt.ProblemStatus = chartData;
 
-            if(projekt != null) { 
-            dB.Projekte.Add(projekt);
+            Projekt projekt = new Projekt(Auftraggeber, ProjektNr, DateTime.Now, ProjektLeiter, DateTime.Now, Startpunkt,  problems, DateTime.Now, chartData);
 
-            dB.SaveChanges();
+            if (projekt != null)
+            {
+                var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+                using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+                {
+                    dbContext.Add(ProjektDTO.ToProjektDTO(projekt));
+                    dbContext.SaveChanges();
+                }
             }
             return projekt;
         }

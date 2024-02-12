@@ -9,6 +9,9 @@ using System.Windows.Input;
 
 namespace ProjektManager.Commands
 {
+    /// <summary>
+    /// ICommand Class for Save part of Problems in the database
+    /// </summary>
     internal class PartSaveCommand : ICommand
     {
         private Action<DataGridRowEditEndingEventArgs> execute;

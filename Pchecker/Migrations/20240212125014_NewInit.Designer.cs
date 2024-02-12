@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektManager.DataBaseAPI;
 
@@ -9,17 +10,19 @@ using ProjektManager.DataBaseAPI;
 
 namespace ProjektManager.Migrations
 {
-    [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ProjektDBContext))]
+    [Migration("20240212125014_NewInit")]
+    partial class NewInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Pchecker.Models.Abteilung", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,26 +36,26 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ProjektNr")
+                    b.Property<string>("ProjektDTOProjektNr")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjektNr");
+                    b.HasIndex("ProjektDTOProjektNr");
 
                     b.ToTable("Abteilungen");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Mitarbeiter", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AbteilungId")
+                    b.Property<int?>("AbteilungDTOId")
                         .HasColumnType("int");
 
-                    b.Property<string>("NachName")
+                    b.Property<string>("Nachname")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -60,17 +63,14 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ProjektStunden")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("AbteilungId");
+                    b.HasIndex("AbteilungDTOId");
 
                     b.ToTable("Mitarbeiter");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Problem", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("AuftritsDatum")
+                    b.Property<DateTime>("AuftrittsDatum")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Bewertung")
@@ -110,15 +110,18 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("ProjektDTOProjektNr")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("ProjektNr")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ProzessStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("ReTermin")
+                    b.Property<DateTime>("ReTermin")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("Termin")
@@ -130,12 +133,12 @@ namespace ProjektManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjektNr");
+                    b.HasIndex("ProjektDTOProjektNr");
 
                     b.ToTable("Probleme");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Projekt", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>
                 {
                     b.Property<string>("ProjektNr")
                         .HasColumnType("varchar(255)");
@@ -143,6 +146,9 @@ namespace ProjektManager.Migrations
                     b.Property<string>("Auftraggeber")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DateOfTheEnd")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("DeadLine")
                         .HasColumnType("datetime(6)");
@@ -165,37 +171,33 @@ namespace ProjektManager.Migrations
                     b.ToTable("Projekte");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Abteilung", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
-                    b.HasOne("Pchecker.Models.Projekt", null)
+                    b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
                         .WithMany("Abteilungen")
-                        .HasForeignKey("ProjektNr");
+                        .HasForeignKey("ProjektDTOProjektNr");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Mitarbeiter", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
-                    b.HasOne("Pchecker.Models.Abteilung", null)
-                        .WithMany("MitarbeiterList")
-                        .HasForeignKey("AbteilungId");
+                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
+                        .WithMany("_mitarbeiterList")
+                        .HasForeignKey("AbteilungDTOId");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Problem", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
-                    b.HasOne("Pchecker.Models.Projekt", "Projekt")
+                    b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
                         .WithMany("Probleme")
-                        .HasForeignKey("ProjektNr")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Projekt");
+                        .HasForeignKey("ProjektDTOProjektNr");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Abteilung", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
-                    b.Navigation("MitarbeiterList");
+                    b.Navigation("_mitarbeiterList");
                 });
 
-            modelBuilder.Entity("Pchecker.Models.Projekt", b =>
+            modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>
                 {
                     b.Navigation("Abteilungen");
 

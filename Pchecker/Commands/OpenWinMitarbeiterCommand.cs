@@ -1,6 +1,6 @@
-﻿using Pchecker.Logic;
-using Pchecker.View;
-using Pchecker.ViewModel;
+﻿using ProjektManager.Logic;
+using ProjektManager.View;
+using ProjektManager.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Pchecker.Commands
+namespace ProjektManager.Commands
 {
+    /// <summary>
+    /// ICommand Class to Open new Windows for Works
+    /// </summary>
     public class OpenWinMitarbeiterCommand : ICommand
     {
         

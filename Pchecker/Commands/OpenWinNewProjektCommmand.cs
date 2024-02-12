@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Pchecker.Logic;
-using Pchecker.View;
-using Pchecker.ViewModel;
+using ProjektManager.Logic;
+using ProjektManager.View;
+using ProjektManager.ViewModel;
+using ProjektManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Pchecker.Commands
+namespace ProjektManager.Commands
 {
-    public class OpenWinNewProjektCommmand : ICommand
+    /// <summary>
+    /// ICommand class for a new window to make a new Projekt
+    /// </summary>
+    public class OpenWinNewProjektCommmand : CommandBase
     {
 
         
@@ -32,7 +36,7 @@ namespace Pchecker.Commands
         }
 
 
-        public void Execute(object? parameter)
+        public override void Execute(object? parameter)
         {
             if (parameter != null)
             {

@@ -1,59 +1,121 @@
-﻿using LiveChartsCore;
-using LiveChartsCore.Kernel.Sketches;
+﻿using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Kernel;
-using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Pchecker.Commands;
-using Pchecker.Models;
-using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using ProjektManager.Logic;
-using ProjektManager.DataBaseAPI;
-using System.Drawing;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
-using System.Windows.Controls;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore;
+using ProjektManager.DataBaseAPI.ProjektProviders;
+using ProjektManager.DataBaseAPI.Services.ProjektCreator;
+using ProjektManager.Models;
+using ProjektManager.Stores;
 using ProjektManager.Commands;
+using SkiaSharp;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Input;
+using ProjektManager.Commands;
+using ProjektManager.DataBaseAPI;
+using ProjektManager.DTOs;
 
-namespace Pchecker.ViewModel
+namespace ProjektManager.ViewModel
 {
     public class ViewModelMainWindow : ViewModelBase
     {
 
+        private readonly NaviStore _naviStore;
+        public ViewModelBase CurrentViewModel => _naviStore.CurrentViewModel;
 
-        public ICommand OpenWindowCommand { get; private set; }
+        private bool _isNewProjektButtonEnabled = true;
 
-        public ICommand ShowChartDetailsCommand { get; private set; }
-
-        public ICommand PartSaveCommand { get; private set; }
-        public ViewModelMainWindow()
+        public bool IsNewProjektButtonEnabled
         {
+            get { return _isNewProjektButtonEnabled; }
+            set { _isNewProjektButtonEnabled = value; OnPropertyChanged(nameof(IsNewProjektButtonEnabled)); }
+        }
+
+
+        public ICommand OpenWindowCommand { get; set; }
+
+        public ICommand ShowChartDetailsCommand { get; set; }
+
+        public ICommand PartSaveCommand { get; set; }
+
+        private readonly IProjektCreator _projektCreator;
+        private readonly IProjektproviders _projektproviders;
+
+        private List<Projekt> projekte;
+
+        public List<Projekt> Projekte
+        {
+            get { return projekte; }
+            set { projekte = value; OnPropertyChanged(nameof(Projekte)); }
+        }
+
+
 
             
 
-            //projekte = new ObservableCollection<Projekt>(ExcelConnection.ReadAllExcelFiles());
 
 
-            //var projekte = ;
-            //IEnumerable<Projekt> projekte = projekte;
+        public ViewModelMainWindow()
+        {
+            OpenWindowCommand = new OpenWinNewProjektCommmand();
+            PartSaveCommand = new PartSaveCommand(SaveChanges);
+            LoadAllProjekte();
+        }
+
+        public ViewModelMainWindow(NaviStore naviStore)
+        {
+            _naviStore = naviStore;
+            _naviStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            OpenWindowCommand = new OpenWinNewProjektCommmand();
+            PartSaveCommand = new PartSaveCommand(SaveChanges);
+            LoadAllProjekte();
+        }
 
 
-            projekte = new ObservableCollection<Projekt>(getAllProjekts());
+        private void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
 
-            foreach (var projekt in projekte)
+
+        public async Task addProjekt(Projekt p)
+        {
+
+            //await _projektCreator.CreateProjekt(p);
+            //projekte.Add(p);
+            //SaveChanges(); //    <<<<<<<<<<<<<<<<<<   geht das?
+
+            OnPropertyChanged(nameof(Projekte));
+        }
+
+        private void SaveChanges(DataGridRowEditEndingEventArgs entity)
+        {
+
+            Debug.WriteLine(entity);
+
+            //DBContext db = new DBContext();
+            //db.Entry(entity).State = EntityState.Modified;
+            //db.SaveChanges();
+        }
+
+
+        public void LoadAllProjekte()
+        {
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                 Projekte = dbContext.GetAllProjekts().Select(p => ProjektDTO.FromProjektDTO(p)).ToList();
+            }
+
+
+            foreach (var projekt in Projekte)
             {
 
 
-                foreach (var series in projekt.ProblemStatus)
+                foreach (var series in projekt.ChartData)
                 {
                     PieSeries<int> casted = (PieSeries<int>)series;
                     casted.ChartPointPointerDown += (sender, e) =>
@@ -62,43 +124,13 @@ namespace Pchecker.ViewModel
                         {
                             return p.ProzessStatus.Equals(series.Name);
                         });
+
                         FilterProblems = new ObservableCollection<Problem>(filtered);
                     };
                 }
 
             }
 
-            //projekte.Add(new Projekt(DateTime.Now, "ich", "JP", DateTime.Now.AddYears(2)));
-            
-
-            
-            OpenWindowCommand = new OpenWinNewProjektCommmand();
-
-            PartSaveCommand = new PartSaveCommand(SaveChanges);
-
-        }
-
-
-
-
-        private bool _isNewProjektButtonEnabled = true;
-
-        public bool IsNewProjektButtonEnabled
-        {
-            get { return _isNewProjektButtonEnabled; }
-            set { _isNewProjektButtonEnabled = value; OnPropertyChanged(nameof(IsNewProjektButtonEnabled)); }
-
-            // 
-        }
-
-
-        private ObservableCollection<Projekt> projekte;
-
-
-        public ObservableCollection<Projekt> Projekte
-        {
-            get { return projekte; }
-            set { projekte = value; }
         }
 
         public Problem? NewProb
@@ -114,11 +146,11 @@ namespace Pchecker.ViewModel
                 // Sortiert Probleme, die als Auftrittsdatum null haben, ganz nach unten.
                 SelectedProjekt.Probleme.Sort((p1, p2) =>
                 {
-                    if (p1.AuftritsDatum == null || p2.AuftritsDatum == null)
+                    if (p1.AuftrittsDatum == null || p2.AuftrittsDatum == null)
                     {
                         return -1;
                     }
-                    return p1.AuftritsDatum.Value.CompareTo(p2.AuftritsDatum);
+                    return p1.AuftrittsDatum.CompareTo(p2.AuftrittsDatum);
                 });
                 return SelectedProjekt.Probleme[0];
             }
@@ -145,7 +177,7 @@ namespace Pchecker.ViewModel
                     problems = problems.Concat(projekt.Probleme);
                 }
 
-                IEnumerable<Problem> result = problems.Where(f => f.AuftritsDatum - PickedTimeToFilterProblems > TimeSpan.Zero);
+                IEnumerable<Problem> result = problems.Where(f => f.AuftrittsDatum - PickedTimeToFilterProblems > TimeSpan.Zero);
                 if (result.Count() == 0)
                 {
                     FilterProblems = new ObservableCollection<Problem>();
@@ -185,7 +217,7 @@ namespace Pchecker.ViewModel
                     IEnumerable<Problem> problems = new List<Problem>();
 
                     problems = problems.Concat(SelectedProjekt.Probleme);
-                    problems = problems.OrderBy(problem => problem.Id);
+                    problems = problems.OrderBy(problem => problem.ProjektNr);
                     return new ObservableCollection<Problem>(problems.TakeLast(5));
                 }
                 else
@@ -219,7 +251,7 @@ namespace Pchecker.ViewModel
                 {
                     return new List<ISeries>();
                 }
-                return SelectedProjekt.ProblemStatus;
+                return SelectedProjekt.ChartData;
             }
         }
 
@@ -228,27 +260,6 @@ namespace Pchecker.ViewModel
             if (point?.Visual is null) return;
 
         }
-
-
-        public void addProjekt(Projekt p)
-        {
-            projekte.Add(p);
-            
-            SaveChanges(); //    <<<<<<<<<<<<<<<<<<   geht das?
-
-            OnPropertyChanged(nameof(Projekte));
-        }
-
-        private void SaveChanges(DataGridRowEditEndingEventArgs entity)
-        {
-
-            Debug.WriteLine(entity);
-
-            //DBContext db = new DBContext();
-            db.Entry(entity).State = EntityState.Modified;
-            db.SaveChanges();
-        }
-
 
     }
 }

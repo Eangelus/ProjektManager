@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pchecker.Models
+namespace ProjektManager.Models
 {
     public static class ProzessStatus
     {

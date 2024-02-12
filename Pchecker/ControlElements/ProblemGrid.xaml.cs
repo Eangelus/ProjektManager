@@ -1,9 +1,9 @@
-﻿using Pchecker.Models;
+﻿using ProjektManager.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Pchecker.ControlElements
+namespace ProjektManager.ControlElements
 {
     /// <summary>
     /// Interaktionslogik für ProblemGrid.xaml

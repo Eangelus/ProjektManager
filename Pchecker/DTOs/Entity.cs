@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace ProjektManager.Models
+namespace ProjektManager.DTOs
 {
     public abstract class Entity
     {

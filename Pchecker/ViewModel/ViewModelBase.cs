@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Pchecker.Models;
+using ProjektManager.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Pchecker.ViewModel
+namespace ProjektManager.ViewModel
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

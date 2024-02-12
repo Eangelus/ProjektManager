@@ -1,4 +1,5 @@
-﻿using Pchecker.Models;
+﻿using ProjektManager.Models;
+using ProjektManager.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace ProjektManager.DataBaseAPI.Services.ProjektCreator
 {
     public interface IProjektCreator
     {
-        Task CreateProjekt(Projekt projekt);
+        Task CreateProjekt(ProjektDTO projekt);
     }
 }

@@ -2,42 +2,16 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace Pchecker.Models
+namespace ProjektManager.Models
 {
-    public class Mitarbeiter : Entity
+    public class Mitarbeiter 
     { 
-        private string _name;
 
-        
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-
-        private string _nachName;
-        public string NachName
-        {
-            get { return _nachName; }
-            set { _nachName = value; }
-        }
-
-        private int _projektStunden = 0;
-        public int ProjektStunden
-        {
-            get { return _projektStunden; }
-            set { _projektStunden = value; }
-        }
+        public string Name { get; }
+        public string NachName { get; }
+        public int ProjektStunden { get; }
 
 
-
-
-        public void addProjektStunde(int stunden)
-        {
-
-            this._projektStunden = this._projektStunden + stunden;
-
-        }
 
     }
 }

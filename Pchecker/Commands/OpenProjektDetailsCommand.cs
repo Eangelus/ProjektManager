@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Pchecker.Commands
+namespace ProjektManager.Commands
 {
+    /// <summary>
+    /// On work
+    /// </summary>
     public class OpenProjektDetails : ICommand
     {
         public event EventHandler? CanExecuteChanged;

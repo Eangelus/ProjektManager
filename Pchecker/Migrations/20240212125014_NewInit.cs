@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjektManager.Migrations
 {
     /// <inheritdoc />
-    public partial class InitM : Migration
+    public partial class NewInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,8 @@ namespace ProjektManager.Migrations
                     ProjektLeiter = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DeadLine = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    DateOfTheEnd = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,15 +47,15 @@ namespace ProjektManager.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AbLeiter = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)
+                    ProjektDTOProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Abteilungen", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Abteilungen_Projekte_ProjektNr",
-                        column: x => x.ProjektNr,
+                        name: "FK_Abteilungen_Projekte_ProjektDTOProjektNr",
+                        column: x => x.ProjektDTOProjektNr,
                         principalTable: "Projekte",
                         principalColumn: "ProjektNr");
                 })
@@ -68,7 +69,7 @@ namespace ProjektManager.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Bezug = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AuftritsDatum = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    AuftrittsDatum = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     KW = table.Column<int>(type: "int", nullable: false),
                     Abteilung = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -85,21 +86,22 @@ namespace ProjektManager.Migrations
                     Bewertung = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Termin = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    ReTermin = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ReTermin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ProzessStatus = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProjektNr = table.Column<string>(type: "varchar(255)", nullable: false)
+                    ProjektNr = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProjektDTOProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Probleme", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Probleme_Projekte_ProjektNr",
-                        column: x => x.ProjektNr,
+                        name: "FK_Probleme_Projekte_ProjektDTOProjektNr",
+                        column: x => x.ProjektDTOProjektNr,
                         principalTable: "Projekte",
-                        principalColumn: "ProjektNr",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProjektNr");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -111,36 +113,35 @@ namespace ProjektManager.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NachName = table.Column<string>(type: "longtext", nullable: false)
+                    Nachname = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProjektStunden = table.Column<int>(type: "int", nullable: false),
-                    AbteilungId = table.Column<int>(type: "int", nullable: true)
+                    AbteilungDTOId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mitarbeiter", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mitarbeiter_Abteilungen_AbteilungId",
-                        column: x => x.AbteilungId,
+                        name: "FK_Mitarbeiter_Abteilungen_AbteilungDTOId",
+                        column: x => x.AbteilungDTOId,
                         principalTable: "Abteilungen",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Abteilungen_ProjektNr",
+                name: "IX_Abteilungen_ProjektDTOProjektNr",
                 table: "Abteilungen",
-                column: "ProjektNr");
+                column: "ProjektDTOProjektNr");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mitarbeiter_AbteilungId",
+                name: "IX_Mitarbeiter_AbteilungDTOId",
                 table: "Mitarbeiter",
-                column: "AbteilungId");
+                column: "AbteilungDTOId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Probleme_ProjektNr",
+                name: "IX_Probleme_ProjektDTOProjektNr",
                 table: "Probleme",
-                column: "ProjektNr");
+                column: "ProjektDTOProjektNr");
         }
 
         /// <inheritdoc />

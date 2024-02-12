@@ -1,4 +1,4 @@
-﻿namespace Pchecker.View
+﻿namespace ProjektManager.View
 {
     class DiagramClass
     {

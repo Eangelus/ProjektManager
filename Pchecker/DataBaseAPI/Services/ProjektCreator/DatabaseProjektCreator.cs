@@ -1,9 +1,6 @@
-﻿using Pchecker.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProjektManager.Models;
+using ProjektManager.DTOs;
+using ProjektManager.DataBaseAPI;
 
 namespace ProjektManager.DataBaseAPI.Services.ProjektCreator
 {
@@ -17,21 +14,20 @@ namespace ProjektManager.DataBaseAPI.Services.ProjektCreator
         }
         public async Task CreateProjekt(Projekt projekt)
         {
+
+            
             using(ProjektDBContext context = _dbContextFactory.CreateDbContext())
             {
-                Projekt projektDTO = ToProjektDTO(projekt);
+                ProjektDTO projektDTO = ProjektDTO.ToProjektDTO(projekt);
 
-                context.Projekte.Add(projektDTO);
+                context.Add(projektDTO);
                 await context.SaveChangesAsync();
             }
         }
 
-        private Projekt ToProjektDTO(Projekt projekt)
+        public Task CreateProjekt(ProjektDTO projekt)
         {
-            return new Projekt()
-            {
-
-            };
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,121 +1,71 @@
 ﻿using LiveChartsCore;
+using ProjektManager.DataBaseAPI.ProjektProviders;
+using ProjektManager.DataBaseAPI.Services.ProjektCreator;
 using ProjektManager.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 
-namespace Pchecker.Models
+namespace ProjektManager.Models
 {
     public class Projekt 
     {
 
-        private string _auftraggeber;
-        public string Auftraggeber
+
+        public string Auftraggeber { get; }
+
+        
+        
+        public string ProjektNr { get; }
+
+        public DateTime Stand { get; }
+
+        public DateTime Startpunkt { get; }
+        public string ProjektLeiter { get; }
+        public DateTime? DeadLine { get; }
+        public List<Abteilung> Abteilungen { get; }
+
+
+        public List<Problem> Probleme { get; }
+
+        public DateTime DateOfTheEnd { get; }
+       
+        public Projekt(string Auftraggeber, string ProjektNr, DateTime Stand, string ProjektLeiter, DateTime? DeadLine, DateTime Startpunkt,  List<Problem> Probleme, DateTime DateOfTheEnd, IEnumerable<ISeries> ChartData)
         {
-            get { return _auftraggeber; }
-            set { _auftraggeber = value; }
-        }
-
-        private string _projektNr;
-
-        [Key]
-        public string ProjektNr
-        {
-            get { return _projektNr; }
-            set { _projektNr = value; }
-        }
-
-        private DateTime _stand;
-        public DateTime Stand
-        {
-            get { return _stand; }
-            set { _stand = value; }
-        }
-
-        private DateTime _startpunkt;
-        public DateTime Startpunkt
-        {
-            get { return _startpunkt; }
-            set { _startpunkt = value; }
-        }
-
-        private string _projektLeiter;
-        public string ProjektLeiter
-        {
-            get { return _projektLeiter; }
-            set { _projektLeiter = value; }
-        }
-
-        private DateTime _deadLine;
-        public DateTime DeadLine
-        {
-            get { return _deadLine; }
-            set { _deadLine = value; }
-        }
-
-        private List<Abteilung> _abteilungen;
-        public List<Abteilung> Abteilungen
-        {
-            get { return _abteilungen; }
-            set { _abteilungen = value; }
-        }
-        [NotMapped]
-        private List<string> _kategorien = new List<string>() { "I", "FF", "LF", "SF", "BBÜ" };
-
-        [NotMapped]
-        public List<string> Kategorien
-        {
-            get { return _kategorien; }
-            set { _kategorien = value; }
-        }
-
-        private List<Problem> _probleme = new List<Problem>();
-        public List<Problem> Probleme
-        {
-            get { return _probleme; }
-            set { _probleme = value; }
-        }
-
-        private int aStatus;
-
-        public int Status
-        {
-            get { return aStatus; }
-            set { this.aStatus = value; }
-        }
-
-        public Projekt(DateTime startpunkt, string projektLeiter, string auftraggeber, DateTime deadLine)
-        {
-            this._startpunkt = startpunkt;
-            this._projektLeiter = projektLeiter;
-            this._auftraggeber = auftraggeber;
-            this._deadLine = deadLine;
-            this._abteilungen = new List<Abteilung> { };
-
-
-
+            this.Auftraggeber = Auftraggeber;
+            this.ProjektNr = ProjektNr;
+            this.Stand = Stand;
+            this.Startpunkt = Startpunkt;
+            this.DeadLine = DeadLine;
+            this.ProjektLeiter = ProjektLeiter;
+            this.Abteilungen = new List<Abteilung>();
+            this.ChartData = ChartData;
+            this.Probleme = Probleme;
+            this.DateOfTheEnd = DateOfTheEnd;
         }
 
         public Projekt()
         {
-            this._abteilungen = new List<Abteilung>();
+            
+
         }
 
-        public void addAbteilungen()
+
+        public bool Conflicts(Projekt projekt)
         {
-            throw new NotImplementedException();
+            if (projekt.ProjektNr == ProjektNr)
+            {
+                return false;
+            }
+
+            return true;
+            
         }
 
-        [NotMapped]
-        private IEnumerable<ISeries> problemStatus;
+        public IEnumerable<ISeries> ChartData { get; }
 
-        [NotMapped]
-        public IEnumerable<ISeries> ProblemStatus
-        {
-            get { return problemStatus; }
-            set { problemStatus = value; }
-        }
+        public TimeSpan LengthOfTheProjekt => DateOfTheEnd.Subtract(Startpunkt);
 
 
 

@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Pchecker.ViewModel;
+using ProjektManager.ViewModel;
 
-namespace Pchecker.View
+namespace ProjektManager.View
 {
     /// <summary>
     /// Interaktionslogik für NewProjektWindow.xaml
@@ -22,7 +22,7 @@ namespace Pchecker.View
     {
         public NewProjektWindow()
         {
-            this.DataContext = new ViewModelNewProjekt();
+            
             InitializeComponent();
         }
     }

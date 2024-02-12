@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Pchecker.View
+namespace ProjektManager.View
 {
     /// <summary>
     /// Interaktionslogik für ProjektDetailsWindow.xaml
