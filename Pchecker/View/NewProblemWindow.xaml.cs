@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace ProjektManager.View
 {
     /// <summary>
-    /// Interaktionslogik für ProjektDetailsWindow.xaml
+    /// Interaction logic for NewProblemWindow.xaml
     /// </summary>
-    public partial class ProjektDetailsWindow : Window
+    public partial class NewProblemWindow : Window
     {
-        public ProjektDetailsWindow()
+        public NewProblemWindow()
         {
             InitializeComponent();
         }

@@ -10,6 +10,7 @@ using ProjektManager.DTOs;
 using ProjektManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 
 namespace ProjektManager.DataBaseAPI
@@ -50,27 +51,29 @@ namespace ProjektManager.DataBaseAPI
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ProjektDTO>();
-
-
-            modelBuilder.Entity<ProblemDTO>(); // Definiert den Fremdschlüssel
+            modelBuilder.Entity<ProjektDTO>()
+                                .HasMany(e => e.Abteilungen)
+                                .WithMany(e => e.Projekte);
         }
 
 
         public IEnumerable<ProjektDTO> GetAllProjekts()
         {
 
-            return Projekte.Where(b => true).Include("Probleme");
+            var erg = Projekte.Include(p => p.Abteilungen).Include(p => p.Probleme).ThenInclude(prob => prob.Abteilung);
+            return erg;
         }
 
 
-
-
-
-
-
-
-
+        public ProblemDTO UpdateProblem(ProblemDTO problemToUpdate)
+        {
+            if (problemToUpdate.Abteilung == null)
+            {
+            }
+            var update = Probleme.Update(problemToUpdate);
+            base.SaveChanges();
+            return update.Entity;
+        }
     }
 }
 

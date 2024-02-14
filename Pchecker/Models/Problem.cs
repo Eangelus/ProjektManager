@@ -1,44 +1,49 @@
 ﻿
+using ProjektManager.DTOs;
 using ProjektManager.Models;
-
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace ProjektManager.Models
 {
-    public class Problem 
+    public class Problem
 
     {
+        public int? Id { get; set; }
+        public string Bezug { get; set; }
+        public DateTime AuftrittsDatum { get; set; }
+        public int KW { get; set; }
+        public Abteilung? Abteilung { get; set; }
+        public string Name { get; set; }
+        public string Initiator { get; set; }
+        public string Kategorie { get; set; }
+        public string Thema { get; set; }
+        public string Maßnahme { get; set; }
 
-        public string Bezug { get; }
-        public DateTime AuftrittsDatum { get; }
-        public int KW { get; }
-        public string Abteilung { get; }
-        public string Name { get; }
-        public string Initiator { get; }
-        public string Kategorie { get; }
-        public string Thema { get; }
-        public string Maßnahme { get; }
+        public string Bewertung { get; set; }
 
-        public string Bewertung { get; }
-
-        public DateTime? Termin { get; }
-        public DateTime ReTermin { get; }
-        public string ProzessStatus { get; }
-        public string ProjektNr { get; }
+        public DateTime? Termin { get; set; }
+        public DateTime ReTermin { get; set; }
+        public string ProzessStatus { get; set; }
+        public string ProjektNr { get; set; }
 
 
         public TimeSpan LengthOfTheProblem => ReTermin.Subtract(AuftrittsDatum);
+
+
+
 
         public Problem( )
         {            
         }
 
-        public Problem(string bezug, DateTime AuftrittsDatum, int kW, string abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
+        public Problem(int? id,string bezug, DateTime auftrittsDatum, int kW, Abteilung? abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
         {
+            Id = id;
             Bezug = bezug;
-            AuftrittsDatum = AuftrittsDatum;
+            AuftrittsDatum = auftrittsDatum;
             KW = kW;
             Abteilung = abteilung;
             Name = name;

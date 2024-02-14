@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,9 @@ namespace ProjektManager.Models
         //public static string Umsetzung_Beendet = "Umsetzung Beendet";
         //public static string Entscheidung = "Entscheidung";
         //public static string Info = "Inforamtiv";
-
+        public static ObservableCollection<string> ListOfState = new ObservableCollection<string>() { 
+    Problem_Erkannt, Umsetzung_Eingeleitet, Umsetzung_Laufend,Vorgang_Abgeschlossen ,
+    Umsetzung_Beendet, Entscheidung, Info};
 
     }
 }

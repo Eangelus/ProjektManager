@@ -1,6 +1,7 @@
 ﻿using ProjektManager.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -8,14 +9,36 @@ using System.Threading.Tasks;
 
 namespace ProjektManager.DTOs
 {
-    public class ProblemDTO : Entity
+    public class ProblemDTO 
     {
 
+        [Key]
+        public int? Id { get; set; }
 
         public ProblemDTO()
         {
             
         }
+
+        public ProblemDTO(int? id, string bezug, DateTime auftrittsDatum, int kW, AbteilungDTO? abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
+        {
+            Id = id;
+            Bezug = bezug;
+            AuftrittsDatum = auftrittsDatum;
+            KW = kW;
+            Abteilung = abteilung;
+            Name = name;
+            Initiator = initiator;
+            Kategorie = kategorie;
+            Thema = thema;
+            Maßnahme = maßnahme;
+            Bewertung = bewertung;
+            Termin = termin;
+            ReTermin = reTermin;
+            ProzessStatus = prozessStatus;
+            ProjektNr = projektNr;
+        }
+
         public string Bezug { set; get; }
 
 
@@ -24,8 +47,7 @@ namespace ProjektManager.DTOs
 
         public int KW { set; get; }
 
-
-        public string Abteilung  { set; get; }
+        public AbteilungDTO? Abteilung  { set; get; }
 
 
         public string Name { set; get; }
@@ -51,10 +73,11 @@ namespace ProjektManager.DTOs
 
         public static ProblemDTO ToProblemDTO(Problem problem) => new ProblemDTO()
         {
+            Id = problem.Id,
             Bezug = problem.Bezug,
             AuftrittsDatum = problem.AuftrittsDatum,
             KW = problem.KW,
-            Abteilung = problem.Abteilung,
+            Abteilung = AbteilungDTO.ToAbteilungDTO(problem.Abteilung),
             Name = problem.Name,
             Initiator = problem.Initiator,
             Kategorie = problem.Kategorie,
@@ -69,7 +92,7 @@ namespace ProjektManager.DTOs
 
         public static Problem FromProblemDTO(ProblemDTO problemDTO)
         {
-            return new Problem(problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.KW, problemDTO.Abteilung, problemDTO.Name, problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
+            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.KW, problemDTO.Abteilung == null ? null : AbteilungDTO.FromAbteilungDTO(problemDTO.Abteilung), problemDTO.Name, problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
                                 problemDTO.Termin, problemDTO.ReTermin, problemDTO.ProzessStatus, problemDTO.ProjektNr);
            
         }

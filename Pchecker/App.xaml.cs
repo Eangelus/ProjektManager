@@ -55,16 +55,6 @@ namespace ProjektManager
             }
             base.OnStartup(e);
         }
-
-        private ViewModelCreateProjekt CreateViewModelCreateProjekt()
-        {
-            return new ViewModelCreateProjekt(new NaviService (_naviStore, createViewModelProjektList ));
-        }
-
-        private ViewModelProjektList createViewModelProjektList()
-        {
-            return new ViewModelProjektList( new NaviService(  _naviStore, CreateViewModelCreateProjekt));
-        }
     }
 
 }

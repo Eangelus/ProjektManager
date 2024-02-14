@@ -80,7 +80,8 @@ namespace ProjektManager.Commands
                                   _viewModelCreateProjekt.MyStartpunkt,
                                   new List<Problem>(),
                                   DateTime.Now,
-                                  new List<ISeries>());
+                                  new List<ISeries>(),
+                                  new List<Abteilung>());
 
             try
             {

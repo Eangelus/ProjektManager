@@ -23,7 +23,22 @@ namespace ProjektManager.DTOs
 
         }
 
-        [Key] public string ProjektNr { get; set; }
+        public ProjektDTO(string projektNr, string auftraggeber, DateTime stand, DateTime startpunkt, string projektLeiter, DateTime deadLine, List<AbteilungDTO> abteilungen, List<ProblemDTO> probleme, int status, DateTime dateOfTheEnd)
+        {
+            ProjektNr = projektNr;
+            Auftraggeber = auftraggeber;
+            Stand = stand;
+            Startpunkt = startpunkt;
+            ProjektLeiter = projektLeiter;
+            DeadLine = deadLine;
+            Abteilungen = abteilungen;
+            Probleme = probleme;
+            Status = status;
+            DateOfTheEnd = dateOfTheEnd;
+        }
+
+        [Key] 
+        public string ProjektNr { get; set; }
 
         public string Auftraggeber { get; set; }
 
@@ -54,8 +69,15 @@ namespace ProjektManager.DTOs
             {
                 problemDTOs.Add(ProblemDTO.ToProblemDTO(problem));
             };
+            List<AbteilungDTO> abteilungen = new List<AbteilungDTO>();
+            foreach(var abteilung in projekt.Abteilungen)
+            {
+                abteilungen.Add(AbteilungDTO.ToAbteilungDTO(abteilung));    
+            }
+
             return new ProjektDTO()
             {
+                
                 ProjektNr = projekt.ProjektNr,
                 Auftraggeber = projekt.Auftraggeber,
                 Stand = projekt.Stand,
@@ -63,7 +85,7 @@ namespace ProjektManager.DTOs
                 ProjektLeiter = projekt.ProjektLeiter,
                 Probleme = problemDTOs,
                 DeadLine = projekt.DeadLine.Value,
-                //Abteilungen = projekt.Abteilungen.ToList(),
+                Abteilungen = abteilungen
             };
         }
 
@@ -105,6 +127,16 @@ namespace ProjektManager.DTOs
                 }
             }
 
+            List<Abteilung> abteilungen = new List<Abteilung>();
+            if (projektDTO.Abteilungen != null)
+            {
+                foreach (var abteilung in projektDTO.Abteilungen)
+                {
+                    abteilungen.Add(AbteilungDTO.FromAbteilungDTO(abteilung));
+                }
+            }
+
+
             IEnumerable<PieSeries<int>> chartData = new[]
             {
                         new PieSeries<int> {Values= new[]{values[0]}, Name=ProzessStatus.Problem_Erkannt, Fill=new SolidColorPaint(SKColors.DarkRed) },
@@ -118,9 +150,8 @@ namespace ProjektManager.DTOs
 
             chartData = chartData.Where(x => x.Values.ToList()[0] != 0);
 
-            return new Projekt(projektDTO.Auftraggeber, projektDTO.ProjektNr, projektDTO.Stand, projektDTO.ProjektLeiter, projektDTO.DeadLine, projektDTO.Startpunkt, problems, projektDTO.DateOfTheEnd, chartData);
+            return new Projekt(projektDTO.Auftraggeber, projektDTO.ProjektNr, projektDTO.Stand, projektDTO.ProjektLeiter, projektDTO.DeadLine, projektDTO.Startpunkt, problems, projektDTO.DateOfTheEnd, chartData, abteilungen);
         }
-
 
     }
 }

@@ -6,32 +6,29 @@
         xmlns:local="clr-namespace:ProjektManager" 
         xmlns:views="clr-namespace:ProjektManager.View"
         xmlns:vms="clr-namespace:ProjektManager.ViewModel"
+        xmlns:model="clr-namespace:ProjektManager.Models"
+        xmlns:ex="clr-namespace:ProjektManager.Exceptions"
         xmlns:controlelements="clr-namespace:ProjektManager.ControlElements"
-        
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" d:DataContext="{d:DesignInstance Type=vms:ViewModelMainWindow}"
         mc:Ignorable="d"
-        Title="ProjektManager" Height="890" Width="1280"
+        Title="ProjektManager"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
         >
 
     <Grid Margin="0,0,0,3" >
-
-        
-
-
-
         <Label HorizontalAlignment="Left" Margin="375,20,0,0" VerticalAlignment="Top" Content="{Binding SelectedProjekt.ProjektNr}" />
         <Button Content="+" HorizontalAlignment="Left" Margin="23,20,0,0" VerticalAlignment="Top" Height="26" Width="26"  Command="{Binding OpenWindowCommand}" CommandParameter="{Binding .}" RenderTransformOrigin="0.524,0.581" IsEnabled="{Binding IsNewProjektButtonEnabled}"/>
-        
+
         <Grid Margin="456,10,10,0" Height="264" VerticalAlignment="Top">
             <lvc:PieChart
-        Series="{Binding ChartData}"
-             MouseDown="PieChart_MouseDown" MouseLeftButtonDown="PieChart_MouseLeftButtonDown">
+        Series="{Binding ChartData}">
             </lvc:PieChart>
         </Grid>
 
         <Grid RenderTransformOrigin="0.5,0.5" Margin="23,51,0,0" Height="810" VerticalAlignment="Top" HorizontalAlignment="Left" Width="384">
 
-            <ListBox MouseDoubleClick="ListBox_MouseDoubleClick" ItemsSource="{Binding Projekte}" Width="373" SelectedItem="{Binding SelectedProjekt}" Background="White" Margin="4,5,0,72" HorizontalAlignment="Left">
+            <ListBox ItemsSource="{Binding Projekte}" Width="373" SelectionChanged="ListBox_SelectionChanged" Background="White" Margin="4,5,0,72" HorizontalAlignment="Left">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,4,0">
@@ -52,7 +49,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Button Content="Mitarbeiterliste" Margin="10,769,0,0" Command="{Binding }" CommandParameter="{Binding .}" IsEnabled="{Binding IsNewProjektButtonEnabled}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" />
+            <Button Content="Mitarbeiter" Margin="10,769,0,0" Command="{Binding }" CommandParameter="{Binding .}" IsEnabled="{Binding IsNewProjektButtonEnabled}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" />
+            <Button Content="Abteilungen" Margin="177,769,0,0" Command="{Binding ''}" CommandParameter="{Binding .}" IsEnabled="{Binding IsNewProjektButtonEnabled}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" />
 
 
         </Grid>
@@ -60,56 +58,92 @@
 
 
         <!--<controlelements:ProblemGrid Problems="{Binding FilterProblems, Mode=TwoWay}" Margin="456,308,0,383"></controlelements:ProblemGrid> -->
-        <DatePicker SelectedDate="{Binding PickedTimeToFilterProblems}" x:Name="ProblemsDatePicker" HorizontalAlignment="Left" Margin="456,279,0,0" VerticalAlignment="Top"/>
+        <DatePicker SelectedDate="{Binding PickedTimeToFilterProblems}" x:Name="ProblemsDatePicker" HorizontalAlignment="Left" Margin="412,279,0,0" VerticalAlignment="Top" Width="145"/>
         <!--<controlelements:ProblemGrid Problems="{Binding PickedTimeToFilterProblems, Mode=TwoWay}" Margin="456,506,10,10"/> -->
-        <DataGrid x:Name="GridProblemeAktivProjekt" ItemsSource="{Binding FilterProblems}"  Margin="456,308,10,0" Height="248" VerticalAlignment="Top" AutoGenerateColumns="False" >
-                    <!--<i:Interaction.Triggers>
-            <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding PartSaveCommand}" CommandParameter="{Binding Problem, ElementName=GridProblemeAktivProjekt}"/>
-            </i:EventTrigger>
-        </i:Interaction.Triggers>-->
+        <DataGrid CanUserSortColumns="True"  RowEditEnding="GridProblemeAktivProjekt_RowEditEnding" CanUserAddRows="False"  x:Name="GridProblemeAktivProjekt" ItemsSource="{Binding FilterProblems}"  Margin="412,308,10,0" Height="478" VerticalAlignment="Top" AutoGenerateColumns="False" >
+
             <DataGrid.Columns>
-                
-                <DataGridTextColumn Binding="{Binding AuftrittsDatum, StringFormat=dd.MM.yyyy}" Header="AuftrittsDatum" ></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding ProzessStatus}" Header="Status"></DataGridTextColumn>
+
+                <DataGridTemplateColumn Header="AuftrittsDatum" CanUserSort="True" SortMemberPath="AuftrittsDatum">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding AuftrittsDatum, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding AuftrittsDatum}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Termin"  CanUserSort="True" SortMemberPath="Termin">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Termin, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding Termin}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Realer-Termin"  CanUserSort="True" SortMemberPath="Realer-Termin">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ReTermin, StringFormat={}{0:dd.MM.yyyy}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding ReTermin}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Abteilung"  CanUserSort="True" SortMemberPath="Abteilung.AbBezeichung" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Abteilung.AbBezeichung}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Source={x:Static vms:ViewModelMainWindow.UniqueAbteilungen}}" SelectedValuePath="AbBezeichung" DisplayMemberPath="AbBezeichung"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTemplateColumn Header="ProzessStatus"  CanUserSort="True" SortMemberPath="ProzessStatus">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ProzessStatus}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectionChanged="ComboBox_SelectionChanged_1" ItemsSource="{Binding Source={x:Static model:ProzessStatus.ListOfState}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+
                 <DataGridTextColumn Binding="{Binding KW}" Header="KW"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Name}" Header="Name"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Thema , UpdateSourceTrigger=PropertyChanged}" Header="Thema"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Kategorie}" Header="Kategorie"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Bewertung, UpdateSourceTrigger=PropertyChanged}" Header="Bewertung"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Maßnahme, UpdateSourceTrigger=PropertyChanged}" Header="Maßname"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Termin, StringFormat=dd.MM.yyyy}" Header="Termin"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding ReTermin, StringFormat=dd.MM.yyyy}" Header="Realer-Termin"></DataGridTextColumn>
+
                 <DataGridTextColumn Binding="{Binding Bezug, UpdateSourceTrigger=PropertyChanged}" Header="Bezug"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Abteilung}" Header="Abteilung"></DataGridTextColumn>
+
                 <DataGridTextColumn Binding="{Binding Initiator}" Header="Initiator"></DataGridTextColumn>
 
             </DataGrid.Columns>
         </DataGrid>
-
-        <DataGrid ItemsSource="{Binding FilterProblemsOnID}"  Margin="456,569,10,76" AutoGenerateColumns="False" >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="CurrentCellEditEnding">
-                    <i:InvokeCommandAction Command="{Binding PartSaveCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <DataGrid.Columns>
-
-                <DataGridTextColumn Binding="{Binding AuftrittsDatum, StringFormat=dd.MM.yyyy}" Header="AuftrittsDatum"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding ProzessStatus}" Header="Status"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding KW}" Header="KW"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Thema, UpdateSourceTrigger=PropertyChanged}" Header="Thema"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Kategorie}" Header="Kategorie"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Bewertung, UpdateSourceTrigger=PropertyChanged}" Header="Bewertung"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Maßnahme, UpdateSourceTrigger=PropertyChanged}" Header="Maßname"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Termin, StringFormat=dd.MM.yyyy}" Header="Termin"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding ReTermin, StringFormat=dd.MM.yyyy}" Header="Realer-Termin"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Bezug, UpdateSourceTrigger=PropertyChanged}" Header="Bezug"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Abteilung}" Header="Abteilung"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Initiator}" Header="Initiator"></DataGridTextColumn>
-
-            </DataGrid.Columns>
-        </DataGrid>
+        <TextBox HorizontalAlignment="Left" Margin="588,279,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" AutomationProperties.HelpText="Search" Height="24"/>
+        <Button Content="Neues Problem" Margin="0,279,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="95"/>
     </Grid>
 </Window>

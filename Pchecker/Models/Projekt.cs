@@ -9,29 +9,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektManager.Models
 {
-    public class Projekt 
+    public class Projekt  
     {
 
 
-        public string Auftraggeber { get; }
+        public string Auftraggeber { get; set; }
 
         
         
-        public string ProjektNr { get; }
+        public string ProjektNr { get; set; }
 
-        public DateTime Stand { get; }
+        public DateTime Stand { get; set; }
 
-        public DateTime Startpunkt { get; }
-        public string ProjektLeiter { get; }
-        public DateTime? DeadLine { get; }
-        public List<Abteilung> Abteilungen { get; }
+        public DateTime Startpunkt { get; set; }
+        public string ProjektLeiter { get; set; }
+        public DateTime? DeadLine { get; set; }
+        public List<Abteilung> Abteilungen { get; set; }
 
 
-        public List<Problem> Probleme { get; }
+        public List<Problem> Probleme { get; set; }
 
-        public DateTime DateOfTheEnd { get; }
+        public DateTime DateOfTheEnd { get; set; }
        
-        public Projekt(string Auftraggeber, string ProjektNr, DateTime Stand, string ProjektLeiter, DateTime? DeadLine, DateTime Startpunkt,  List<Problem> Probleme, DateTime DateOfTheEnd, IEnumerable<ISeries> ChartData)
+        public Projekt(string Auftraggeber, string ProjektNr, DateTime Stand, string ProjektLeiter, DateTime? DeadLine, DateTime Startpunkt,  List<Problem> Probleme, DateTime DateOfTheEnd, IEnumerable<ISeries> ChartData, List<Abteilung> Abteilungen)
         {
             this.Auftraggeber = Auftraggeber;
             this.ProjektNr = ProjektNr;
@@ -39,7 +39,7 @@ namespace ProjektManager.Models
             this.Startpunkt = Startpunkt;
             this.DeadLine = DeadLine;
             this.ProjektLeiter = ProjektLeiter;
-            this.Abteilungen = new List<Abteilung>();
+            this.Abteilungen = Abteilungen;
             this.ChartData = ChartData;
             this.Probleme = Probleme;
             this.DateOfTheEnd = DateOfTheEnd;
@@ -63,7 +63,7 @@ namespace ProjektManager.Models
             
         }
 
-        public IEnumerable<ISeries> ChartData { get; }
+        public IEnumerable<ISeries> ChartData { get; set; }
 
         public TimeSpan LengthOfTheProjekt => DateOfTheEnd.Subtract(Startpunkt);
 

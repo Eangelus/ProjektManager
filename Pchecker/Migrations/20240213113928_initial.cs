@@ -7,12 +7,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjektManager.Migrations
 {
     /// <inheritdoc />
-    public partial class NewInit : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Abteilungen",
+                columns: table => new
+                {
+                    AbBezeichung = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AbLeiter = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Abteilungen", x => x.AbBezeichung);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -38,26 +53,53 @@ namespace ProjektManager.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Abteilungen",
+                name: "Mitarbeiter",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AbBezeichung = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AbLeiter = table.Column<string>(type: "longtext", nullable: false)
+                    Nachname = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProjektDTOProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)
+                    AbteilungDTOAbBezeichung = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Abteilungen", x => x.Id);
+                    table.PrimaryKey("PK_Mitarbeiter", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Abteilungen_Projekte_ProjektDTOProjektNr",
-                        column: x => x.ProjektDTOProjektNr,
+                        name: "FK_Mitarbeiter_Abteilungen_AbteilungDTOAbBezeichung",
+                        column: x => x.AbteilungDTOAbBezeichung,
+                        principalTable: "Abteilungen",
+                        principalColumn: "AbBezeichung");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AbteilungDTOProjektDTO",
+                columns: table => new
+                {
+                    AbteilungenAbBezeichung = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProjekteProjektNr = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbteilungDTOProjektDTO", x => new { x.AbteilungenAbBezeichung, x.ProjekteProjektNr });
+                    table.ForeignKey(
+                        name: "FK_AbteilungDTOProjektDTO_Abteilungen_AbteilungenAbBezeichung",
+                        column: x => x.AbteilungenAbBezeichung,
+                        principalTable: "Abteilungen",
+                        principalColumn: "AbBezeichung",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AbteilungDTOProjektDTO_Projekte_ProjekteProjektNr",
+                        column: x => x.ProjekteProjektNr,
                         principalTable: "Projekte",
-                        principalColumn: "ProjektNr");
+                        principalColumn: "ProjektNr",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -71,7 +113,7 @@ namespace ProjektManager.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AuftrittsDatum = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     KW = table.Column<int>(type: "int", nullable: false),
-                    Abteilung = table.Column<string>(type: "longtext", nullable: false)
+                    AbteilungAbBezeichung = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -98,6 +140,11 @@ namespace ProjektManager.Migrations
                 {
                     table.PrimaryKey("PK_Probleme", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Probleme_Abteilungen_AbteilungAbBezeichung",
+                        column: x => x.AbteilungAbBezeichung,
+                        principalTable: "Abteilungen",
+                        principalColumn: "AbBezeichung");
+                    table.ForeignKey(
                         name: "FK_Probleme_Projekte_ProjektDTOProjektNr",
                         column: x => x.ProjektDTOProjektNr,
                         principalTable: "Projekte",
@@ -105,38 +152,20 @@ namespace ProjektManager.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "Mitarbeiter",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Nachname = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AbteilungDTOId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Mitarbeiter", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Mitarbeiter_Abteilungen_AbteilungDTOId",
-                        column: x => x.AbteilungDTOId,
-                        principalTable: "Abteilungen",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+            migrationBuilder.CreateIndex(
+                name: "IX_AbteilungDTOProjektDTO_ProjekteProjektNr",
+                table: "AbteilungDTOProjektDTO",
+                column: "ProjekteProjektNr");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Abteilungen_ProjektDTOProjektNr",
-                table: "Abteilungen",
-                column: "ProjektDTOProjektNr");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Mitarbeiter_AbteilungDTOId",
+                name: "IX_Mitarbeiter_AbteilungDTOAbBezeichung",
                 table: "Mitarbeiter",
-                column: "AbteilungDTOId");
+                column: "AbteilungDTOAbBezeichung");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Probleme_AbteilungAbBezeichung",
+                table: "Probleme",
+                column: "AbteilungAbBezeichung");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Probleme_ProjektDTOProjektNr",
@@ -147,6 +176,9 @@ namespace ProjektManager.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AbteilungDTOProjektDTO");
+
             migrationBuilder.DropTable(
                 name: "Mitarbeiter");
 

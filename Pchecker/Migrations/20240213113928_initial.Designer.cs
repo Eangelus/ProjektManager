@@ -11,8 +11,8 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(ProjektDBContext))]
-    [Migration("20240212125014_NewInit")]
-    partial class NewInit
+    [Migration("20240213113928_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,26 +22,31 @@ namespace ProjektManager.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("AbteilungDTOProjektDTO", b =>
+                {
+                    b.Property<string>("AbteilungenAbBezeichung")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ProjekteProjektNr")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("AbteilungenAbBezeichung", "ProjekteProjektNr");
+
+                    b.HasIndex("ProjekteProjektNr");
+
+                    b.ToTable("AbteilungDTOProjektDTO");
+                });
+
             modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("AbBezeichung")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("AbLeiter")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ProjektDTOProjektNr")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjektDTOProjektNr");
+                    b.HasKey("AbBezeichung");
 
                     b.ToTable("Abteilungen");
                 });
@@ -52,8 +57,8 @@ namespace ProjektManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AbteilungDTOId")
-                        .HasColumnType("int");
+                    b.Property<string>("AbteilungDTOAbBezeichung")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Nachname")
                         .IsRequired()
@@ -65,20 +70,19 @@ namespace ProjektManager.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AbteilungDTOId");
+                    b.HasIndex("AbteilungDTOAbBezeichung");
 
                     b.ToTable("Mitarbeiter");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Abteilung")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<string>("AbteilungAbBezeichung")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("AuftrittsDatum")
                         .HasColumnType("datetime(6)");
@@ -133,6 +137,8 @@ namespace ProjektManager.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AbteilungAbBezeichung");
+
                     b.HasIndex("ProjektDTOProjektNr");
 
                     b.ToTable("Probleme");
@@ -171,36 +177,50 @@ namespace ProjektManager.Migrations
                     b.ToTable("Projekte");
                 });
 
-            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
+            modelBuilder.Entity("AbteilungDTOProjektDTO", b =>
                 {
+                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
+                        .WithMany()
+                        .HasForeignKey("AbteilungenAbBezeichung")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
-                        .WithMany("Abteilungen")
-                        .HasForeignKey("ProjektDTOProjektNr");
+                        .WithMany()
+                        .HasForeignKey("ProjekteProjektNr")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
                     b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
-                        .WithMany("_mitarbeiterList")
-                        .HasForeignKey("AbteilungDTOId");
+                        .WithMany("Mitarbeiter")
+                        .HasForeignKey("AbteilungDTOAbBezeichung");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
+                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", "Abteilung")
+                        .WithMany("Probleme")
+                        .HasForeignKey("AbteilungAbBezeichung");
+
                     b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
                         .WithMany("Probleme")
                         .HasForeignKey("ProjektDTOProjektNr");
+
+                    b.Navigation("Abteilung");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
-                    b.Navigation("_mitarbeiterList");
+                    b.Navigation("Mitarbeiter");
+
+                    b.Navigation("Probleme");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>
                 {
-                    b.Navigation("Abteilungen");
-
                     b.Navigation("Probleme");
                 });
 #pragma warning restore 612, 618

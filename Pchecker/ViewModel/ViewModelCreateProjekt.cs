@@ -1,14 +1,5 @@
 ﻿using ProjektManager.Commands;
-using ProjektManager.ViewModel;
-using ProjektManager.Commands;
-using ProjektManager.Models;
 using ProjektManager.Services;
-using ProjektManager.Stores;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ProjektManager.ViewModel
