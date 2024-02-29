@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace ProjektManager.View
@@ -80,6 +81,26 @@ namespace ProjektManager.View
                 context.SelectedProjekt = selectedProjekt;
                 context.FilterProblems = new ObservableCollection<Problem>(selectedProjekt.Probleme);
             }
+        }
+
+        private void Delete_Projekt_Click(object sender, RoutedEventArgs e)
+        {
+            Projekt selectedProjekt = ((sender as MenuItem).DataContext as Projekt);
+            var context = (ViewModelMainWindow)DataContext;
+
+            if (context != null && selectedProjekt != null)
+            {
+                var filtered = new ObservableCollection<Projekt>(context.Projekte.Where(p => p.ProjektNr != selectedProjekt.ProjektNr));
+                context.Projekte = filtered;
+                var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+                using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+                {
+                    dbContext.DeleteProjekt(ProjektDTO.ToProjektDTO(selectedProjekt));
+                }
+
+            }
+
+
         }
     }
 }

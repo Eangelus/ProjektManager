@@ -1,21 +1,27 @@
-﻿using ProjektManager.Commands;
+﻿using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using ProjektManager.Commands;
+using ProjektManager.DataBaseAPI;
+using ProjektManager.DTOs;
+using ProjektManager.Models;
 using ProjektManager.Services;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace ProjektManager.ViewModel
 {
-    public class ViewModelCreateProjekt : ViewModelBase
+    public class ViewModelNewProjekt : ViewModelBase
     {
 
-        public ViewModelCreateProjekt()
+        public ViewModelNewProjekt()
         {
             
+            CreateProjektCommand = new CreateProjektCommand(this);
         }
 
         public ICommand CreateProjektCommand { get; }
-        public ICommand ChancelCommand { get; }
 
-        private string _Auftrageber;
+		private string _Auftrageber;
 
 		public string MyAuftrageber
         {
@@ -30,7 +36,21 @@ namespace ProjektManager.ViewModel
 			}
 		}
 
+		private string _myProjektNummer;
 
+		public string MyProjektNummer
+        {
+			get { return _myProjektNummer; }
+			set { _myProjektNummer = value; OnPropertyChanged(nameof(MyProjektNummer)); }
+		}
+
+		private DateTime _myStand = DateTime.Now;
+
+		public DateTime MyStand
+		{
+			get { return _myStand; }
+			set { _myStand = value; }
+		}
 
 
 		private string _ProjektLeiter;
@@ -48,8 +68,7 @@ namespace ProjektManager.ViewModel
 			}
 		}
 
-
-		private DateTime _Startpunkt;
+		private DateTime _Startpunkt = DateTime.Now;
 
 		public DateTime MyStartpunkt
         {
@@ -64,9 +83,7 @@ namespace ProjektManager.ViewModel
 			}
 		}
 
-
-
-		private DateTime _DeadLine;
+		private DateTime _DeadLine = DateTime.Now;
 
 		public DateTime MyDeadLine
         {
@@ -81,16 +98,6 @@ namespace ProjektManager.ViewModel
 			}
 		}
 
-
-
-
-
-
-		public ViewModelCreateProjekt(NaviService naviService)
-        {
-            CreateProjektCommand = new CreateProjektCommand(this, naviService);
-			ChancelCommand = new NaviCommands(naviService);
-        }
 
 
 

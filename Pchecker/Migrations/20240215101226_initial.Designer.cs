@@ -11,7 +11,7 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(ProjektDBContext))]
-    [Migration("20240213113928_initial")]
+    [Migration("20240215101226_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -21,21 +21,6 @@ namespace ProjektManager.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("AbteilungDTOProjektDTO", b =>
-                {
-                    b.Property<string>("AbteilungenAbBezeichung")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ProjekteProjektNr")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("AbteilungenAbBezeichung", "ProjekteProjektNr");
-
-                    b.HasIndex("ProjekteProjektNr");
-
-                    b.ToTable("AbteilungDTOProjektDTO");
-                });
 
             modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
@@ -117,10 +102,6 @@ namespace ProjektManager.Migrations
                     b.Property<string>("ProjektDTOProjektNr")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("ProjektNr")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("ProzessStatus")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -177,21 +158,6 @@ namespace ProjektManager.Migrations
                     b.ToTable("Projekte");
                 });
 
-            modelBuilder.Entity("AbteilungDTOProjektDTO", b =>
-                {
-                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
-                        .WithMany()
-                        .HasForeignKey("AbteilungenAbBezeichung")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
-                        .WithMany()
-                        .HasForeignKey("ProjekteProjektNr")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
                     b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
@@ -202,7 +168,7 @@ namespace ProjektManager.Migrations
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
                     b.HasOne("ProjektManager.DTOs.AbteilungDTO", "Abteilung")
-                        .WithMany("Probleme")
+                        .WithMany()
                         .HasForeignKey("AbteilungAbBezeichung");
 
                     b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
@@ -215,8 +181,6 @@ namespace ProjektManager.Migrations
             modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
                 {
                     b.Navigation("Mitarbeiter");
-
-                    b.Navigation("Probleme");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>

@@ -1,23 +1,27 @@
-﻿using ProjektManager.Logic;
+﻿using CommunityToolkit.Mvvm.Input;
+using ProjektManager.Logic;
 using ProjektManager.View;
 using ProjektManager.ViewModel;
+using ProjektManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ProjektManager.Commands
 {
     /// <summary>
-    /// ICommand Class to Open new Windows for Works
+    /// ICommand class for a new window to make a new Projekt
     /// </summary>
-    public class OpenWinMitarbeiterCommand : ICommand
+    public class OpenNewProjektWindowCommand : CommandBase
     {
+
         
 
-        public OpenWinMitarbeiterCommand()
+        public OpenNewProjektWindowCommand()
         {
         }
 
@@ -32,9 +36,11 @@ namespace ProjektManager.Commands
         }
 
 
-        public void Execute(object? parameter)
+        public override void Execute(object? parameter)
         {
-            
+            var window = new NewProjektWindow();
+            window.ShowDialog();
         }
+
     }
 }

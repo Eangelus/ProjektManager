@@ -24,6 +24,8 @@ namespace ProjektManager.View
         {
             
             InitializeComponent();
+            DataContext = new ViewModelNewProjekt();
+
         }
     }
 }

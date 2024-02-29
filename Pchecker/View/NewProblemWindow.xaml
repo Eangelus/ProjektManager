@@ -4,9 +4,49 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektManager.View"
+        xmlns:model="clr-namespace:ProjektManager.Models"
         mc:Ignorable="d"
-        Title="NewProblemWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Neues Problem" Height="593" Width="755">
+    <Grid Margin="0,0,0,0">
+        <Grid Margin="0,0,388,306">
+            <DatePicker HorizontalAlignment="Left" Margin="208,81,0,0" VerticalAlignment="Top" SelectedDate="{Binding AuftrittsDatum}"/>
+            <Label Content="Auftrittsdatum" HorizontalAlignment="Left" Margin="79,80,0,0" VerticalAlignment="Top"/>
+            <Label Content="Projekt: " HorizontalAlignment="Left" Margin="79,21,0,0" VerticalAlignment="Top" Height="29" Width="52"/>
+            <Label Content="{Binding SelectedProjekt.ProjektNr}" Margin="208,24,-306,0" VerticalAlignment="Top" Height="24"/>
+            <Label Content="Bezug" HorizontalAlignment="Left" Margin="80,111,0,0" VerticalAlignment="Top"/>
+            <Label Content="Abteilung" HorizontalAlignment="Left" Margin="79,142,0,0" VerticalAlignment="Top"/>
+            <Label Content="Name" HorizontalAlignment="Left" Margin="79,173,0,0" VerticalAlignment="Top"/>
+            <Label Content="Initiator" HorizontalAlignment="Left" Margin="80,204,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Margin="208,119,0,0" TextWrapping="Wrap" Text="{Binding Bezug, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="129" />
+            <ComboBox HorizontalAlignment="Left" Margin="208,146,0,0" VerticalAlignment="Top" Width="129" SelectedItem="{Binding Abteilung}" ItemsSource="{Binding Abteilungen}" DisplayMemberPath="AbBezeichung"/>
+            <TextBox HorizontalAlignment="Left" Margin="208,181,0,0" TextWrapping="Wrap" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged }" VerticalAlignment="Top" Width="129"/>
+            <TextBox HorizontalAlignment="Left" Margin="208,212,0,0" TextWrapping="Wrap" Text="{Binding Initiator, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="129"/>
+        </Grid>
+        <Grid Margin="367,0,-3,306">
+            <Label Content="Zieltermin" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="100" Height="25" Margin="14,77,0,0"/>
+            <DatePicker HorizontalAlignment="Left"  VerticalAlignment="Top" SelectedDate="{Binding Termin}" Margin="154,77,0,0"/>
+            <Label Content="Realer-Termin" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="106" Height="26" Margin="10,114,0,0"/>
+            <DatePicker HorizontalAlignment="Left"  VerticalAlignment="Top" SelectedDate="{Binding ReTermin}" Margin="154,114,0,0"/>
+
+            <ComboBox HorizontalAlignment="Left"  VerticalAlignment="Top" Width="144" SelectedItem="{Binding ProzessStatus}" ItemsSource="{Binding Source={x:Static model:ProzessStatus.ListOfState}}" Height="22" Margin="154,151,0,0"/>
+            <Label Content="Status" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="106" Height="26" Margin="14,149,0,0"/>
+            <Label Content="Kategorie" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="106" Height="26" Margin="14,180,0,0"/>
+            <TextBox HorizontalAlignment="Left" Margin="154,184,0,0" TextWrapping="Wrap" Text="{Binding Kategorie, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="129"/>
+        </Grid>
+        <Grid Margin="0,276,0,0">
+            <Label Content="Thema" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Margin="210,0,0,0" TextWrapping="Wrap" Text="{Binding Bewertung, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="403" Height="56"/>
+            <Label Content="Maßnahme" HorizontalAlignment="Left" Margin="80,80,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Margin="208,80,0,0" TextWrapping="Wrap" Text="{Binding Thema, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="402" Height="56"/>
+            <TextBox HorizontalAlignment="Left" Margin="210,160,0,0" TextWrapping="Wrap" Text="{Binding Maßnahme, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="402" Height="56"/>
+            <Label Content="Bewertung" HorizontalAlignment="Left" Margin="80,160,0,0" VerticalAlignment="Top"/>
+            <Button Content="Erstellen" HorizontalAlignment="Left" Margin="529,240,0,0" VerticalAlignment="Top" Height="22" Width="83" Command="{Binding CreateProblemCommand}"/>
+
+        </Grid>
+
+
+
+
+
     </Grid>
 </Window>

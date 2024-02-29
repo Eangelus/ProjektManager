@@ -22,84 +22,96 @@ using LiveChartsCore;
 
 namespace ProjektManager.Commands
 {
-    
+
     /// <summary>
     /// ICommand Class for creatin a new Projekt 
     /// </summary>
     public class CreateProjektCommand : CommandBase
     {
-        private readonly ViewModelCreateProjekt _viewModelCreateProjekt;
-        private readonly NaviService naviService;
+        private readonly ViewModelNewProjekt _viewModelCreateProjekt;
 
         public event EventHandler? CanExecuteChanged;
 
-        public CreateProjektCommand(ViewModelCreateProjekt viewModelCreateProjekt,
-            NaviService naviService)
+        public CreateProjektCommand(ViewModelNewProjekt viewModelCreateProjekt)
         {
             _viewModelCreateProjekt = viewModelCreateProjekt;
-            this.naviService = naviService;
             _viewModelCreateProjekt.PropertyChanged += OnViewModelPropertyChanged;
-        }
 
+            var windows = Application.Current.Windows;
+            Window? projektWindow = null;
+            Window? mainWindow = null;
+            foreach (var window in windows)
+            {
+                if (window.GetType() == typeof(NewProjektWindow))
+                {
+                    projektWindow = (NewProjektWindow)window;
+                }
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    mainWindow = (MainWindow)window;
+                }
+            }
+        }
 
         public override bool CanExecute(object? parameter)
         {
-
-            return !string.IsNullOrEmpty(_viewModelCreateProjekt.MyAuftrageber) && base.CanExecute(parameter);
-            //throw new NotImplementedException();
+            bool result = !string.IsNullOrEmpty(_viewModelCreateProjekt.MyProjektNummer) && !string.IsNullOrEmpty(_viewModelCreateProjekt.MyAuftrageber) && !string.IsNullOrEmpty(_viewModelCreateProjekt.MyProjektLeiter) &&  base.CanExecute(parameter);
+            return result;
         }
 
         public override void Execute(object? parameter)
         {
             var windows = Application.Current.Windows;
-            //Projekt projekt = new Projekt();
 
+            Window? projektWindow = null;
             Window? mainWindow = null;
-            Window? projektWindow = null; 
             foreach (var window in windows)
             {
-                if (window.GetType() == typeof(MainWindow) )
-                {
-                    mainWindow = (MainWindow)window;
-                }
                 if (window.GetType() == typeof(NewProjektWindow))
                 {
                     projektWindow = (NewProjektWindow)window;
                 }
+                if (window.GetType() == typeof(MainWindow))
+                {
+                    mainWindow = (MainWindow)window;
+                }
 
             }
-            //var dataContext = (ViewModelMainWindow) mainWindow.DataContext;
-            //projekt = (Projekt)projektWindow.DataContext;
-            //_jp.CreateProjekt(projekt);
-           Projekt projekt = new Projekt(
-                                  _viewModelCreateProjekt.MyAuftrageber,
-                                  "0",
-                                  DateTime.Now,
-                                  _viewModelCreateProjekt.MyProjektLeiter,
-                                  _viewModelCreateProjekt.MyDeadLine,
-                                  _viewModelCreateProjekt.MyStartpunkt,
-                                  new List<Problem>(),
-                                  DateTime.Now,
-                                  new List<ISeries>(),
-                                  new List<Abteilung>());
 
+            Projekt projekt = new Projekt(
+                                   _viewModelCreateProjekt.MyAuftrageber,
+                                   _viewModelCreateProjekt.MyProjektNummer,
+                                   _viewModelCreateProjekt.MyStand,
+                                   _viewModelCreateProjekt.MyProjektLeiter,
+                                   _viewModelCreateProjekt.MyDeadLine,
+                                   _viewModelCreateProjekt.MyStartpunkt,
+                                   new List<Problem>(),
+                                   DateTime.Now,
+                                   new List<ISeries>());
+
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
             try
             {
-                var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
                 using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
                 {
                     dbContext.Add(ProjektDTO.ToProjektDTO(projekt));
                     dbContext.SaveChanges();
                 }
-                MessageBox.Show("Projekt wurde Angelegt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (ProjektConflictException )
+            }catch (Exception ex)
             {
-                MessageBox.Show("Die eingaben Stimmen schon mit einen anderen Projekt überein !  btw Sollte niemals kommen, diese meldung!", "Error", MessageBoxButton.OK, MessageBoxImage.Error) ;
+                // Duplicate entry '0' for key 'projekte.PRIMARY'
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("Duplicate entry") && ex.InnerException.Message.Contains("for key"))
+                {
+                    MessageBox.Show("Fehler beim Anlegen des Projekts. -> Projekt exisitert bereits.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                MessageBox.Show("Fehler beim Anlegen des Projekts.", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-            
+            MessageBox.Show("Projekt wurde Angelegt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            if(projektWindow is null)
+            (mainWindow.DataContext as ViewModelMainWindow).Projekte.Add(projekt);
+            if (projektWindow == null)
             {
                 return;
             }
@@ -108,10 +120,7 @@ namespace ProjektManager.Commands
 
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(ViewModelCreateProjekt.MyAuftrageber))
-            {
-                OnCanExecuteChanged();
-            }
+            OnCanExecuteChanged();
         }
 
 

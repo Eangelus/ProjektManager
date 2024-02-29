@@ -17,13 +17,11 @@ namespace ProjektManager.DTOs
             
         }
 
-        public AbteilungDTO(string abBezeichung, string abLeiter, List<MitarbeiterDTO> mitarbeiter, List<ProjektDTO> projekte, List<ProblemDTO> probleme)
+        public AbteilungDTO(string abBezeichung, string abLeiter, List<MitarbeiterDTO> mitarbeiter)
         {
             AbBezeichung = abBezeichung;
             AbLeiter = abLeiter;
             Mitarbeiter = mitarbeiter;
-            Projekte = projekte;
-            Probleme = probleme;
         }
 
         [Key] 
@@ -31,9 +29,6 @@ namespace ProjektManager.DTOs
         public string AbLeiter { set; get; }
 
         public List<MitarbeiterDTO> Mitarbeiter { get; set; }
-
-        public List<ProjektDTO> Projekte { get; set; }
-        public List<ProblemDTO> Probleme { get; set; }
 
         public static AbteilungDTO ToAbteilungDTO(Abteilung abteilung)
         {
@@ -49,24 +44,8 @@ namespace ProjektManager.DTOs
                     mitarbeiter.Add(MitarbeiterDTO.ToMitarbeiterDTO(m));
                 }
             }
-            List<ProjektDTO> projekte = new List<ProjektDTO>();
-            if (abteilung.Projekte != null)
-            {
-                foreach (var p in abteilung.Projekte)
-                {
-                    projekte.Add(ProjektDTO.ToProjektDTO(p));
-                }
-            }
 
-            List<ProblemDTO> probleme = new List<ProblemDTO>();
-            if (abteilung.Probleme != null)
-            {
-                foreach (var p in abteilung.Probleme)
-                {
-                    probleme.Add(ProblemDTO.ToProblemDTO(p));
-                }
-            }
-            return new AbteilungDTO(abteilung.AbBezeichung, abteilung.AbLeiter, mitarbeiter, projekte, probleme);
+            return new AbteilungDTO(abteilung.AbBezeichung, abteilung.AbLeiter, mitarbeiter);
         }
 
         public static Abteilung FromAbteilungDTO(AbteilungDTO abteilungDTO)
@@ -89,7 +68,7 @@ namespace ProjektManager.DTOs
             //    }
             //}
             List<Problem> probleme = new List<Problem>();   
-            return new Abteilung(abteilungDTO.AbBezeichung, abteilungDTO.AbLeiter, mitarbeiter, projekte, probleme);
+            return new Abteilung(abteilungDTO.AbBezeichung, abteilungDTO.AbLeiter, mitarbeiter);
 
         }
 

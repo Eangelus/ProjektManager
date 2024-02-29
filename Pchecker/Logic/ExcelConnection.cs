@@ -55,7 +55,6 @@ namespace ProjektManager.Logic
                 int[] values = [0, 0, 0, 0, 0, 0, 0,];
 
                 List<ProblemDTO> problems = new List<ProblemDTO>();
-                Dictionary<string, AbteilungDTO> uniqueAbteilungen = new Dictionary<string, AbteilungDTO>();
 
 
                 while (true)
@@ -163,7 +162,7 @@ namespace ProjektManager.Logic
                     if (AbteilungBezeichnung.Length > 0)
                     {
                         // neue abteilung wird erstellt wen die bezeichung größer als 1
-                        abteilungDTO = new AbteilungDTO(AbteilungBezeichnung, "", new List<MitarbeiterDTO>(), new List<ProjektDTO>(), new List<ProblemDTO>());
+                        abteilungDTO = new AbteilungDTO(AbteilungBezeichnung, "", new List<MitarbeiterDTO>());
                     }
 
                     var found = dbContext.Abteilungen.Any(e => e.AbBezeichung == AbteilungBezeichnung);
@@ -172,13 +171,11 @@ namespace ProjektManager.Logic
 
                         abteilungDTO = dbContext.Add(abteilungDTO).Entity;
                         dbContext.SaveChanges();
-                        uniqueAbteilungen.TryAdd(abteilungDTO.AbBezeichung, abteilungDTO);
 
                     }
                     if (found)
                     {
                         abteilungDTO = dbContext.Abteilungen.Single(a => a.AbBezeichung == AbteilungBezeichnung);
-                        uniqueAbteilungen.TryAdd(abteilungDTO.AbBezeichung, abteilungDTO);
                     }
                     ProblemDTO newProblem = new ProblemDTO(null, Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), KW, abteilungDTO, Name, Initiator, Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr);
 
@@ -201,8 +198,7 @@ namespace ProjektManager.Logic
                     };
                 chartData = chartData.Where(x => x.Values.ToList()[0] != 0);
 
-                var abteilungen = uniqueAbteilungen.Values.ToList();
-                ProjektDTO projekt = new ProjektDTO(ProjektNr, Auftraggeber, DateTime.Now, Startpunkt, ProjektLeiter, DateTime.Now, abteilungen, problems, 0, DateTime.Now);
+                ProjektDTO projekt = new ProjektDTO(ProjektNr, Auftraggeber, DateTime.Now, Startpunkt, ProjektLeiter, DateTime.Now, problems, 0, DateTime.Now);
 
                 if (projekt != null)
                 {

@@ -1,13 +1,5 @@
-﻿using LiveChartsCore;
-using ProjektManager.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using ProjektManager.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjektManager.Models;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView;
 using SkiaSharp;
@@ -23,7 +15,7 @@ namespace ProjektManager.DTOs
 
         }
 
-        public ProjektDTO(string projektNr, string auftraggeber, DateTime stand, DateTime startpunkt, string projektLeiter, DateTime deadLine, List<AbteilungDTO> abteilungen, List<ProblemDTO> probleme, int status, DateTime dateOfTheEnd)
+        public ProjektDTO(string projektNr, string auftraggeber, DateTime stand, DateTime startpunkt, string projektLeiter, DateTime deadLine, List<ProblemDTO> probleme, int status, DateTime dateOfTheEnd)
         {
             ProjektNr = projektNr;
             Auftraggeber = auftraggeber;
@@ -31,7 +23,6 @@ namespace ProjektManager.DTOs
             Startpunkt = startpunkt;
             ProjektLeiter = projektLeiter;
             DeadLine = deadLine;
-            Abteilungen = abteilungen;
             Probleme = probleme;
             Status = status;
             DateOfTheEnd = dateOfTheEnd;
@@ -53,9 +44,6 @@ namespace ProjektManager.DTOs
 
         public DateTime DeadLine { get; set; }
 
-
-        public List<AbteilungDTO> Abteilungen { get; set; }
-
         public List<ProblemDTO> Probleme { get; set; }
 
         public int Status { get; set; }
@@ -69,11 +57,6 @@ namespace ProjektManager.DTOs
             {
                 problemDTOs.Add(ProblemDTO.ToProblemDTO(problem));
             };
-            List<AbteilungDTO> abteilungen = new List<AbteilungDTO>();
-            foreach(var abteilung in projekt.Abteilungen)
-            {
-                abteilungen.Add(AbteilungDTO.ToAbteilungDTO(abteilung));    
-            }
 
             return new ProjektDTO()
             {
@@ -85,7 +68,6 @@ namespace ProjektManager.DTOs
                 ProjektLeiter = projekt.ProjektLeiter,
                 Probleme = problemDTOs,
                 DeadLine = projekt.DeadLine.Value,
-                Abteilungen = abteilungen
             };
         }
 
@@ -127,16 +109,6 @@ namespace ProjektManager.DTOs
                 }
             }
 
-            List<Abteilung> abteilungen = new List<Abteilung>();
-            if (projektDTO.Abteilungen != null)
-            {
-                foreach (var abteilung in projektDTO.Abteilungen)
-                {
-                    abteilungen.Add(AbteilungDTO.FromAbteilungDTO(abteilung));
-                }
-            }
-
-
             IEnumerable<PieSeries<int>> chartData = new[]
             {
                         new PieSeries<int> {Values= new[]{values[0]}, Name=ProzessStatus.Problem_Erkannt, Fill=new SolidColorPaint(SKColors.DarkRed) },
@@ -150,7 +122,7 @@ namespace ProjektManager.DTOs
 
             chartData = chartData.Where(x => x.Values.ToList()[0] != 0);
 
-            return new Projekt(projektDTO.Auftraggeber, projektDTO.ProjektNr, projektDTO.Stand, projektDTO.ProjektLeiter, projektDTO.DeadLine, projektDTO.Startpunkt, problems, projektDTO.DateOfTheEnd, chartData, abteilungen);
+            return new Projekt(projektDTO.Auftraggeber, projektDTO.ProjektNr, projektDTO.Stand, projektDTO.ProjektLeiter, projektDTO.DeadLine, projektDTO.Startpunkt, problems, projektDTO.DateOfTheEnd, chartData);
         }
 
     }

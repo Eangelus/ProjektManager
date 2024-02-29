@@ -4,6 +4,7 @@ using ProjektManager.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 
 namespace ProjektManager.Models
@@ -27,7 +28,6 @@ namespace ProjektManager.Models
         public DateTime? Termin { get; set; }
         public DateTime ReTermin { get; set; }
         public string ProzessStatus { get; set; }
-        public string ProjektNr { get; set; }
 
 
         public TimeSpan LengthOfTheProblem => ReTermin.Subtract(AuftrittsDatum);
@@ -39,12 +39,12 @@ namespace ProjektManager.Models
         {            
         }
 
-        public Problem(int? id,string bezug, DateTime auftrittsDatum, int kW, Abteilung? abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
+        public Problem(int? id,string bezug, DateTime auftrittsDatum, Abteilung? abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus)
         {
             Id = id;
             Bezug = bezug;
             AuftrittsDatum = auftrittsDatum;
-            KW = kW;
+            KW = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(AuftrittsDatum, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             Abteilung = abteilung;
             Name = name;
             Initiator = initiator;
@@ -55,7 +55,6 @@ namespace ProjektManager.Models
             Termin = termin;
             ReTermin = reTermin;
             ProzessStatus = prozessStatus;
-            ProjektNr = projektNr;
         }
     }
 }

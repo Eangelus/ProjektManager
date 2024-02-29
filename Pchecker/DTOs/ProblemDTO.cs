@@ -36,7 +36,6 @@ namespace ProjektManager.DTOs
             Termin = termin;
             ReTermin = reTermin;
             ProzessStatus = prozessStatus;
-            ProjektNr = projektNr;
         }
 
         public string Bezug { set; get; }
@@ -68,9 +67,6 @@ namespace ProjektManager.DTOs
 
         public string ProzessStatus { set; get; }
 
-       
-        public string ProjektNr { set; get; }
-
         public static ProblemDTO ToProblemDTO(Problem problem) => new ProblemDTO()
         {
             Id = problem.Id,
@@ -86,14 +82,13 @@ namespace ProjektManager.DTOs
             Bewertung = problem.Bewertung,
             Termin = problem.Termin,
             ReTermin = problem.ReTermin,
-            ProzessStatus = problem.ProzessStatus,
-            ProjektNr = problem.ProjektNr,
+            ProzessStatus = problem.ProzessStatus
         };
 
         public static Problem FromProblemDTO(ProblemDTO problemDTO)
         {
-            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.KW, problemDTO.Abteilung == null ? null : AbteilungDTO.FromAbteilungDTO(problemDTO.Abteilung), problemDTO.Name, problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
-                                problemDTO.Termin, problemDTO.ReTermin, problemDTO.ProzessStatus, problemDTO.ProjektNr);
+            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.Abteilung == null ? null : AbteilungDTO.FromAbteilungDTO(problemDTO.Abteilung), problemDTO.Name, problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
+                                problemDTO.Termin, problemDTO.ReTermin, problemDTO.ProzessStatus);
            
         }
 

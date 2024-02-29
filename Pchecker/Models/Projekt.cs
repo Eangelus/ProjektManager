@@ -31,7 +31,7 @@ namespace ProjektManager.Models
 
         public DateTime DateOfTheEnd { get; set; }
        
-        public Projekt(string Auftraggeber, string ProjektNr, DateTime Stand, string ProjektLeiter, DateTime? DeadLine, DateTime Startpunkt,  List<Problem> Probleme, DateTime DateOfTheEnd, IEnumerable<ISeries> ChartData, List<Abteilung> Abteilungen)
+        public Projekt(string Auftraggeber, string ProjektNr, DateTime Stand, string ProjektLeiter, DateTime? DeadLine, DateTime Startpunkt,  List<Problem> Probleme, DateTime DateOfTheEnd, IEnumerable<ISeries> ChartData)
         {
             this.Auftraggeber = Auftraggeber;
             this.ProjektNr = ProjektNr;
@@ -39,7 +39,6 @@ namespace ProjektManager.Models
             this.Startpunkt = Startpunkt;
             this.DeadLine = DeadLine;
             this.ProjektLeiter = ProjektLeiter;
-            this.Abteilungen = Abteilungen;
             this.ChartData = ChartData;
             this.Probleme = Probleme;
             this.DateOfTheEnd = DateOfTheEnd;

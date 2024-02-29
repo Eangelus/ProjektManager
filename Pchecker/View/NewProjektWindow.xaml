@@ -5,20 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektManager.View"
 
-        Title="NewProjektWindow" Height="412" Width="471">
+        Title="Neues Projekt" Height="391" Width="381">
 
-    <Grid Margin="0,0,10,-6" >
+    <Grid Margin="0,0,0,3" >
         <Label Content="Neues Projekt" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="Auftraggeber" HorizontalAlignment="Left" Margin="152,74,0,0" TextWrapping="Wrap" Text="{Binding MyAuftrageber}" VerticalAlignment="Top" Width="120" AutomationProperties.HelpText="Auftraggeber" />
-        <TextBox Name="Projektleiter" HorizontalAlignment="Left" Margin="152,113,0,0" TextWrapping="Wrap" Text="{Binding MyProjektLeiter}" VerticalAlignment="Top" Width="120"/>
-        <DatePicker x:Name="AddProjektWindow" HorizontalAlignment="Left" Margin="152,0,0,0" VerticalAlignment="Center" Text="Startzeitpunkt" SelectedDate ="{Binding MyStartpunkt}" Height="26" Width="120"/>
-        <ComboBox Name="Abteilung" HorizontalAlignment="Left" Margin="152,150,0,0" VerticalAlignment="Top" Width="120"/>
-        <DatePicker HorizontalAlignment="Left" Margin="152,235,0,0" VerticalAlignment="Top" SelectedDate="{Binding MyDeadLine}" Height="26" Width="120"/>
-        <Button Content="Erstellen" HorizontalAlignment="Left" Margin="299,304,0,0" VerticalAlignment="Top" Command="{Binding CreateProjekt}"/>
-        <Label HorizontalAlignment="Left" Margin="52,70,0,0" VerticalAlignment="Top" Content="Auftraggeber"/>
-        <Label Content="Projektleiter" HorizontalAlignment="Left" Margin="52,109,0,0" VerticalAlignment="Top" Width="68"/>
-        <Label Content="Abteilung" HorizontalAlignment="Left" Margin="55,150,0,0" VerticalAlignment="Top"/>
-        <Label Content="Startpunkt" HorizontalAlignment="Left" Margin="58,0,0,0" VerticalAlignment="Center"/>
-        <Label Content="deadline" HorizontalAlignment="Left" Margin="65,235,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="ProjektNr" HorizontalAlignment="Left" Margin="157,60,0,0" TextWrapping="Wrap" Text="{Binding MyProjektNummer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" />
+        <TextBox Name="Auftraggeber" HorizontalAlignment="Left" Margin="157,135,0,0" TextWrapping="Wrap" Text="{Binding MyAuftrageber, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" />
+        <TextBox Name="Projektleiter" HorizontalAlignment="Left" Margin="157,174,0,0" TextWrapping="Wrap" Text="{Binding MyProjektLeiter, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <DatePicker x:Name="AddProjektWindow" HorizontalAlignment="Left" Margin="160,216,0,0" VerticalAlignment="Top" Text="Startzeitpunkt" SelectedDate ="{Binding MyStartpunkt, UpdateSourceTrigger=PropertyChanged}" Height="26" Width="120"/>
+        <DatePicker HorizontalAlignment="Left" Margin="160,263,0,0" VerticalAlignment="Top" SelectedDate="{Binding MyDeadLine, UpdateSourceTrigger=PropertyChanged}" Height="26" Width="120"/>
+        <DatePicker HorizontalAlignment="Left" Margin="157,94,0,0" VerticalAlignment="Top" SelectedDate="{Binding MyStand, UpdateSourceTrigger=PropertyChanged}" Height="26" Width="120"/>
+        <Button Content="Erstellen" HorizontalAlignment="Left" Margin="234,324,0,0" VerticalAlignment="Top" Command="{Binding CreateProjektCommand}"/>
+        <Label HorizontalAlignment="Left" Margin="57,131,0,0" VerticalAlignment="Top" Content="Auftraggeber"/>
+        <Label Content="Projektleiter" HorizontalAlignment="Left" Margin="57,170,0,0" VerticalAlignment="Top" Width="68"/>
+        <Label Content="Startpunkt" HorizontalAlignment="Left" Margin="63,216,0,0" VerticalAlignment="Top"/>
+        <Label Content="Deadline" HorizontalAlignment="Left" Margin="63,263,0,0" VerticalAlignment="Top"/>
+        <Label Content="Stand" HorizontalAlignment="Left" Margin="60,94,0,0" VerticalAlignment="Top"/>
+        <Label Content="Projekt Nr." HorizontalAlignment="Left" Margin="57,56,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

@@ -50,17 +50,13 @@ namespace ProjektManager.DataBaseAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<ProjektDTO>()
-                                .HasMany(e => e.Abteilungen)
-                                .WithMany(e => e.Projekte);
         }
 
 
         public IEnumerable<ProjektDTO> GetAllProjekts()
         {
 
-            var erg = Projekte.Include(p => p.Abteilungen).Include(p => p.Probleme).ThenInclude(prob => prob.Abteilung);
+            var erg = Projekte.Include(p => p.Probleme).ThenInclude(prob => prob.Abteilung);
             return erg;
         }
 
@@ -74,6 +70,22 @@ namespace ProjektManager.DataBaseAPI
             base.SaveChanges();
             return update.Entity;
         }
+
+        public void DeleteProjekt(ProjektDTO projektToDelete)
+        {
+            if (projektToDelete != null)
+            {
+                base.Entry(projektToDelete).State = EntityState.Deleted;
+                projektToDelete.Probleme.ForEach(p =>
+                {
+                    base.Entry(p).State = EntityState.Deleted;
+                });
+                //Projekte.Remove(projektToDelete);
+                base.SaveChanges();
+            }
+        }
+
+
     }
 }
 

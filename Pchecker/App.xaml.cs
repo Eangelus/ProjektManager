@@ -15,16 +15,12 @@ namespace ProjektManager
     public partial class App : Application
     {
 
-        public static string CONSTRING = "server=localhost; database=projekte; uid=root; Password=123456789";
+        public static string CONSTRING = "server=localhost; database=projekte; Uid=root; Password=123456789";
         public readonly ProjektDBContextFactory _projektDBContextFactory;
-        private readonly NaviStore _naviStore;
 
    
         public App()
         {
-
-            _naviStore = new NaviStore();
-
             _projektDBContextFactory = new ProjektDBContextFactory(CONSTRING);
 
 

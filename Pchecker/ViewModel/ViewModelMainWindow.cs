@@ -9,33 +9,28 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ProjektManager.DataBaseAPI;
 using ProjektManager.DTOs;
+using SixLabors.Fonts.Unicode;
 
 namespace ProjektManager.ViewModel
 {
     public class ViewModelMainWindow : ViewModelBase
     {
-
-        private readonly NaviStore _naviStore;
-        public ViewModelBase CurrentViewModel => _naviStore.CurrentViewModel;
-
-        public static ObservableCollection<Abteilung> UniqueAbteilungen = new ObservableCollection<Abteilung>();
-
-
-
-        private bool _isNewProjektButtonEnabled = true;
-
-        public bool IsNewProjektButtonEnabled
+        public bool IsNewProblemButtonEnabled
         {
-            get { return _isNewProjektButtonEnabled; }
-            set { _isNewProjektButtonEnabled = value; OnPropertyChanged(nameof(IsNewProjektButtonEnabled)); }
+            get { return SelectedProjekt != null; }
+        }
+
+        private string _selectedProjektStatus;
+
+        public string SelectedProjektStatus
+        {
+            get { return _selectedProjektStatus; }
+            set { _selectedProjektStatus = value; OnPropertyChanged(nameof(SelectedProjektStatus)); }
         }
 
 
-        public ICommand OpenWindowCommand { get; set; }
-
-        public ICommand ShowChartDetailsCommand { get; set; }
-
-        public ICommand PartSaveCommand { get; set; }
+        public ICommand OpenNewProjektWindowCommand { get; set; }
+        public ICommand OpenNewProblemWindowCommand { get; set; }
 
         private ObservableCollection<Projekt> projekte;
 
@@ -45,26 +40,24 @@ namespace ProjektManager.ViewModel
             set { projekte = value; OnPropertyChanged(nameof(Projekte)); }
         }
 
+        private static ObservableCollection<Abteilung> _abteilungen = new ObservableCollection<Abteilung>();
+
+        public static ObservableCollection<Abteilung> Abteilungen
+        {
+            get { return _abteilungen; }
+            set { _abteilungen = value; }
+        }
+
         public ViewModelMainWindow()
         {
-            OpenWindowCommand = new OpenWinNewProjektCommmand();
-            PartSaveCommand = new PartSaveCommand(SaveChanges);
+            OpenNewProjektWindowCommand = new OpenNewProjektWindowCommand();
+            OpenNewProblemWindowCommand = new OpenNewProblemWindowCommand(this);
             LoadAllProjekte();
+            LoadAbteilungen();
         }
-
-        public ViewModelMainWindow(NaviStore naviStore)
-        {
-            _naviStore = naviStore;
-            _naviStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
-            OpenWindowCommand = new OpenWinNewProjektCommmand();
-            PartSaveCommand = new PartSaveCommand(SaveChanges);
-            LoadAllProjekte();
-            
-        }
-
 
         private string searchText;
-        
+
         public string SearchText
         {
             get
@@ -79,18 +72,17 @@ namespace ProjektManager.ViewModel
 
                 var suche =
                     from p in SelectedProjekt.Probleme
-                    where p.Name.Contains(searchText) || 
+                    where p.Name.Contains(searchText) ||
                     (p.Abteilung == null ? false : p.Abteilung.AbBezeichung.Contains(searchText)) ||
                     (p.Bewertung.Contains(searchText)) ||
                     (p.Termin == null ? false : p.Termin.ToString().Contains(searchText)) ||
                     (p.AuftrittsDatum.ToString().Contains(searchText)) ||
-                    (p.ProjektNr.Contains(searchText)) ||
                     (p.Initiator == null ? false : p.Initiator.Contains(searchText)) ||
                     (p.Maßnahme == null ? false : p.Maßnahme.Contains(searchText)) ||
                     (p.Bezug == null ? false : p.Bezug.Contains(searchText)) ||
                     (p.Kategorie == null ? false : p.Kategorie.Contains(searchText)) ||
                     (p.KW.ToString().Contains(searchText)) ||
-                    (p.ProzessStatus == null ? false : p.ProzessStatus.Contains(searchText)) || 
+                    (p.ProzessStatus == null ? false : p.ProzessStatus.Contains(searchText)) ||
                     (p.ReTermin == null ? false : p.ReTermin.ToString().Contains(searchText)) ||
                     (p.Thema == null ? false : p.Thema.Contains(searchText))
                     select p;
@@ -103,29 +95,15 @@ namespace ProjektManager.ViewModel
             }
         }
 
-            
-
-        private void OnCurrentViewModelChanged()
+        public void LoadAbteilungen()
         {
-            OnPropertyChanged(nameof(CurrentViewModel));
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                Abteilungen.Clear();
+                dbContext.Abteilungen.Select(p => AbteilungDTO.FromAbteilungDTO(p)).ToList().ForEach(Abteilungen.Add);
+            }
         }
-
-
-        public async Task addProjekt(Projekt p)
-        {
-            OnPropertyChanged(nameof(Projekte));
-        }
-
-        private void SaveChanges(DataGridRowEditEndingEventArgs entity)
-        {
-
-            Debug.WriteLine(entity);
-
-            //DBContext db = new DBContext();
-            //db.Entry(entity).State = EntityState.Modified;
-            //db.SaveChanges();
-        }
-
 
         public void LoadAllProjekte()
         {
@@ -141,73 +119,32 @@ namespace ProjektManager.ViewModel
                 SelectedProjekt = newSelectedProjekt;
             }
 
-            HashSet<Abteilung> uniqueAbteilungenSet = new HashSet<Abteilung>();
-
 
             foreach (var projekt in Projekte)
             {
-
-                foreach(var abteilung in projekt.Abteilungen)
-                {
-                    uniqueAbteilungenSet.Add(abteilung);
-                }
 
                 foreach (var series in projekt.ChartData)
                 {
                     PieSeries<int> casted = (PieSeries<int>)series;
                     casted.ChartPointPointerDown += (sender, e) =>
                     {
+                        foreach (var series in ChartData)
+                        {
+                            (series as PieSeries<int>).Pushout = 0;
+                        }
+                        casted.Pushout = 20;
                         IEnumerable<Problem> filtered = projekt.Probleme.Where(p =>
                         {
                             return p.ProzessStatus.Equals(series.Name);
                         });
 
                         FilterProblems = new ObservableCollection<Problem>(filtered);
+                        SelectedProjektStatus = series.Name;
                     };
                 }
 
             }
-
-            var abteilungenList = uniqueAbteilungenSet.ToList();
-            if(abteilungenList != null)
-            {
-                foreach(var a in abteilungenList)
-                {
-                    UniqueAbteilungen.Add(a);
-                }
-                OnPropertyChanged(nameof(UniqueAbteilungen));
-            }
-
         }
-
-        private DateTime pickedTimeToFilterProblems = DateTime.Now.AddDays(-7);
-
-        public DateTime PickedTimeToFilterProblems
-        {
-            get { return pickedTimeToFilterProblems; }
-            set
-            {
-                if (pickedTimeToFilterProblems.Ticks == value.Ticks)
-                {
-                    return;
-                }
-                pickedTimeToFilterProblems = value;
-
-                IEnumerable<Problem> problems = new List<Problem>();
-                foreach (var projekt in Projekte)
-                {
-                    problems = problems.Concat(projekt.Probleme);
-                }
-
-                IEnumerable<Problem> result = problems.Where(f => f.AuftrittsDatum - PickedTimeToFilterProblems > TimeSpan.Zero);
-                if (result.Count() == 0)
-                {
-                    FilterProblems = new ObservableCollection<Problem>();
-                }
-                FilterProblems = new ObservableCollection<Problem>(result);
-            }
-        }
-
 
         ObservableCollection<Problem> _filterProblems = new ObservableCollection<Problem>();
 
@@ -239,9 +176,11 @@ namespace ProjektManager.ViewModel
             get { return selectedProjekt; }
             set
             {
+                SelectedProjektStatus = String.Empty;
                 selectedProjekt = value;
                 OnPropertyChanged(nameof(SelectedProjekt));
                 OnPropertyChanged(nameof(ChartData));
+                OnPropertyChanged(nameof(IsNewProblemButtonEnabled));
             }
         }
 

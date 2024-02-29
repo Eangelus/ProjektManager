@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ProjektManager.DataBaseAPI;
+using ProjektManager.Models;
+using ProjektManager.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +22,11 @@ namespace ProjektManager.View
     /// </summary>
     public partial class NewProblemWindow : Window
     {
-        public NewProblemWindow()
+        public NewProblemWindow(Projekt selectedProjekt)
         {
             InitializeComponent();
+            DataContext = new ViewModelNewProblem();
+            (DataContext as ViewModelNewProblem).SelectedProjekt = selectedProjekt;
         }
     }
 }

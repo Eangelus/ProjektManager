@@ -77,33 +77,6 @@ namespace ProjektManager.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "AbteilungDTOProjektDTO",
-                columns: table => new
-                {
-                    AbteilungenAbBezeichung = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProjekteProjektNr = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbteilungDTOProjektDTO", x => new { x.AbteilungenAbBezeichung, x.ProjekteProjektNr });
-                    table.ForeignKey(
-                        name: "FK_AbteilungDTOProjektDTO_Abteilungen_AbteilungenAbBezeichung",
-                        column: x => x.AbteilungenAbBezeichung,
-                        principalTable: "Abteilungen",
-                        principalColumn: "AbBezeichung",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AbteilungDTOProjektDTO_Projekte_ProjekteProjektNr",
-                        column: x => x.ProjekteProjektNr,
-                        principalTable: "Projekte",
-                        principalColumn: "ProjektNr",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Probleme",
                 columns: table => new
                 {
@@ -131,8 +104,6 @@ namespace ProjektManager.Migrations
                     ReTermin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ProzessStatus = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProjektNr = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ProjektDTOProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -153,11 +124,6 @@ namespace ProjektManager.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbteilungDTOProjektDTO_ProjekteProjektNr",
-                table: "AbteilungDTOProjektDTO",
-                column: "ProjekteProjektNr");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Mitarbeiter_AbteilungDTOAbBezeichung",
                 table: "Mitarbeiter",
                 column: "AbteilungDTOAbBezeichung");
@@ -176,9 +142,6 @@ namespace ProjektManager.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AbteilungDTOProjektDTO");
-
             migrationBuilder.DropTable(
                 name: "Mitarbeiter");
 
