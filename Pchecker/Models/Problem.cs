@@ -15,9 +15,20 @@ namespace ProjektManager.Models
         public int? Id { get; set; }
         public string Bezug { get; set; }
         public DateTime AuftrittsDatum { get; set; }
-        public int KW { get; set; }
-        public Abteilung? Abteilung { get; set; }
-        public string Name { get; set; }
+        [NotMapped]
+        public int KW
+        {
+            get
+            {
+                if(AuftrittsDatum == null)
+                {
+                    return 0;
+                }
+                return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(AuftrittsDatum, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+            }
+        }
+        public string Abteilung { get; set; }
+        public Mitarbeiter Verantwortlicher { get; set; }
         public string Initiator { get; set; }
         public string Kategorie { get; set; }
         public string Thema { get; set; }
@@ -39,14 +50,13 @@ namespace ProjektManager.Models
         {            
         }
 
-        public Problem(int? id,string bezug, DateTime auftrittsDatum, Abteilung? abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus)
+        public Problem(int? id, string bezug, DateTime auftrittsDatum, string abteilung, Mitarbeiter verantwortlicher, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus)
         {
             Id = id;
             Bezug = bezug;
             AuftrittsDatum = auftrittsDatum;
-            KW = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(AuftrittsDatum, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
             Abteilung = abteilung;
-            Name = name;
+            Verantwortlicher = verantwortlicher;
             Initiator = initiator;
             Kategorie = kategorie;
             Thema = thema;

@@ -20,14 +20,13 @@ namespace ProjektManager.DTOs
             
         }
 
-        public ProblemDTO(int? id, string bezug, DateTime auftrittsDatum, int kW, AbteilungDTO? abteilung, string name, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
+        public ProblemDTO(int? id, string bezug, DateTime auftrittsDatum, string abteilung, MitarbeiterDTO? verantwortlicher, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
         {
             Id = id;
             Bezug = bezug;
             AuftrittsDatum = auftrittsDatum;
-            KW = kW;
             Abteilung = abteilung;
-            Name = name;
+            Verantwortlicher = verantwortlicher;
             Initiator = initiator;
             Kategorie = kategorie;
             Thema = thema;
@@ -43,13 +42,10 @@ namespace ProjektManager.DTOs
 
         public DateTime AuftrittsDatum { set; get; }
 
-
-        public int KW { set; get; }
-
-        public AbteilungDTO? Abteilung  { set; get; }
+        public string Abteilung  { set; get; }
 
 
-        public string Name { set; get; }
+        public MitarbeiterDTO? Verantwortlicher { set; get; }
 
         public string Initiator { set; get; }
 
@@ -72,9 +68,8 @@ namespace ProjektManager.DTOs
             Id = problem.Id,
             Bezug = problem.Bezug,
             AuftrittsDatum = problem.AuftrittsDatum,
-            KW = problem.KW,
-            Abteilung = AbteilungDTO.ToAbteilungDTO(problem.Abteilung),
-            Name = problem.Name,
+            Abteilung = problem.Abteilung,
+            Verantwortlicher = MitarbeiterDTO.ToMitarbeiterDTO(problem.Verantwortlicher),
             Initiator = problem.Initiator,
             Kategorie = problem.Kategorie,
             Thema = problem.Thema,
@@ -87,7 +82,7 @@ namespace ProjektManager.DTOs
 
         public static Problem FromProblemDTO(ProblemDTO problemDTO)
         {
-            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.Abteilung == null ? null : AbteilungDTO.FromAbteilungDTO(problemDTO.Abteilung), problemDTO.Name, problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
+            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.Abteilung, MitarbeiterDTO.FromMitarbeiterDTO(problemDTO.Verantwortlicher), problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
                                 problemDTO.Termin, problemDTO.ReTermin, problemDTO.ProzessStatus);
            
         }

@@ -40,20 +40,21 @@ namespace ProjektManager.ViewModel
             set { projekte = value; OnPropertyChanged(nameof(Projekte)); }
         }
 
-        private static ObservableCollection<Abteilung> _abteilungen = new ObservableCollection<Abteilung>();
+        private static ObservableCollection<Mitarbeiter> _allMitarbeiter = new ObservableCollection<Mitarbeiter>();
 
-        public static ObservableCollection<Abteilung> Abteilungen
+        public static ObservableCollection<Mitarbeiter> AllMitarbeiter
         {
-            get { return _abteilungen; }
-            set { _abteilungen = value; }
+            get { return _allMitarbeiter; }
+            set { _allMitarbeiter = value; }
         }
+
 
         public ViewModelMainWindow()
         {
             OpenNewProjektWindowCommand = new OpenNewProjektWindowCommand();
             OpenNewProblemWindowCommand = new OpenNewProblemWindowCommand(this);
             LoadAllProjekte();
-            LoadAbteilungen();
+            LoadAllMitarbeiter();
         }
 
         private string searchText;
@@ -72,8 +73,8 @@ namespace ProjektManager.ViewModel
 
                 var suche =
                     from p in SelectedProjekt.Probleme
-                    where p.Name.Contains(searchText) ||
-                    (p.Abteilung == null ? false : p.Abteilung.AbBezeichung.Contains(searchText)) ||
+                    where p.Verantwortlicher == null ? false : p.Verantwortlicher.Name.Contains(searchText) ||
+                    (p.Abteilung == null ? false : p.Abteilung.Contains(searchText)) ||
                     (p.Bewertung.Contains(searchText)) ||
                     (p.Termin == null ? false : p.Termin.ToString().Contains(searchText)) ||
                     (p.AuftrittsDatum.ToString().Contains(searchText)) ||
@@ -92,16 +93,6 @@ namespace ProjektManager.ViewModel
 
 
                 OnPropertyChanged(nameof(SearchText));
-            }
-        }
-
-        public void LoadAbteilungen()
-        {
-            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
-            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
-            {
-                Abteilungen.Clear();
-                dbContext.Abteilungen.Select(p => AbteilungDTO.FromAbteilungDTO(p)).ToList().ForEach(Abteilungen.Add);
             }
         }
 
@@ -143,6 +134,21 @@ namespace ProjektManager.ViewModel
                     };
                 }
 
+            }
+        }
+
+        public void LoadAllMitarbeiter()
+        {
+            
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                AllMitarbeiter.Clear();
+                var mitarbeiter = new ObservableCollection<Mitarbeiter>(dbContext.GetAllMitarbeiter().Select(m => MitarbeiterDTO.FromMitarbeiterDTO(m)!).ToList());
+                foreach (var m in mitarbeiter)
+                {
+                    AllMitarbeiter.Add(m);
+                }
             }
         }
 

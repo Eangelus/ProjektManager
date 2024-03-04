@@ -24,7 +24,6 @@ namespace ProjektManager.Models
         public DateTime Startpunkt { get; set; }
         public string ProjektLeiter { get; set; }
         public DateTime? DeadLine { get; set; }
-        public List<Abteilung> Abteilungen { get; set; }
 
 
         public List<Problem> Probleme { get; set; }

@@ -36,24 +36,6 @@ namespace ProjektManager.View
             }
         }
 
-        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            Abteilung? newAbteilung = (Abteilung?)e.AddedItems[0];
-            ComboBox comboBox = sender as ComboBox;
-
-            Problem changed = (Problem)comboBox.DataContext;
-
-            changed.Abteilung = newAbteilung;
-
-            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
-            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
-            {
-                var result = dbContext.UpdateProblem(ProblemDTO.ToProblemDTO(changed));
-            }
-            var a = (ViewModelMainWindow)DataContext;
-            a.LoadAllProjekte();
-        }
-
         private void ComboBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
             string? newStatus = (string?)e.AddedItems[0];
@@ -102,5 +84,30 @@ namespace ProjektManager.View
 
 
         }
+
+        private void OnVerantwortlicherChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Mitarbeiter newVerantwortlicher = (Mitarbeiter)e.AddedItems[0];
+            ComboBox comboBox = sender as ComboBox;
+
+            Problem changed = (Problem)comboBox.DataContext;
+
+            if (newVerantwortlicher == null)
+            {
+                return;
+            }
+
+            changed.Verantwortlicher = newVerantwortlicher;
+
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                var result = dbContext.Update(ProblemDTO.ToProblemDTO(changed));
+                dbContext.SaveChanges();
+            }
+            var a = (ViewModelMainWindow)DataContext;
+            a.LoadAllProjekte();
+        }
+
     }
 }

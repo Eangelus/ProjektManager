@@ -5,24 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektManager.View"
         xmlns:model="clr-namespace:ProjektManager.Models"
+        xmlns:vms="clr-namespace:ProjektManager.ViewModel"
         mc:Ignorable="d"
-        Title="Neues Problem" Height="593" Width="755">
+        Title="Neues Problem" Height="614" Width="958">
     <Grid Margin="0,0,0,0">
         <Grid Margin="0,0,388,306">
             <DatePicker HorizontalAlignment="Left" Margin="208,81,0,0" VerticalAlignment="Top" SelectedDate="{Binding AuftrittsDatum}"/>
             <Label Content="Auftrittsdatum" HorizontalAlignment="Left" Margin="79,80,0,0" VerticalAlignment="Top"/>
             <Label Content="Projekt: " HorizontalAlignment="Left" Margin="79,21,0,0" VerticalAlignment="Top" Height="29" Width="52"/>
             <Label Content="{Binding SelectedProjekt.ProjektNr}" Margin="208,24,-306,0" VerticalAlignment="Top" Height="24"/>
-            <Label Content="Bezug" HorizontalAlignment="Left" Margin="80,111,0,0" VerticalAlignment="Top"/>
-            <Label Content="Abteilung" HorizontalAlignment="Left" Margin="79,142,0,0" VerticalAlignment="Top"/>
-            <Label Content="Name" HorizontalAlignment="Left" Margin="79,173,0,0" VerticalAlignment="Top"/>
-            <Label Content="Initiator" HorizontalAlignment="Left" Margin="80,204,0,0" VerticalAlignment="Top"/>
+            <Label Content="Bezug" HorizontalAlignment="Left" Margin="80,115,0,0" VerticalAlignment="Top"/>
+            <Label Content="Abteilung" HorizontalAlignment="Left" Margin="80,146,0,0" VerticalAlignment="Top"/>
+            <Label Content="Verantwortlicher" HorizontalAlignment="Left" Margin="79,177,0,0" VerticalAlignment="Top"/>
+            <Label Content="Initiator" HorizontalAlignment="Left" Margin="80,207,0,0" VerticalAlignment="Top"/>
             <TextBox HorizontalAlignment="Left" Margin="208,119,0,0" TextWrapping="Wrap" Text="{Binding Bezug, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="129" />
-            <ComboBox HorizontalAlignment="Left" Margin="208,146,0,0" VerticalAlignment="Top" Width="129" SelectedItem="{Binding Abteilung}" ItemsSource="{Binding Abteilungen}" DisplayMemberPath="AbBezeichung"/>
-            <TextBox HorizontalAlignment="Left" Margin="208,181,0,0" TextWrapping="Wrap" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged }" VerticalAlignment="Top" Width="129"/>
-            <TextBox HorizontalAlignment="Left" Margin="208,212,0,0" TextWrapping="Wrap" Text="{Binding Initiator, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="129"/>
+            <TextBox HorizontalAlignment="Left" Margin="208,150,0,0" TextWrapping="Wrap" Text="{Binding Abteilung, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="129" />
+            <ComboBox HorizontalAlignment="Left" Margin="208,179,0,0" VerticalAlignment="Top" Width="129" DisplayMemberPath="Name" ItemsSource="{Binding Source={x:Static vms:ViewModelNewProblem.AllMitarbeiter}}" SelectedItem="{Binding SelectedVerantwortlicher, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox HorizontalAlignment="Left" Margin="208,211,0,0" VerticalAlignment="Top" Width="129" DisplayMemberPath="Name" ItemsSource="{Binding Source={x:Static vms:ViewModelNewProblem.AllMitarbeiter}}" SelectedItem="{Binding SelectedInitator, UpdateSourceTrigger=PropertyChanged }"/>
         </Grid>
-        <Grid Margin="367,0,-3,306">
+        <Grid Margin="367,0,223,314">
             <Label Content="Zieltermin" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="100" Height="25" Margin="14,77,0,0"/>
             <DatePicker HorizontalAlignment="Left"  VerticalAlignment="Top" SelectedDate="{Binding Termin}" Margin="154,77,0,0"/>
             <Label Content="Realer-Termin" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="106" Height="26" Margin="10,114,0,0"/>
@@ -40,9 +41,24 @@
             <TextBox HorizontalAlignment="Left" Margin="208,80,0,0" TextWrapping="Wrap" Text="{Binding Thema, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="402" Height="56"/>
             <TextBox HorizontalAlignment="Left" Margin="210,160,0,0" TextWrapping="Wrap" Text="{Binding Maßnahme, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="402" Height="56"/>
             <Label Content="Bewertung" HorizontalAlignment="Left" Margin="80,160,0,0" VerticalAlignment="Top"/>
-            <Button Content="Erstellen" HorizontalAlignment="Left" Margin="529,240,0,0" VerticalAlignment="Top" Height="22" Width="83" Command="{Binding CreateProblemCommand}"/>
+            <Button Content="Erstellen" HorizontalAlignment="Left" Margin="824,269,0,0" VerticalAlignment="Top" Height="22" Width="83" Command="{Binding CreateProblemCommand}"/>
+            <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding Source={x:Static vms:ViewModelNewProblem.AllMitarbeiter}}" HorizontalAlignment="Left" Margin="663,40,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding Selected4EmailVer, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Margin="802,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105" DisplayMemberPath="Name" ItemsSource="{Binding Source={x:Static vms:ViewModelNewProblem.AllMitarbeiter}}" SelectedItem="{Binding Selected4EmailInfo, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Verantwortlich" HorizontalAlignment="Left" Margin="663,2,0,0" VerticalAlignment="Top" Width="120"/>
+            <Label Content="Informativ" HorizontalAlignment="Left" Margin="802,2,0,0" VerticalAlignment="Top" Height="29" Width="120"/>
+            <ListBox ItemsSource="{Binding ListForEmail, UpdateSourceTrigger=PropertyChanged}" Margin="663,67,0,0" HorizontalAlignment="Left" Width="244" Height="149" VerticalAlignment="Top">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}">
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
         </Grid>
+        <Label Content="Email versand:" HorizontalAlignment="Left" Margin="664,245,0,0" VerticalAlignment="Top" Width="111"/>
 
 
 

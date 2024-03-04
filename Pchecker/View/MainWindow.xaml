@@ -24,7 +24,7 @@
             <lvc:PieChart
         Series="{Binding ChartData}" Margin="0,0,408,0">
             </lvc:PieChart>
-            <Image HorizontalAlignment="Left" Height="258" Margin="866,10,0,0" VerticalAlignment="Top" Width="323" Source="/Resources/jp-logo-4c-hg-frei.png"/>
+            <Image Height="258" Margin="866,10,0,0" VerticalAlignment="Top" Source="/Resources/jp-logo-4c-hg-frei.png"/>
             <TextBlock Text="{Binding SelectedProjektStatus}" FontWeight="Bold" Margin="290,263,699,-19" TextAlignment="Center"/>
         </Grid>
 
@@ -67,7 +67,7 @@
             </ListBox>
 
             <Button Content="Mitarbeiter" Margin="10,769,0,0" Command="{Binding }" CommandParameter="{Binding .}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" Grid.ColumnSpan="3" />
-            <Button Content="Abteilungen" Margin="152,769,0,0" Command="{Binding ''}" CommandParameter="{Binding .}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" Grid.Column="2" />
+            <Button Content="Abteilungen" Margin="152,769,0,0" Command="{Binding }" CommandParameter="{Binding .}" HorizontalAlignment="Left" Width="153" Height="31" VerticalAlignment="Top" Grid.Column="2" />
 
 
         </Grid>
@@ -105,7 +105,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Realer-Termin"  CanUserSort="True" SortMemberPath="Realer-Termin">
+                <DataGridTemplateColumn Header="Realer-Termin"  CanUserSort="True" SortMemberPath="ReTermin">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding ReTermin, StringFormat={}{0:dd.MM.yyyy}}" />
@@ -117,20 +117,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Header="Abteilung"  CanUserSort="True" SortMemberPath="Abteilung.AbBezeichung" >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Abteilung.AbBezeichung}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <ComboBox SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Source={x:Static vms:ViewModelMainWindow.Abteilungen}}" SelectedValuePath="AbBezeichung" DisplayMemberPath="AbBezeichung"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>
-
 
                 <DataGridTemplateColumn Header="ProzessStatus"  CanUserSort="True" SortMemberPath="ProzessStatus">
                     <DataGridTemplateColumn.CellTemplate>
@@ -145,9 +131,29 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
+                <DataGridTextColumn Binding="{Binding Abteilung, UpdateSourceTrigger=PropertyChanged}" Header="Abteilung"></DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding KW}" Header="KW"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name"></DataGridTextColumn>
+
+                <DataGridTextColumn IsReadOnly="True" Binding="{Binding KW}" Header="KW"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Verantwortlicher"  CanUserSort="True" SortMemberPath="Verantwortlicher.Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat=" {0} {1}">
+                                        <Binding Path="Verantwortlicher.Name"/>
+                                        <Binding Path="Verantwortlicher.Vorname"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox DisplayMemberPath="Name" MaxHeight="30" SelectionChanged="OnVerantwortlicherChanged" ItemsSource="{Binding Source={x:Static vms:ViewModelMainWindow.AllMitarbeiter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Thema , UpdateSourceTrigger=PropertyChanged}" Header="Thema"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Kategorie}" Header="Kategorie"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Bewertung, UpdateSourceTrigger=PropertyChanged}" Header="Bewertung"></DataGridTextColumn>

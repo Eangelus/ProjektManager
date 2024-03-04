@@ -1,4 +1,6 @@
-﻿using ProjektManager.Commands;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using ProjektManager.Commands;
 using ProjektManager.DataBaseAPI;
 using ProjektManager.DTOs;
 using ProjektManager.Models;
@@ -10,33 +12,121 @@ namespace ProjektManager.ViewModel
     public class ViewModelNewProblem : ViewModelBase
     {
 
-        //public string Bezug { get; set; }
-        //public DateTime AuftrittsDatum { get; set; }
-        //public int KW { get; set; }
-        //public Abteilung? Abteilung { get; set; }
-        //public string Name { get; set; }
-        //public string Initiator { get; set; }
-        //public string Kategorie { get; set; }
-        //public string Thema { get; set; }
-        //public string Maßnahme { get; set; }
+        public static ObservableCollection<Mitarbeiter> AllMitarbeiter = new ObservableCollection<Mitarbeiter>();
 
-        //public string Bewertung { get; set; }
+        public void LoadAllMitarbeiter()
+        {
 
-        //public DateTime? Termin { get; set; }
-        //public DateTime ReTermin { get; set; }
-        //public string ProzessStatus { get; set; }
-        //public string ProjektNr { get; set; }
-
-
-        //public TimeSpan LengthOfTheProblem => ReTermin.Subtract(AuftrittsDatum);
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                AllMitarbeiter.Clear();
+                var mitarbeiter = new ObservableCollection<Mitarbeiter>(dbContext.GetAllMitarbeiter().Select(m => MitarbeiterDTO.FromMitarbeiterDTO(m)!).ToList());
+                foreach (var m in mitarbeiter)
+                {
+                    AllMitarbeiter.Add(m);
+                }
+            }
+        }
 
         public ViewModelNewProblem() {
-
-            LoadAbteilungen();
             CreateProblemCommand = new CreateProblemCommand(this);
+            LoadAllMitarbeiter();
         }
 
         public ICommand CreateProblemCommand { get; set; }
+
+        private ObservableCollection<Mitarbeiter> _listForEmail = new ObservableCollection<Mitarbeiter>();
+
+        public ObservableCollection<Mitarbeiter> ListForEmail
+        {
+            get
+            {
+                return _listForEmail;
+            }
+            set
+            {
+                _listForEmail = value;
+                OnPropertyChanged(nameof(ListForEmail));
+            }
+        }
+
+
+
+
+        private Mitarbeiter _selected4EmailVer;
+
+        public Mitarbeiter Selected4EmailVer
+        {
+            get
+            {
+                return _selected4EmailVer;
+            }
+            set
+            {
+                _selected4EmailVer = value;
+                ListForEmail.Add(value);
+                OnPropertyChanged(nameof(Selected4EmailVer));
+                OnPropertyChanged(nameof(ListForEmail));
+
+
+            }
+        }
+        private Mitarbeiter _selected4EmailInfo;
+
+        public Mitarbeiter Selected4EmailInfo
+        {
+            get
+            {
+                return _selected4EmailInfo;
+            }
+            set
+            {
+                _selected4EmailInfo = value;
+                ListForEmail.Add(value);
+                OnPropertyChanged(nameof(Selected4EmailInfo));
+                OnPropertyChanged(nameof(ListForEmail));
+
+
+            }
+        }
+
+
+
+        private Mitarbeiter _selectedVerantwortlicher;
+
+        public Mitarbeiter SelectedVerantwortlicher
+        {
+            get
+            {
+                return _selectedVerantwortlicher;
+            }
+            set
+            {
+                _selectedVerantwortlicher = value;
+                OnPropertyChanged(nameof(SelectedVerantwortlicher));
+            }
+        }
+
+
+        private Mitarbeiter _selectedInitiator;
+
+        public Mitarbeiter SelectedInitator
+        {
+            get
+            {
+                return _selectedInitiator;
+            }
+            set
+            {
+                _selectedInitiator = value;
+                OnPropertyChanged(nameof(SelectedInitator));
+            }
+        }
+
+
+
+
 
         private Projekt _selectedProjekt;
 
@@ -146,50 +236,20 @@ namespace ProjektManager.ViewModel
             }
         }
 
-        public void LoadAbteilungen()
-        {
-            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
-            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
-            {
-                Abteilungen.Clear();
-                dbContext.Abteilungen.Select(p => AbteilungDTO.FromAbteilungDTO(p)).ToList().ForEach(Abteilungen.Add);
-            }
-        }
+        private string _abteilung;
 
-
-        private static ObservableCollection<Abteilung> _abteilungen = new ObservableCollection<Abteilung>();
-
-        public static ObservableCollection<Abteilung> Abteilungen
+        public string Abteilung
         {
             get
             {
-                return _abteilungen;
+                return _abteilung;
             }
             set
             {
-
-                _abteilungen = value;
-            }
-        }
-
-
-        private Abteilung myAbteilung;
-
-        public Abteilung Abteilung
-        {
-            get
-            {
-                return myAbteilung;
-            }
-            set
-            {
-                myAbteilung = value;
+                _abteilung = value;
                 OnPropertyChanged(nameof(Abteilung));
             }
         }
-
-
-
 
         private string bezug;
 
@@ -223,33 +283,33 @@ namespace ProjektManager.ViewModel
         }
 
 
-        private string myName;
+        private Mitarbeiter _verantwortlicher;
 
-        public string Name
+        public Mitarbeiter Verantwortlicher
         {
             get
             {
-                return myName;
+                return _verantwortlicher;
             }
             set
             {
-                myName = value;
-                OnPropertyChanged(nameof(Name));
+                _verantwortlicher = value;
+                OnPropertyChanged(nameof(Verantwortlicher));
             }
         }
 
 
-        private string myInitiator;
+        private Mitarbeiter _initiator;
 
-        public string Initiator
+        public Mitarbeiter Initiator
         {
             get
             {
-                return myInitiator;
+                return _initiator;
             }
             set
             {
-                myInitiator = value;
+                _initiator = value;
                 OnPropertyChanged(nameof(Initiator));
             }
         }

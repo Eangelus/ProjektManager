@@ -17,8 +17,6 @@ namespace ProjektManager.DataBaseAPI
 {
     public class ProjektDBContext : DbContext
     {
-
-        public DbSet<AbteilungDTO> Abteilungen { get; set; }
         public DbSet<MitarbeiterDTO> Mitarbeiter { get; set; }
         public DbSet<ProblemDTO> Probleme { get; set; }
 
@@ -56,11 +54,16 @@ namespace ProjektManager.DataBaseAPI
         public IEnumerable<ProjektDTO> GetAllProjekts()
         {
 
-            var erg = Projekte.Include(p => p.Probleme).ThenInclude(prob => prob.Abteilung);
+            var erg = Projekte.Include(p => p.Probleme).ThenInclude(p => p.Verantwortlicher);
             return erg;
         }
 
+        public IEnumerable<MitarbeiterDTO> GetAllMitarbeiter()
+        {
 
+            var erg = Mitarbeiter;
+            return erg;
+        }
         public ProblemDTO UpdateProblem(ProblemDTO problemToUpdate)
         {
             if (problemToUpdate.Abteilung == null)

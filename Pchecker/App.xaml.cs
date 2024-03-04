@@ -23,7 +23,6 @@ namespace ProjektManager
         {
             _projektDBContextFactory = new ProjektDBContextFactory(CONSTRING);
 
-
             //ExcelConnection.ReadAllExcelFiles();
         }
 

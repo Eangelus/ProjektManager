@@ -17,9 +17,9 @@ namespace ProjektManager.View
     /// <summary>
     /// Interaktionslogik für MitarbeiterWindow.xaml
     /// </summary>
-    public partial class MitarbeiterWindow : Window
+    public partial class NewMitarbeiterWindow : Window
     {
-        public MitarbeiterWindow()
+        public NewMitarbeiterWindow()
         {
             InitializeComponent();
         }

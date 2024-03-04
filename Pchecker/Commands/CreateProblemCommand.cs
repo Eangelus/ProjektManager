@@ -46,7 +46,7 @@ namespace ProjektManager.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            bool result = !string.IsNullOrEmpty(_viewModelCreateProblem.Name) && !string.IsNullOrEmpty(_viewModelCreateProblem.Thema) && !string.IsNullOrEmpty(_viewModelCreateProblem.Maßnahme) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bezug) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bewertung) && !string.IsNullOrEmpty(_viewModelCreateProblem.Initiator) && !string.IsNullOrEmpty(_viewModelCreateProblem.Kategorie) && (_viewModelCreateProblem.Abteilung != null &&!string.IsNullOrEmpty(_viewModelCreateProblem.Abteilung.AbBezeichung)) && !string.IsNullOrEmpty(_viewModelCreateProblem.ProzessStatus) && base.CanExecute(parameter);
+            bool result = (_viewModelCreateProblem.Verantwortlicher != null && !string.IsNullOrEmpty(_viewModelCreateProblem.Verantwortlicher.Name)) && !string.IsNullOrEmpty(_viewModelCreateProblem.Thema) && !string.IsNullOrEmpty(_viewModelCreateProblem.Maßnahme) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bezug) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bewertung) && (_viewModelCreateProblem.Initiator != null && !string.IsNullOrEmpty(_viewModelCreateProblem.Initiator.Name)) && !string.IsNullOrEmpty(_viewModelCreateProblem.Kategorie) && !string.IsNullOrEmpty(_viewModelCreateProblem.ProzessStatus) && base.CanExecute(parameter);
             return result;
         }
 
@@ -71,7 +71,7 @@ namespace ProjektManager.Commands
 
             var viewModelNewProblem = (problemWindow.DataContext as ViewModelNewProblem);
 
-            Problem problem = new Problem(null, viewModelNewProblem.Bezug, viewModelNewProblem.AuftrittsDatum, viewModelNewProblem.Abteilung, viewModelNewProblem.Name, viewModelNewProblem.Initiator, viewModelNewProblem.Kategorie, viewModelNewProblem.Thema, viewModelNewProblem.Maßnahme, viewModelNewProblem.Bewertung, viewModelNewProblem.Termin, viewModelNewProblem.ReTermin, viewModelNewProblem.ProzessStatus);
+            Problem problem = new Problem(null, viewModelNewProblem.Bezug, viewModelNewProblem.AuftrittsDatum, viewModelNewProblem.Abteilung, new Mitarbeiter(), viewModelNewProblem.Initiator.Name, viewModelNewProblem.Kategorie, viewModelNewProblem.Thema, viewModelNewProblem.Maßnahme, viewModelNewProblem.Bewertung, viewModelNewProblem.Termin, viewModelNewProblem.ReTermin, viewModelNewProblem.ProzessStatus);
 
 
             var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);

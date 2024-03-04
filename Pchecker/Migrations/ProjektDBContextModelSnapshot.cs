@@ -19,30 +19,13 @@ namespace ProjektManager.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
-                {
-                    b.Property<string>("AbBezeichung")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("AbLeiter")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("AbBezeichung");
-
-                    b.ToTable("Abteilungen");
-                });
-
             modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AbteilungDTOAbBezeichung")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Nachname")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -50,9 +33,11 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Vorname")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("AbteilungDTOAbBezeichung");
+                    b.HasKey("Id");
 
                     b.ToTable("Mitarbeiter");
                 });
@@ -63,8 +48,9 @@ namespace ProjektManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AbteilungAbBezeichung")
-                        .HasColumnType("varchar(255)");
+                    b.Property<string>("Abteilung")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("AuftrittsDatum")
                         .HasColumnType("datetime(6)");
@@ -81,18 +67,11 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("KW")
-                        .HasColumnType("int");
-
                     b.Property<string>("Kategorie")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Maßnahme")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -113,11 +92,14 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("VerantwortlicherId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AbteilungAbBezeichung");
-
                     b.HasIndex("ProjektDTOProjektNr");
+
+                    b.HasIndex("VerantwortlicherId");
 
                     b.ToTable("Probleme");
                 });
@@ -155,29 +137,17 @@ namespace ProjektManager.Migrations
                     b.ToTable("Projekte");
                 });
 
-            modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
-                {
-                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
-                        .WithMany("Mitarbeiter")
-                        .HasForeignKey("AbteilungDTOAbBezeichung");
-                });
-
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
-                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", "Abteilung")
-                        .WithMany()
-                        .HasForeignKey("AbteilungAbBezeichung");
-
                     b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
                         .WithMany("Probleme")
                         .HasForeignKey("ProjektDTOProjektNr");
 
-                    b.Navigation("Abteilung");
-                });
+                    b.HasOne("ProjektManager.DTOs.MitarbeiterDTO", "Verantwortlicher")
+                        .WithMany()
+                        .HasForeignKey("VerantwortlicherId");
 
-            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
-                {
-                    b.Navigation("Mitarbeiter");
+                    b.Navigation("Verantwortlicher");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>

@@ -17,6 +17,8 @@ namespace ProjektManager.Logic
     {
         public ExcelConnection() { }
 
+        public static List<string> ErstellteVerantwortliche { get; set; } = new List<string>();
+
         public static IEnumerable<Projekt> ReadAllExcelFiles()
         {
             var path = "C:\\Users\\t.bernecker\\Desktop\\TestData";
@@ -79,17 +81,11 @@ namespace ProjektManager.Logic
 
 
                     DateTime? AuftrittsDatum = sheet.Cell($"C{counter}").IsEmpty() ? null : sheet.Cell($"C{counter}").Value.GetDateTime();
-                    int KW = 0;
 
 
                     if (!AuftrittsDatum.HasValue)
                     {
                         AuftrittsDatum = DateTime.Now;
-                    }
-
-                    if (AuftrittsDatum != null)
-                    {
-                        KW = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(AuftrittsDatum.Value, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
                     }
 
                     DateTime? Termin = sheet.Cell($"L{counter}").IsEmpty() ? null : sheet.Cell($"L{counter}").Value.GetDateTime();
@@ -156,28 +152,29 @@ namespace ProjektManager.Logic
                     }
                     catch { }
 
-                    AbteilungDTO? abteilungDTO = null;
+                    MitarbeiterDTO? mitarbeiterDTO = null;
 
                     //Prüfen ob die Abteilungsbezeichung größer als null ist
-                    if (AbteilungBezeichnung.Length > 0)
+                    if (Name.Length > 0)
                     {
                         // neue abteilung wird erstellt wen die bezeichung größer als 1
-                        abteilungDTO = new AbteilungDTO(AbteilungBezeichnung, "", new List<MitarbeiterDTO>());
+                        mitarbeiterDTO = new MitarbeiterDTO(null, Name, "","",   new Dictionary<string, int>());  
                     }
 
-                    var found = dbContext.Abteilungen.Any(e => e.AbBezeichung == AbteilungBezeichnung);
-                    if (!found && abteilungDTO != null)
+                    var found = ErstellteVerantwortliche.Exists(p =>p.Equals(Name));
+                    if (!found && mitarbeiterDTO != null)
                     {
 
-                        abteilungDTO = dbContext.Add(abteilungDTO).Entity;
+                        mitarbeiterDTO = dbContext.Add(mitarbeiterDTO).Entity;
+                        ErstellteVerantwortliche.Add(Name);
                         dbContext.SaveChanges();
 
                     }
                     if (found)
                     {
-                        abteilungDTO = dbContext.Abteilungen.Single(a => a.AbBezeichung == AbteilungBezeichnung);
+                        mitarbeiterDTO = dbContext.Mitarbeiter.Single(m => m.Name == Name);
                     }
-                    ProblemDTO newProblem = new ProblemDTO(null, Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), KW, abteilungDTO, Name, Initiator, Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr);
+                    ProblemDTO newProblem = new ProblemDTO(null, Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), AbteilungBezeichnung, mitarbeiterDTO, Initiator, Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr);
 
 
                     newProblem = dbContext.Add(newProblem).Entity;
