@@ -41,7 +41,9 @@
             <TextBox HorizontalAlignment="Left" Margin="208,80,0,0" TextWrapping="Wrap" Text="{Binding Thema, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="402" Height="56"/>
             <TextBox HorizontalAlignment="Left" Margin="210,160,0,0" TextWrapping="Wrap" Text="{Binding Maßnahme, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="402" Height="56"/>
             <Label Content="Bewertung" HorizontalAlignment="Left" Margin="80,160,0,0" VerticalAlignment="Top"/>
-            <Button Content="Erstellen" HorizontalAlignment="Left" Margin="824,269,0,0" VerticalAlignment="Top" Height="22" Width="83" Command="{Binding CreateProblemCommand}"/>
+            <Button Content="Erstellen" HorizontalAlignment="Left" Margin="824,269,0,0" VerticalAlignment="Top" Height="22" Width="83" Command="{Binding CreateProblemCommand}" CommandParameter="{Binding .}" >
+    
+            </Button>
             <ComboBox DisplayMemberPath="Name" ItemsSource="{Binding Source={x:Static vms:ViewModelNewProblem.AllMitarbeiter}}" HorizontalAlignment="Left" Margin="663,40,0,0" VerticalAlignment="Top" Width="120" SelectedItem="{Binding Selected4EmailVer, UpdateSourceTrigger=PropertyChanged}"/>
             <ComboBox Margin="802,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="105" DisplayMemberPath="Name" ItemsSource="{Binding Source={x:Static vms:ViewModelNewProblem.AllMitarbeiter}}" SelectedItem="{Binding Selected4EmailInfo, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="Verantwortlich" HorizontalAlignment="Left" Margin="663,2,0,0" VerticalAlignment="Top" Width="120"/>

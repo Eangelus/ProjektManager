@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace ProjektManager.Logic
 {
@@ -152,29 +153,10 @@ namespace ProjektManager.Logic
                     }
                     catch { }
 
-                    MitarbeiterDTO? mitarbeiterDTO = null;
+                    MitarbeiterDTO verantwortlicherDTO = CreateMitarbeiterIfNew(Name, dbContext);
+                    MitarbeiterDTO initiatorDTO = CreateMitarbeiterIfNew(Initiator, dbContext);
 
-                    //Prüfen ob die Abteilungsbezeichung größer als null ist
-                    if (Name.Length > 0)
-                    {
-                        // neue abteilung wird erstellt wen die bezeichung größer als 1
-                        mitarbeiterDTO = new MitarbeiterDTO(null, Name, "","",   new Dictionary<string, int>());  
-                    }
-
-                    var found = ErstellteVerantwortliche.Exists(p =>p.Equals(Name));
-                    if (!found && mitarbeiterDTO != null)
-                    {
-
-                        mitarbeiterDTO = dbContext.Add(mitarbeiterDTO).Entity;
-                        ErstellteVerantwortliche.Add(Name);
-                        dbContext.SaveChanges();
-
-                    }
-                    if (found)
-                    {
-                        mitarbeiterDTO = dbContext.Mitarbeiter.Single(m => m.Name == Name);
-                    }
-                    ProblemDTO newProblem = new ProblemDTO(null, Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), AbteilungBezeichnung, mitarbeiterDTO, Initiator, Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr);
+                    ProblemDTO newProblem = new ProblemDTO(null, Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), AbteilungBezeichnung, verantwortlicherDTO, initiatorDTO , Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr);
 
 
                     newProblem = dbContext.Add(newProblem).Entity;
@@ -205,6 +187,28 @@ namespace ProjektManager.Logic
                 return ProjektDTO.FromProjektDTO(projekt);
             }
         }
+        public static MitarbeiterDTO? CreateMitarbeiterIfNew(string Name, ProjektDBContext dbContext)
+        {
 
+            if(String.IsNullOrEmpty(Name)) return null;
+
+            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "", new Dictionary<string, int>()); ;
+
+            var found = ErstellteVerantwortliche.Exists(p => p.Equals(Name));
+            if (!found && mitarbeiterDTO != null)
+            {
+
+                mitarbeiterDTO = dbContext.Add(mitarbeiterDTO).Entity;
+                ErstellteVerantwortliche.Add(Name);
+                dbContext.SaveChanges();
+
+            }
+            if (found)
+            {
+                mitarbeiterDTO = dbContext.Mitarbeiter.Single(m => m.Name == Name);
+            }
+
+            return mitarbeiterDTO;
+        }
     }
 }

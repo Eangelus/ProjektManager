@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjektManager.Migrations
 {
     /// <inheritdoc />
-    public partial class NewInit : Migration
+    public partial class NewInti : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,8 +68,7 @@ namespace ProjektManager.Migrations
                     Abteilung = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     VerantwortlicherId = table.Column<int>(type: "int", nullable: true),
-                    Initiator = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InitiatorId = table.Column<int>(type: "int", nullable: true),
                     Kategorie = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Thema = table.Column<string>(type: "longtext", nullable: false)
@@ -89,6 +88,11 @@ namespace ProjektManager.Migrations
                 {
                     table.PrimaryKey("PK_Probleme", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Probleme_Mitarbeiter_InitiatorId",
+                        column: x => x.InitiatorId,
+                        principalTable: "Mitarbeiter",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Probleme_Mitarbeiter_VerantwortlicherId",
                         column: x => x.VerantwortlicherId,
                         principalTable: "Mitarbeiter",
@@ -100,6 +104,11 @@ namespace ProjektManager.Migrations
                         principalColumn: "ProjektNr");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Probleme_InitiatorId",
+                table: "Probleme",
+                column: "InitiatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Probleme_ProjektDTOProjektNr",

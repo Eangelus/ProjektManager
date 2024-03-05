@@ -54,7 +54,7 @@ namespace ProjektManager.DataBaseAPI
         public IEnumerable<ProjektDTO> GetAllProjekts()
         {
 
-            var erg = Projekte.Include(p => p.Probleme).ThenInclude(p => p.Verantwortlicher);
+            var erg = Projekte.Include(p => p.Probleme).ThenInclude(p => p.Verantwortlicher).Include(p => p.Probleme).ThenInclude(p => p.Initiator);
             return erg;
         }
 

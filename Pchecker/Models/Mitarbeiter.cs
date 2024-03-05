@@ -14,7 +14,7 @@ namespace ProjektManager.Models
             Name = name;
             Vorname = vorname;
             StundenImProjekt = stundenImProjekt;
-            Email = email;
+            Email = email;  // $"{mitarbeiter.Vorname[0]}.{mitarbeiter.Name}@jp-industrieanlagen.de"
         }
 
         public string Name { get; set; } = String.Empty;

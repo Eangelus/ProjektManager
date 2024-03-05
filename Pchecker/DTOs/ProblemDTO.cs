@@ -20,7 +20,7 @@ namespace ProjektManager.DTOs
             
         }
 
-        public ProblemDTO(int? id, string bezug, DateTime auftrittsDatum, string abteilung, MitarbeiterDTO? verantwortlicher, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
+        public ProblemDTO(int? id, string bezug, DateTime auftrittsDatum, string abteilung, MitarbeiterDTO? verantwortlicher, MitarbeiterDTO? initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus, string projektNr)
         {
             Id = id;
             Bezug = bezug;
@@ -47,7 +47,7 @@ namespace ProjektManager.DTOs
 
         public MitarbeiterDTO? Verantwortlicher { set; get; }
 
-        public string Initiator { set; get; }
+        public MitarbeiterDTO? Initiator { set; get; }
 
         public string Kategorie { set; get; }
 
@@ -70,7 +70,7 @@ namespace ProjektManager.DTOs
             AuftrittsDatum = problem.AuftrittsDatum,
             Abteilung = problem.Abteilung,
             Verantwortlicher = MitarbeiterDTO.ToMitarbeiterDTO(problem.Verantwortlicher),
-            Initiator = problem.Initiator,
+            Initiator = MitarbeiterDTO.ToMitarbeiterDTO( problem.Initiator ),
             Kategorie = problem.Kategorie,
             Thema = problem.Thema,
             Maßnahme = problem.Maßnahme,
@@ -82,7 +82,7 @@ namespace ProjektManager.DTOs
 
         public static Problem FromProblemDTO(ProblemDTO problemDTO)
         {
-            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.Abteilung, MitarbeiterDTO.FromMitarbeiterDTO(problemDTO.Verantwortlicher), problemDTO.Initiator, problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
+            return new Problem(problemDTO.Id, problemDTO.Bezug, problemDTO.AuftrittsDatum, problemDTO.Abteilung, MitarbeiterDTO.FromMitarbeiterDTO(problemDTO.Verantwortlicher),MitarbeiterDTO.FromMitarbeiterDTO( problemDTO.Initiator ), problemDTO.Kategorie, problemDTO.Thema, problemDTO.Maßnahme, problemDTO.Bewertung,
                                 problemDTO.Termin, problemDTO.ReTermin, problemDTO.ProzessStatus);
            
         }

@@ -11,8 +11,8 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(ProjektDBContext))]
-    [Migration("20240229125254_NewInit")]
-    partial class NewInit
+    [Migration("20240305100127_NewInti")]
+    partial class NewInti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,9 +66,8 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Initiator")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int?>("InitiatorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Kategorie")
                         .IsRequired()
@@ -99,6 +98,8 @@ namespace ProjektManager.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InitiatorId");
 
                     b.HasIndex("ProjektDTOProjektNr");
 
@@ -142,6 +143,10 @@ namespace ProjektManager.Migrations
 
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
+                    b.HasOne("ProjektManager.DTOs.MitarbeiterDTO", "Initiator")
+                        .WithMany()
+                        .HasForeignKey("InitiatorId");
+
                     b.HasOne("ProjektManager.DTOs.ProjektDTO", null)
                         .WithMany("Probleme")
                         .HasForeignKey("ProjektDTOProjektNr");
@@ -149,6 +154,8 @@ namespace ProjektManager.Migrations
                     b.HasOne("ProjektManager.DTOs.MitarbeiterDTO", "Verantwortlicher")
                         .WithMany()
                         .HasForeignKey("VerantwortlicherId");
+
+                    b.Navigation("Initiator");
 
                     b.Navigation("Verantwortlicher");
                 });

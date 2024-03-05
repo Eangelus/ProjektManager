@@ -137,7 +137,7 @@ namespace ProjektManager.ViewModel
         }
 
 
-        private string myProzessStatus;
+        private string myProzessStatus = "Abgeschlossen";
 
         public string ProzessStatus
         {
@@ -187,7 +187,7 @@ namespace ProjektManager.ViewModel
 
 
 
-        private string myBewertung;
+        private string myBewertung = "askldöjf";
 
         public string Bewertung
         {
@@ -204,7 +204,7 @@ namespace ProjektManager.ViewModel
 
 
 
-        private string myMaßnahme;
+        private string myMaßnahme = "lkasjdf";
 
         public string Maßnahme
         {
@@ -221,7 +221,7 @@ namespace ProjektManager.ViewModel
 
 
 
-        private string myThema;
+        private string myThema = "alkdsjfö";
 
         public string Thema
         {
@@ -236,7 +236,7 @@ namespace ProjektManager.ViewModel
             }
         }
 
-        private string _abteilung;
+        private string _abteilung = "alkdsjfö";
 
         public string Abteilung
         {
@@ -251,7 +251,7 @@ namespace ProjektManager.ViewModel
             }
         }
 
-        private string bezug;
+        private string bezug = "alkdsjfö";
 
         public string Bezug
         {
@@ -315,7 +315,7 @@ namespace ProjektManager.ViewModel
         }
 
 
-        private string myKategorie;
+        private string myKategorie = "akljdsf";
 
         public string Kategorie
         {

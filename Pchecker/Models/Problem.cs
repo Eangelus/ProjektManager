@@ -29,7 +29,7 @@ namespace ProjektManager.Models
         }
         public string Abteilung { get; set; }
         public Mitarbeiter Verantwortlicher { get; set; }
-        public string Initiator { get; set; }
+        public Mitarbeiter Initiator { get; set; }
         public string Kategorie { get; set; }
         public string Thema { get; set; }
         public string Maßnahme { get; set; }
@@ -50,7 +50,7 @@ namespace ProjektManager.Models
         {            
         }
 
-        public Problem(int? id, string bezug, DateTime auftrittsDatum, string abteilung, Mitarbeiter verantwortlicher, string initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus)
+        public Problem(int? id, string bezug, DateTime auftrittsDatum, string abteilung, Mitarbeiter verantwortlicher, Mitarbeiter initiator, string kategorie, string thema, string maßnahme, string bewertung, DateTime? termin, DateTime reTermin, string prozessStatus)
         {
             Id = id;
             Bezug = bezug;

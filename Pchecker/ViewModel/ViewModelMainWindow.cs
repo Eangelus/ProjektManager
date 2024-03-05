@@ -78,7 +78,7 @@ namespace ProjektManager.ViewModel
                     (p.Bewertung.Contains(searchText)) ||
                     (p.Termin == null ? false : p.Termin.ToString().Contains(searchText)) ||
                     (p.AuftrittsDatum.ToString().Contains(searchText)) ||
-                    (p.Initiator == null ? false : p.Initiator.Contains(searchText)) ||
+                    (p.Initiator == null ? false : p.Initiator.Name.Contains(searchText)) ||
                     (p.Maßnahme == null ? false : p.Maßnahme.Contains(searchText)) ||
                     (p.Bezug == null ? false : p.Bezug.Contains(searchText)) ||
                     (p.Kategorie == null ? false : p.Kategorie.Contains(searchText)) ||
