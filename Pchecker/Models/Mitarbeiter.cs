@@ -22,6 +22,8 @@ namespace ProjektManager.Models
         public string Vorname { get; set; } = String.Empty;
         public string Email { get; set; } = String.Empty;
 
+        public Abteilung Abteilung { get; set; }
+
 
 
     }

@@ -23,7 +23,7 @@ namespace ProjektManager
         {
             _projektDBContextFactory = new ProjektDBContextFactory(CONSTRING);
 
-            //ExcelConnection.ReadAllExcelFiles();
+            ExcelConnection.ReadAllExcelFiles();
         }
 
         protected override void OnStartup(StartupEventArgs e)

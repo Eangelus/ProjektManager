@@ -1,4 +1,5 @@
-﻿using ProjektManager.Models;
+﻿using ProjektManager.Commands;
+using ProjektManager.Models;
 using ProjektManager.Services;
 using System;
 using System.Collections.Generic;
@@ -6,57 +7,73 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ProjektManager.ViewModel
 {
     public class ViewModelNewStundenbuchung : ViewModelBase
     {
 
-        private IEnumerable<Stundenbuchung> _alleStundenbuchungen;
+        public ICommand CreateBuchungCommand { get; }
 
-        public IEnumerable<Stundenbuchung> AlleStundenbuchungen
+        public string mode;
+
+
+        private double _stunden;
+
+        public double Stunden
         {
-            get { return _alleStundenbuchungen; }
-            set { _alleStundenbuchungen = value; }
+            get
+            {
+                return _stunden;
+            }
+            set
+            {
+                _stunden = value;
+                OnPropertyChanged(nameof(Stunden));
+            }
         }
 
-        private DateTime _StartTime;
+
+
+
+        private string _details;
+
+        public string Details
+        {
+            get
+            {
+                return _details;
+            }
+            set
+            {
+                _details = value;
+                OnPropertyChanged(nameof(Details));
+            }
+        }
+
+
+
+        private DateTime _startTime;
 
         public DateTime StartTime
         {
             get
             {
-                return _StartTime;
+                return _startTime;
             }
             set
             {
-                Console.WriteLine("Test2");
+                _startTime = value;
                 OnPropertyChanged(nameof(StartTime));
             }
         }
-
-
-        private DateTime _EndTime;
-
-        public DateTime EndTime
-        {
-            get
-            {
-                return _EndTime;
-            }
-            set
-            {
-                Console.WriteLine("Test1");
-                OnPropertyChanged(nameof(EndTime));
-            }
-        }
-
 
         public ObservableCollection<Stundenbuchung> FilteredStundenbuchungen
         {
             get
             {
-                IEnumerable<Stundenbuchung> filtered = new List<Stundenbuchung>(AlleStundenbuchungen);
+                IEnumerable<Stundenbuchung> filtered = new List<Stundenbuchung>();
                 if (SelectedProjekt != null)
                 {
                     filtered = filtered.Where(x => x.Projekt.ProjektNr == SelectedProjekt.ProjektNr);
@@ -76,7 +93,7 @@ namespace ProjektManager.ViewModel
 
         public static ObservableCollection<Projekt> ProjekteListe = new ObservableCollection<Projekt>();
 
-        private Projekt _selectedProjekt;
+        private Projekt _selectedProjekt = new Projekt();
 
         public Projekt SelectedProjekt
         {
@@ -87,13 +104,15 @@ namespace ProjektManager.ViewModel
             set
             {
                 _selectedProjekt = value;
+               
                 OnPropertyChanged(nameof(SelectedProjekt));
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
+
             }
         }
 
 
-        private Mitarbeiter _selectedMitarbeiter;
+        private Mitarbeiter _selectedMitarbeiter = new Mitarbeiter();
 
         public Mitarbeiter SelectedMitarbeiter
         {
@@ -104,8 +123,10 @@ namespace ProjektManager.ViewModel
             set
             {
                 _selectedMitarbeiter = value;
+
                 OnPropertyChanged(nameof(SelectedMitarbeiter));
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
+
             }
         }
 
@@ -135,6 +156,7 @@ namespace ProjektManager.ViewModel
 
         public ViewModelNewStundenbuchung()
         {
+            CreateBuchungCommand = new CreateBuchungCommand(this);
             LoadAllMitarbeiter();
             LoadAllProjekts();
         }

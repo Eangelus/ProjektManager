@@ -38,18 +38,9 @@ namespace ProjektManager.ControlElements
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var newStundenW = new NewStundenBuchungWindow();
+            newStundenW.Show();
         }
 
-        private void StartPicker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            var pickedStartTime = (DateTime)e.NewValue;
-            ((ViewModelStundenbuchung)this.DataContext).StartTime = pickedStartTime;
-        }
 
-        private void EndPicker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            DateTime pickedEndTime = (DateTime)e.NewValue;
-            ((ViewModelStundenbuchung)this.DataContext).EndTime = pickedEndTime;
-        }
     }
 }

@@ -221,7 +221,7 @@ namespace ProjektManager.ViewModel
 
 
 
-        private string myBewertung = "askldöjf";
+        private string myBewertung;
 
         public string Bewertung
         {
@@ -238,7 +238,7 @@ namespace ProjektManager.ViewModel
 
 
 
-        private string myMaßnahme = "lkasjdf";
+        private string myMaßnahme;
 
         public string Maßnahme
         {
@@ -255,7 +255,7 @@ namespace ProjektManager.ViewModel
 
 
 
-        private string myThema = "alkdsjfö";
+        private string myThema;
 
         public string Thema
         {
@@ -270,7 +270,7 @@ namespace ProjektManager.ViewModel
             }
         }
 
-        private string _abteilung = "alkdsjfö";
+        private string _abteilung;
 
         public string Abteilung
         {
@@ -285,7 +285,7 @@ namespace ProjektManager.ViewModel
             }
         }
 
-        private string bezug = "alkdsjfö";
+        private string bezug;
 
         public string Bezug
         {
@@ -349,7 +349,7 @@ namespace ProjektManager.ViewModel
         }
 
 
-        private string myKategorie = "akljdsf";
+        private string myKategorie;
 
         public string Kategorie
         {

@@ -8,13 +8,47 @@ namespace ProjektManager.ViewModel
     public class ViewModelStundenbuchung : ViewModelBase
     {
 
-        private IEnumerable<Stundenbuchung> _alleStundenbuchungen;
+        private ObservableCollection<Stundenbuchung> _alleStundenbuchungen = new ObservableCollection<Stundenbuchung>();
 
-        public IEnumerable<Stundenbuchung> AlleStundenbuchungen
+        public ObservableCollection<Stundenbuchung> AlleStundenbuchungen
         {
             get { return _alleStundenbuchungen; }
-            set { _alleStundenbuchungen = value; }
+            set { _alleStundenbuchungen = value; OnPropertyChanged(nameof(AlleStundenbuchungen)); }
         }
+
+
+        private string _Details;
+
+        public string Details
+        {
+            get
+            {
+                return _Details;
+            }
+            set
+            {
+                _Details = value;
+                OnPropertyChanged(nameof(Details));
+            }
+        }
+
+
+        private double _stunden;
+
+        public double Stunden
+        {
+            get
+            {
+                return _stunden;
+            }
+            set
+            {
+                _stunden = value;
+                OnPropertyChanged(nameof(Stunden));
+            }
+        }
+
+
 
         private DateTime _StartTime;
 
@@ -26,27 +60,9 @@ namespace ProjektManager.ViewModel
             }
             set
             {
-                Console.WriteLine("Test2");
                 OnPropertyChanged(nameof(StartTime));
             }
         }
-
-
-        private DateTime _EndTime;
-
-        public DateTime EndTime
-        {
-            get
-            {
-                return _EndTime;
-            }
-            set
-            {
-                Console.WriteLine("Test1");
-                OnPropertyChanged(nameof(EndTime));
-            }
-        }
-
 
         public ObservableCollection<Stundenbuchung> FilteredStundenbuchungen
         {
@@ -61,7 +77,12 @@ namespace ProjektManager.ViewModel
                 {
                     filtered = filtered.Where(x => x.Mitarbeiter.Id == SelectedMitarbeiter.Id);
                 }
+                
                 return new ObservableCollection<Stundenbuchung>(filtered);
+            }
+            set
+            {
+                OnPropertyChanged(nameof(FilteredStundenbuchungen));
             }
         }
 
@@ -128,11 +149,23 @@ namespace ProjektManager.ViewModel
             }
 
         }
+        public void LoadAllStunden()
+        {
+            AlleStundenbuchungen.Clear();
+            var Stunden = DatabankService.LoadAllStundenbuchungen();
+            foreach (var b in Stunden)
+            {
+                AlleStundenbuchungen.Add(b);
+
+            }
+
+        }
 
         public ViewModelStundenbuchung()
         {
             LoadAllMitarbeiter();
             LoadAllProjekts();
+            LoadAllStunden();
         }
 
 

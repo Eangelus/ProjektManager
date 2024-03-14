@@ -5,18 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektManager.View"
         xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:vms="clr-namespace:ProjektManager.ViewModel"
+        xmlns:vms="clr-namespace:ProjektManager.ViewModel" xmlns:local1="clr-namespace:ProjektManager.Logic" d:DataContext="{d:DesignInstance Type=vms:ViewModelNewStundenbuchung}"
         mc:Ignorable="d"
-        Title="NewStundenBuchungWindow" Height="447" Width="710">
-    <Grid>
-        <Grid>
-            <Image Source="/Resources/jp-logo-4c-hg-frei.png" HorizontalAlignment="Right" Width="142" Height="118" VerticalAlignment="Top" Margin="0,10,10,0">
-            </Image>
-            <ComboBox Margin="269,76,0,0" IsEditable="True" IsTextSearchEnabled="False" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.Mitarbeiter}}" DisplayMemberPath="Name"  Text="{Binding SearchText,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedMitarbeiter, UpdateSourceTrigger=PropertyChanged }"/>
-            <ComboBox Margin="10,76,0,0" IsEditable="True" IsTextSearchEnabled="False"  ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.ProjekteListe}}" DisplayMemberPath="ProjektNr"  Text="{Binding SearchText,  UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedProjekt, UpdateSourceTrigger=PropertyChanged }"/>
+        Title="NewStundenBuchungWindow" Height="341" Width="627">
+    <Window.Resources>
+        <local1:TimeConverter x:Key="TimeConverter"/>
+    </Window.Resources>
 
-            <toolkit:DateTimePicker x:Name="StartPicker" Margin="10,157,0,0" Height="40" Width="240" HorizontalAlignment="Left" VerticalAlignment="Top"  CultureInfo="de" />
-            <toolkit:DateTimePicker x:Name="EndPicker" Format="FullDateTime" Margin="286,157,0,0" Height="40" Width="240" HorizontalAlignment="Left" VerticalAlignment="Top" CultureInfo="de" />
-        </Grid>
+    <Grid Margin="5,5,5,5">
+
+        <Image Source="/Resources/jp-logo-4c-hg-frei.png" HorizontalAlignment="Right" Width="142" Height="118" VerticalAlignment="Top" Margin="0,10,10,0">
+        </Image>
+        <ComboBox Margin="255,41,0,0" ItemsSource="{Binding Source={x:Static vms:ViewModelNewStundenbuchung.Mitarbeiter}}" DisplayMemberPath="Name" HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedMitarbeiter, UpdateSourceTrigger=PropertyChanged }"/>
+        <ComboBox Margin="10,41,0,0" ItemsSource="{Binding Source={x:Static vms:ViewModelNewStundenbuchung.ProjekteListe}}" DisplayMemberPath="ProjektNr" HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedProjekt, UpdateSourceTrigger=PropertyChanged }"/>
+
+        <toolkit:DateTimePicker x:Name="StartPicker" Margin="10,118,0,0" Height="40" Width="240" HorizontalAlignment="Left" VerticalAlignment="Top"  CultureInfo="de" ValueChanged="StartPicker_ValueChanged" />
+        <Button Content="Buchen" HorizontalAlignment="Left" Margin="466,253,0,0" VerticalAlignment="Top" Command="{Binding CreateBuchungCommand}" CommandParameter="{Binding .}"/>
+        <Slider Name="StundenSlider" HorizontalAlignment="Left" Margin="262,120,0,0" VerticalAlignment="Top" Width="233" Maximum="900" Minimum="0" Value="{Binding Stunden, UpdateSourceTrigger=PropertyChanged}" TickFrequency="15"/>
+        <Label Content="Datum und Startzeit:" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top"/>
+        <Label Content="Für Projekt:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="72"/>
+        <Label Content="Mitarbeiter:" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Dauer:" HorizontalAlignment="Left" Margin="262,79,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding ElementName=StundenSlider, Path=Value, Converter={StaticResource TimeConverter}}" HorizontalAlignment="Left" Margin="354,92,0,0" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>

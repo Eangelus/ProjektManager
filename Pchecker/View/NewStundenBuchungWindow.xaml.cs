@@ -23,12 +23,24 @@ namespace ProjektManager.View
         public NewStundenBuchungWindow()
         {
             InitializeComponent();
-            this.DataContext = new ViewModelStundenbuchung();
+            this.DataContext = new ViewModelNewStundenbuchung();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
         }
+
+        private void StartPicker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var newValue = DateTime.MinValue;
+            if (e.NewValue != null)
+            {
+                newValue = (DateTime)e.NewValue;
+            }
+            ((ViewModelNewStundenbuchung)this.DataContext).StartTime = newValue;
+        }
+
+
     }
 }

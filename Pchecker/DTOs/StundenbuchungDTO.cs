@@ -19,18 +19,10 @@ namespace ProjektManager.DTOs
 
         public DateTime BuchungsDatum { get; set; }
 
-        public double Stunden
-        {
-            get
-            {
-                return (this.EndTime.Ticks - this.StartTime.Ticks) / 1000 * 60 * 60;
-            }
-        }
+        public double Stunden {  get; set; }
         public string Details { get; set; }
         public ProjektDTO Projekt { get; set; }
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-
 
 
         public static StundenbuchungDTO? ToStundenbuchungDTO(Stundenbuchung? stundenbuchung)
@@ -39,7 +31,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new StundenbuchungDTO(stundenbuchung.Id, stundenbuchung.BuchungsDatum, MitarbeiterDTO.ToMitarbeiterDTO(stundenbuchung.Mitarbeiter), stundenbuchung.Details, ProjektDTO.ToProjektDTO(stundenbuchung.Projekt), stundenbuchung.StartTime, stundenbuchung.EndTime);
+            return new StundenbuchungDTO(stundenbuchung.Id, stundenbuchung.BuchungsDatum, MitarbeiterDTO.ToMitarbeiterDTO(stundenbuchung.Mitarbeiter), stundenbuchung.Details, ProjektDTO.ToProjektDTO(stundenbuchung.Projekt), stundenbuchung.StartTime, stundenbuchung.Stunden);
         }
 
         public static Stundenbuchung? FromStundenbuchungDTO(StundenbuchungDTO stundenbuchungDTO)
@@ -48,7 +40,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new Stundenbuchung(null, stundenbuchungDTO.BuchungsDatum, MitarbeiterDTO.FromMitarbeiterDTO(stundenbuchungDTO.Mitarbeiter),  stundenbuchungDTO.Details, ProjektDTO.FromProjektDTO(stundenbuchungDTO.Projekt), stundenbuchungDTO.StartTime, stundenbuchungDTO.EndTime);
+            return new Stundenbuchung(null, stundenbuchungDTO.BuchungsDatum, MitarbeiterDTO.FromMitarbeiterDTO(stundenbuchungDTO.Mitarbeiter),  stundenbuchungDTO.Details, ProjektDTO.FromProjektDTO(stundenbuchungDTO.Projekt), stundenbuchungDTO.StartTime, stundenbuchungDTO.Stunden);
 
         }
 
@@ -57,7 +49,7 @@ namespace ProjektManager.DTOs
 
         }
 
-        public StundenbuchungDTO(int? Id, DateTime TagDerBuchung, MitarbeiterDTO Mitarbeiter, string Details, ProjektDTO Projekt, DateTime StartTime, DateTime EndTime)
+        public StundenbuchungDTO(int? Id, DateTime TagDerBuchung, MitarbeiterDTO Mitarbeiter, string Details, ProjektDTO Projekt, DateTime StartTime, double Stunden)
         {
             this.Id = Id;
             this.BuchungsDatum = TagDerBuchung;
@@ -65,7 +57,7 @@ namespace ProjektManager.DTOs
             this.Details = Details;
             this.Projekt = Projekt;
             this.StartTime = StartTime;
-            this.EndTime = EndTime;
+            this.Stunden = Stunden;
         }
     }
 }

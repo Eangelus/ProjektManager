@@ -12,8 +12,8 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(ProjektDBContext))]
-    [Migration("20240311151739_newInit")]
-    partial class newInit
+    [Migration("20240314143057_Newinit")]
+    partial class Newinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,9 +163,6 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("MitarbeiterId")
                         .HasColumnType("int");
 
@@ -174,6 +171,9 @@ namespace ProjektManager.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<double>("Stunden")
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
