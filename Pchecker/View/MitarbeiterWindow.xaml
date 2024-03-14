@@ -1,0 +1,21 @@
+﻿<Window x:Class="ProjektManager.View.MitarbeiterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjektManager.View" xmlns:viewmodel="clr-namespace:ProjektManager.ViewModel"
+        mc:Ignorable="d"
+        Title="MitarbeiterWindow" Height="450" Width="800" d:DataContext="{d:DesignInstance Type=viewmodel:ViewModelMitarbeiterListe}">
+    <Grid>
+
+        <DataGrid CanUserSortColumns="True"  RowEditEnding="DataGrid_CellEditEnding" CanUserAddRows="False" AutoGenerateColumns="False"  x:Name="GridMitarbeiter" ItemsSource="{Binding Mitarbeiter}"  Height="309" VerticalAlignment="Top" Margin="0,137,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Vorname, UpdateSourceTrigger=PropertyChanged}" Header="Vorname"/>
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name"/>
+                <DataGridTextColumn Binding="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Header="Email" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Mitarbeiter Liste" HorizontalAlignment="Left" Margin="19,35,0,0" VerticalAlignment="Top" Width="119"/>
+
+    </Grid>
+</Window>

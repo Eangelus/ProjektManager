@@ -15,12 +15,11 @@ namespace ProjektManager.DTOs
             
         }
 
-        public MitarbeiterDTO(int? id, string name, string vorname, string email,  Dictionary<string, int> stundenImProjekt)
+        public MitarbeiterDTO(int? id, string name, string vorname, string email)
         {
             Id = id;
             Name = name;
             Vorname = vorname;
-            StundenImProjekt = stundenImProjekt;
             Email = email;
 
         }
@@ -34,16 +33,13 @@ namespace ProjektManager.DTOs
 
         public string Email { get; set; } = String.Empty;
  
-
-        private Dictionary<string, int> StundenImProjekt { get; set; } // String : ProjektNummern  ---  int : StundenImProjekt
-
         public static MitarbeiterDTO? ToMitarbeiterDTO(Mitarbeiter? mitarbeiter)
         {
             if (mitarbeiter == null)
             {
                 return null;
             }
-            return new MitarbeiterDTO(null, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email, new Dictionary<string, int>());
+            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email);
         }
 
         public static Mitarbeiter? FromMitarbeiterDTO(MitarbeiterDTO mitarbeiterDTO)
@@ -52,7 +48,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new Mitarbeiter(mitarbeiterDTO.Name, mitarbeiterDTO.Vorname, new Dictionary<string, int>(), mitarbeiterDTO.Email);
+            return new Mitarbeiter(mitarbeiterDTO.Id, mitarbeiterDTO.Name, mitarbeiterDTO.Vorname, mitarbeiterDTO.Email);
 
         }
 

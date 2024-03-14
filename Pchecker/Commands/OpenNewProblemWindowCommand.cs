@@ -21,16 +21,16 @@ namespace ProjektManager.Commands
     public class OpenNewProblemWindowCommand : CommandBase
     {
 
-        private ViewModelMainWindow _viewModelMainWindow;
+        private ViewModelProjektWindow _viewModelMainWindow;
 
-        public ViewModelMainWindow ViewModelMainWindow
+        public ViewModelProjektWindow ViewModelMainWindow
         {
             get { return _viewModelMainWindow; }
             set { _viewModelMainWindow = value;}
         }
 
 
-        public OpenNewProblemWindowCommand(ViewModelMainWindow viewModelMainWindow)
+        public OpenNewProblemWindowCommand(ViewModelProjektWindow viewModelMainWindow)
         {
             _viewModelMainWindow = viewModelMainWindow; 
         }

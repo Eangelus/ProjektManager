@@ -18,8 +18,8 @@ namespace ProjektManager.Logic
     {
         public ExcelConnection() { }
 
-        public static List<string> ErstellteVerantwortliche { get; set; } = new List<string>();
-
+        public static List<string> ErstellteMitarbeiter { get; set; } = new List<string>();
+       
         public static IEnumerable<Projekt> ReadAllExcelFiles()
         {
             var path = "C:\\Users\\t.bernecker\\Desktop\\TestData";
@@ -153,8 +153,8 @@ namespace ProjektManager.Logic
                     }
                     catch { }
 
-                    MitarbeiterDTO verantwortlicherDTO = CreateMitarbeiterIfNew(Name, dbContext);
-                    MitarbeiterDTO initiatorDTO = CreateMitarbeiterIfNew(Initiator, dbContext);
+                    MitarbeiterDTO? verantwortlicherDTO = CreateMitarbeiterIfNew(Name, dbContext);
+                    MitarbeiterDTO? initiatorDTO = CreateMitarbeiterIfNew(Initiator, dbContext);
 
                     ProblemDTO newProblem = new ProblemDTO(null, Bezug, AuftrittsDatum.GetValueOrDefault(DateTime.Now), AbteilungBezeichnung, verantwortlicherDTO, initiatorDTO , Kategorie, Thema, Maßnahme, Bewertung, Termin, ReTermin, ProblemProzessStatus, ProjektNr);
 
@@ -192,14 +192,15 @@ namespace ProjektManager.Logic
 
             if(String.IsNullOrEmpty(Name)) return null;
 
-            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "", new Dictionary<string, int>()); ;
+            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "");
 
-            var found = ErstellteVerantwortliche.Exists(p => p.Equals(Name));
+            var found = ErstellteMitarbeiter.Exists(p => p.Equals(Name));
+            
             if (!found && mitarbeiterDTO != null)
             {
 
                 mitarbeiterDTO = dbContext.Add(mitarbeiterDTO).Entity;
-                ErstellteVerantwortliche.Add(Name);
+                ErstellteMitarbeiter.Add(Name);
                 dbContext.SaveChanges();
 
             }

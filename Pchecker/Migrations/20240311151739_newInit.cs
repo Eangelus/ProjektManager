@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjektManager.Migrations
 {
     /// <inheritdoc />
-    public partial class NewInti : Migration
+    public partial class newInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -105,6 +105,38 @@ namespace ProjektManager.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Stundenbuchungen",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    MitarbeiterId = table.Column<int>(type: "int", nullable: false),
+                    BuchungsDatum = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Details = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StartTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stundenbuchungen", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stundenbuchungen_Mitarbeiter_MitarbeiterId",
+                        column: x => x.MitarbeiterId,
+                        principalTable: "Mitarbeiter",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Stundenbuchungen_Projekte_ProjektNr",
+                        column: x => x.ProjektNr,
+                        principalTable: "Projekte",
+                        principalColumn: "ProjektNr");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Probleme_InitiatorId",
                 table: "Probleme",
@@ -119,6 +151,16 @@ namespace ProjektManager.Migrations
                 name: "IX_Probleme_VerantwortlicherId",
                 table: "Probleme",
                 column: "VerantwortlicherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stundenbuchungen_MitarbeiterId",
+                table: "Stundenbuchungen",
+                column: "MitarbeiterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stundenbuchungen_ProjektNr",
+                table: "Stundenbuchungen",
+                column: "ProjektNr");
         }
 
         /// <inheritdoc />
@@ -126,6 +168,9 @@ namespace ProjektManager.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Probleme");
+
+            migrationBuilder.DropTable(
+                name: "Stundenbuchungen");
 
             migrationBuilder.DropTable(
                 name: "Mitarbeiter");

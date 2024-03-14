@@ -46,9 +46,9 @@ namespace ProjektManager.Commands
                 {
                     projektWindow = (NewProjektWindow)window;
                 }
-                if (window.GetType() == typeof(MainWindow))
+                if (window.GetType() == typeof(ProjektWindow))
                 {
-                    mainWindow = (MainWindow)window;
+                    mainWindow = (ProjektWindow)window;
                 }
             }
         }
@@ -71,9 +71,9 @@ namespace ProjektManager.Commands
                 {
                     projektWindow = (NewProjektWindow)window;
                 }
-                if (window.GetType() == typeof(MainWindow))
+                if (window.GetType() == typeof(ProjektWindow))
                 {
-                    mainWindow = (MainWindow)window;
+                    mainWindow = (ProjektWindow)window;
                 }
 
             }
@@ -110,7 +110,7 @@ namespace ProjektManager.Commands
             }
             MessageBox.Show("Projekt wurde Angelegt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            (mainWindow.DataContext as ViewModelMainWindow).Projekte.Add(projekt);
+            (mainWindow.DataContext as ViewModelProjektWindow).Projekte.Add(projekt);
             if (projektWindow == null)
             {
                 return;

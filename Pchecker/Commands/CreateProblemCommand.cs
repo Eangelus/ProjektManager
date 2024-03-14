@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Net.Mail;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace ProjektManager.Commands
@@ -37,19 +38,18 @@ namespace ProjektManager.Commands
                 {
                     problemWindow = (NewProblemWindow)window;
                 }
-                if (window.GetType() == typeof(MainWindow))
+                if (window.GetType() == typeof(ProjektWindow))
                 {
-                    mainWindow = (MainWindow)window;
+                    mainWindow = (ProjektWindow)window;
                 }
             }
 
-            
 
         }
 
         public override bool CanExecute(object? parameter)
         {
-            bool result = (_viewModelCreateProblem.SelectedVerantwortlicher != null && !string.IsNullOrEmpty(_viewModelCreateProblem.SelectedVerantwortlicher.Name)) && !string.IsNullOrEmpty(_viewModelCreateProblem.Thema) && !string.IsNullOrEmpty(_viewModelCreateProblem.Maßnahme) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bezug) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bewertung) && (_viewModelCreateProblem.SelectedInitator.Name != null && !string.IsNullOrEmpty(_viewModelCreateProblem.SelectedInitator.Name)) && !string.IsNullOrEmpty(_viewModelCreateProblem.Kategorie) && !string.IsNullOrEmpty(_viewModelCreateProblem.ProzessStatus) && base.CanExecute(parameter);
+            bool result = (_viewModelCreateProblem.SelectedVerantwortlicher != null && !string.IsNullOrEmpty(_viewModelCreateProblem.SelectedVerantwortlicher.Name)) && !string.IsNullOrEmpty(_viewModelCreateProblem.Thema) && !string.IsNullOrEmpty(_viewModelCreateProblem.Maßnahme) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bezug) && !string.IsNullOrEmpty(_viewModelCreateProblem.Bewertung) && (_viewModelCreateProblem.SelectedInitator != null && !string.IsNullOrEmpty(_viewModelCreateProblem.SelectedInitator.Name)) && !string.IsNullOrEmpty(_viewModelCreateProblem.Kategorie) && !string.IsNullOrEmpty(_viewModelCreateProblem.ProzessStatus) && base.CanExecute(parameter);
             return result;
         }
 
@@ -58,16 +58,16 @@ namespace ProjektManager.Commands
             var windows = Application.Current.Windows;
 
             Window? problemWindow = null;
-            Window? mainWindow = null;
+            Window? ProjektWindow = null;
             foreach (var window in windows)
             {
                 if (window.GetType() == typeof(NewProblemWindow))
                 {
                     problemWindow = (NewProblemWindow)window;
                 }
-                if (window.GetType() == typeof(MainWindow))
+                if (window.GetType() == typeof(ProjektWindow))
                 {
-                    mainWindow = (MainWindow)window;
+                    ProjektWindow = (ProjektWindow)window;
                 }
 
             }
@@ -84,13 +84,10 @@ namespace ProjektManager.Commands
                 {
                     var projektDTO = dbContext.Projekte.Include("Probleme").Single(p => p.ProjektNr == viewModelNewProblem.SelectedProjekt.ProjektNr);
                     var problemDTO = ProblemDTO.ToProblemDTO(problem);
-
                     if(projektDTO.Probleme == null)
                     {
                         projektDTO.Probleme = new List<ProblemDTO>();
                     }
-
-
 
                     //projektDTO.Probleme.Add(problemDTO);
                     var entity = dbContext.Attach(projektDTO);
@@ -114,9 +111,9 @@ namespace ProjektManager.Commands
             MessageBox.Show("Problem wurde Angelegt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
 
 
-            (mainWindow.DataContext as ViewModelMainWindow).LoadAllProjekte();
-            (mainWindow.DataContext as ViewModelMainWindow).FilterProblems = new ObservableCollection<Problem>(viewModelNewProblem.SelectedProjekt.Probleme);
-            (mainWindow.DataContext as ViewModelMainWindow).SearchText = String.Empty;
+            (ProjektWindow.DataContext as ViewModelProjektWindow).LoadAllProjekte();
+            (ProjektWindow.DataContext as ViewModelProjektWindow).FilterProblems = new ObservableCollection<Problem>(viewModelNewProblem.SelectedProjekt.Probleme);
+            (ProjektWindow.DataContext as ViewModelProjektWindow).SearchText = String.Empty;
 
             SendEmailForNewProblem(viewModelNewProblem.ListForEmail, problem);
 
@@ -137,9 +134,6 @@ namespace ProjektManager.Commands
         private void SendEmailForNewProblem(ObservableCollection<Mitarbeiter> ListOfEmail, Problem problem)
         {
 
-
-
-
             foreach ( Mitarbeiter mitarbeiter in ListOfEmail )
             {
                 if(mitarbeiter.Email == null)
@@ -150,26 +144,35 @@ namespace ProjektManager.Commands
                 using( SmtpClient smtpClient = new SmtpClient() )
                 {
                     smtpClient.Host = "jp-mail.jpindustrie.local"; // 192.168.23.4
-                    //smtpClient.Port = 587;
-                    smtpClient.UseDefaultCredentials = false;
-                    smtpClient.EnableSsl = false;
-                    
-
+                    smtpClient.Port = 587;
+                    smtpClient.EnableSsl = true;
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     var basicCredentail = new NetworkCredential("t.bernecker@jp-industrieanlagen.de", "TB1982!");
                     smtpClient.Credentials = basicCredentail;
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
+                    X509CertificateCollection certificates= new X509CertificateCollection();
+                    X509Store store = new X509Store(StoreName.TrustedPublisher, StoreLocation.CurrentUser);
+
+                    store.Open(OpenFlags.ReadOnly);
+
+                    foreach (X509Certificate2 certificate in store.Certificates)
+                    {
+                        certificates.Add( certificate );    
+                    }
+
+                    smtpClient.ClientCertificates.AddRange( certificates );
+                    
+
                     using (MailMessage message = new MailMessage())
                     {
                         MailAddress fromAdress = new MailAddress("t.bernecker@jp-industrieanlagen.de");
-
                         message.From = fromAdress;
-                        message.To.Add(mitarbeiter.Email);
-
+                        message.To.Add("t.bernecker@jp-industrieanlagen.de");
                         message.Subject = $"{problem.AuftrittsDatum } + {problem.Initiator} + {problem.Kategorie}";
                         message.IsBodyHtml = true;
-                        message.Body = "<h1> Deine Nachricht <h1>";
-
+                        message.Body = $"<h1> Ein Problem wurde erstellt :{problem.Thema} von {problem.Initiator} <h1><br>" +
+                            $" vorrauslich bis {problem.Termin}";
 
                         try
                         {

@@ -34,7 +34,7 @@ namespace ProjektManager
             MainWindow = new MainWindow()
             {
 
-                DataContext = new ViewModelMainWindow()
+                DataContext = new MainWindow()
             
             };
             MainWindow.Show();

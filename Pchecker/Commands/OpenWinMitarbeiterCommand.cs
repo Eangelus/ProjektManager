@@ -3,6 +3,7 @@ using ProjektManager.View;
 using ProjektManager.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,8 @@ namespace ProjektManager.Commands
     /// </summary>
     public class OpenWinMitarbeiterCommand : ICommand
     {
-        
+
+
 
         public OpenWinMitarbeiterCommand()
         {
@@ -34,7 +36,9 @@ namespace ProjektManager.Commands
 
         public void Execute(object? parameter)
         {
-            
+            var window = new MitarbeiterWindow();
+            window.ShowDialog();
+
         }
     }
 }

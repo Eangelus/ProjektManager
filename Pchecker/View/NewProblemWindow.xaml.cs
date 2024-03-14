@@ -28,5 +28,10 @@ namespace ProjektManager.View
             DataContext = new ViewModelNewProblem();
             (DataContext as ViewModelNewProblem).SelectedProjekt = selectedProjekt;
         }
+
+        private void comboboxVerantwortlicher_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            (sender as ComboBox).SelectedIndex = -1;
+        }
     }
 }

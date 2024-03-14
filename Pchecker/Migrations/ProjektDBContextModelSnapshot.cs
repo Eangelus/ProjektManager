@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjektManager.DataBaseAPI;
 
@@ -16,14 +17,18 @@ namespace ProjektManager.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -47,6 +52,8 @@ namespace ProjektManager.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Abteilung")
                         .IsRequired()
@@ -138,6 +145,42 @@ namespace ProjektManager.Migrations
                     b.ToTable("Projekte");
                 });
 
+            modelBuilder.Entity("ProjektManager.DTOs.StundenbuchungDTO", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("Id"));
+
+                    b.Property<DateTime>("BuchungsDatum")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("MitarbeiterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProjektNr")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MitarbeiterId");
+
+                    b.HasIndex("ProjektNr");
+
+                    b.ToTable("Stundenbuchungen");
+                });
+
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
                     b.HasOne("ProjektManager.DTOs.MitarbeiterDTO", "Initiator")
@@ -155,6 +198,23 @@ namespace ProjektManager.Migrations
                     b.Navigation("Initiator");
 
                     b.Navigation("Verantwortlicher");
+                });
+
+            modelBuilder.Entity("ProjektManager.DTOs.StundenbuchungDTO", b =>
+                {
+                    b.HasOne("ProjektManager.DTOs.MitarbeiterDTO", "Mitarbeiter")
+                        .WithMany()
+                        .HasForeignKey("MitarbeiterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjektManager.DTOs.ProjektDTO", "Projekt")
+                        .WithMany()
+                        .HasForeignKey("ProjektNr");
+
+                    b.Navigation("Mitarbeiter");
+
+                    b.Navigation("Projekt");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>

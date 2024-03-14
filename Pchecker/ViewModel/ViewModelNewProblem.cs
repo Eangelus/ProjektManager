@@ -4,6 +4,7 @@ using ProjektManager.Commands;
 using ProjektManager.DataBaseAPI;
 using ProjektManager.DTOs;
 using ProjektManager.Models;
+using ProjektManager.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -14,24 +15,24 @@ namespace ProjektManager.ViewModel
 
         public static ObservableCollection<Mitarbeiter> AllMitarbeiter = new ObservableCollection<Mitarbeiter>();
 
-        public void LoadAllMitarbeiter()
+        public void LoadAllList()
         {
 
-            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
-            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            AllMitarbeiter.Clear();
+            ListForEmailDropbox.Clear();
+            var mitarbeiter = DatabankService.loadAllMitarbeiter();
+            foreach (var m in mitarbeiter)
             {
-                AllMitarbeiter.Clear();
-                var mitarbeiter = new ObservableCollection<Mitarbeiter>(dbContext.GetAllMitarbeiter().Select(m => MitarbeiterDTO.FromMitarbeiterDTO(m)!).ToList());
-                foreach (var m in mitarbeiter)
-                {
-                    AllMitarbeiter.Add(m);
-                }
+                AllMitarbeiter.Add(m);
+                ListForEmailDropbox.Add(m);
             }
+
         }
 
-        public ViewModelNewProblem() {
+        public ViewModelNewProblem()
+        {
             CreateProblemCommand = new CreateProblemCommand(this);
-            LoadAllMitarbeiter();
+            LoadAllList();
         }
 
         public ICommand CreateProblemCommand { get; set; }
@@ -51,7 +52,24 @@ namespace ProjektManager.ViewModel
             }
         }
 
+        private static ObservableCollection<Mitarbeiter> _listForDropBoxEmail = new ObservableCollection<Mitarbeiter>();
 
+        public static ObservableCollection<Mitarbeiter> ListForEmailDropbox
+        {
+            get
+            {
+                return _listForDropBoxEmail;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    return;
+                }
+                _listForDropBoxEmail = value;
+                //OnPropertyChanged(nameof(ListForEmailDropbox));
+            }
+        }
 
 
         private Mitarbeiter _selected4EmailVer;
@@ -64,8 +82,15 @@ namespace ProjektManager.ViewModel
             }
             set
             {
+                if (value == null) return;
                 _selected4EmailVer = value;
                 ListForEmail.Add(value);
+                var list = ListForEmailDropbox.ToList().Where(m => m.Id != _selected4EmailVer.Id);
+                ListForEmailDropbox.Clear();
+                foreach (var m in list)
+                {
+                    ListForEmailDropbox.Add(m);
+                }
                 OnPropertyChanged(nameof(Selected4EmailVer));
                 OnPropertyChanged(nameof(ListForEmail));
 
@@ -82,8 +107,17 @@ namespace ProjektManager.ViewModel
             }
             set
             {
+
+                if (value == null) return;
                 _selected4EmailInfo = value;
                 ListForEmail.Add(value);
+                var list = ListForEmailDropbox.ToList().Where(m => m.Id != _selected4EmailInfo.Id);
+                ListForEmailDropbox.Clear();
+                foreach (var m in list)
+                {
+                    ListForEmailDropbox.Add(m);
+                }
+
                 OnPropertyChanged(nameof(Selected4EmailInfo));
                 OnPropertyChanged(nameof(ListForEmail));
 

@@ -21,6 +21,7 @@ namespace ProjektManager.DataBaseAPI
         public DbSet<ProblemDTO> Probleme { get; set; }
 
         public DbSet<ProjektDTO> Projekte { get; set; }
+        public DbSet<StundenbuchungDTO> Stundenbuchungen { get; set; }
 
 
 
@@ -88,7 +89,11 @@ namespace ProjektManager.DataBaseAPI
             }
         }
 
-
+        internal IEnumerable<StundenbuchungDTO> GetAllStundenbuchungen()
+        {
+            var erg = Stundenbuchungen.Include(pro => pro.Projekt).Include(p => p.Mitarbeiter);
+            return erg;
+        }
     }
 }
 

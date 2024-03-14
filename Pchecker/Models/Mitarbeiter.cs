@@ -9,17 +9,17 @@ namespace ProjektManager.Models
 
         public Mitarbeiter() { }
 
-        public Mitarbeiter(string name, string vorname, Dictionary<string, int> stundenImProjekt, string email)
+        public Mitarbeiter(int? id,string name, string vorname, string email)
         {
+            this.Id = id;
             Name = name;
             Vorname = vorname;
-            StundenImProjekt = stundenImProjekt;
             Email = email;  // $"{mitarbeiter.Vorname[0]}.{mitarbeiter.Name}@jp-industrieanlagen.de"
         }
 
+        public int? Id { get; set; }
         public string Name { get; set; } = String.Empty;
         public string Vorname { get; set; } = String.Empty;
-        private Dictionary<string, int> StundenImProjekt { get; set; } // String : ProjektNummern  ---  int : StundenImProjekt
         public string Email { get; set; } = String.Empty;
 
 
