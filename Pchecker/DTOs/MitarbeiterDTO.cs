@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,6 @@ namespace ProjektManager.DTOs
             Name = name;
             Vorname = vorname;
             Email = email;
-
         }
 
         [Key]
@@ -33,15 +33,14 @@ namespace ProjektManager.DTOs
 
         public string Email { get; set; } = String.Empty;
 
-        public Abteilung Abteilung { get; set; }
 
-        public static MitarbeiterDTO? ToMitarbeiterDTO(Mitarbeiter? mitarbeiter)
+        public static MitarbeiterDTO? ToMitarbeiterDTO(Mitarbeiter? mitarbeiter) 
         {
             if (mitarbeiter == null)
             {
                 return null;
             }
-            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email, mitarbeiter.Abteilung);
+            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email);
         }
 
         public static Mitarbeiter? FromMitarbeiterDTO(MitarbeiterDTO mitarbeiterDTO)

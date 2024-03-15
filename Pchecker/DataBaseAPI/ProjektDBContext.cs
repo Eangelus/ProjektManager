@@ -23,7 +23,7 @@ namespace ProjektManager.DataBaseAPI
         public DbSet<ProjektDTO> Projekte { get; set; }
         public DbSet<StundenbuchungDTO> Stundenbuchungen { get; set; }
 
-
+        public DbSet<AbteilungDTO> Abteilungen { get; set; }
 
         public ProjektDBContext(DbContextOptions options) : base(options)
         {

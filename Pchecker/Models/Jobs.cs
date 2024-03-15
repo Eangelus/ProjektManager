@@ -9,10 +9,11 @@ namespace ProjektManager.Models
 {
     public static class Jobs
     {
-        public static string Programmier  "Programmieren";
+        public static string Programmier = "Programmieren";
+
                     
-        public static ObservableCollection<string> ListOfState = new ObservableCollection<string>() {
-    Problem_Erkannt, Umsetzung_Eingeleitet, Umsetzung_Laufend,Vorgang_Abgeschlossen ,
-    Umsetzung_Beendet, Entscheidung, Info};
+    //    public static ObservableCollection<string> ListOfState = new ObservableCollection<string>() {
+    //Problem_Erkannt, Umsetzung_Eingeleitet, Umsetzung_Laufend,Vorgang_Abgeschlossen ,
+    //Umsetzung_Beendet, Entscheidung, Info};
     }
 }

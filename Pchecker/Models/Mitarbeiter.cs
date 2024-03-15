@@ -15,6 +15,7 @@ namespace ProjektManager.Models
             Name = name;
             Vorname = vorname;
             Email = email;  // $"{mitarbeiter.Vorname[0]}.{mitarbeiter.Name}@jp-industrieanlagen.de"
+
         }
 
         public int? Id { get; set; }
@@ -22,7 +23,6 @@ namespace ProjektManager.Models
         public string Vorname { get; set; } = String.Empty;
         public string Email { get; set; } = String.Empty;
 
-        public Abteilung Abteilung { get; set; }
 
 
 
