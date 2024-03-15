@@ -16,12 +16,13 @@ namespace ProjektManager.DTOs
             
         }
 
-        public MitarbeiterDTO(int? id, string name, string vorname, string email)
+        public MitarbeiterDTO(int? id, string name, string vorname, string email, string Inabteilung)
         {
             Id = id;
             Name = name;
             Vorname = vorname;
             Email = email;
+            InAbteilung = Inabteilung;
         }
 
         [Key]
@@ -33,6 +34,7 @@ namespace ProjektManager.DTOs
 
         public string Email { get; set; } = String.Empty;
 
+        public string InAbteilung { get; set; } = String.Empty;
 
         public static MitarbeiterDTO? ToMitarbeiterDTO(Mitarbeiter? mitarbeiter) 
         {
@@ -40,7 +42,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email);
+            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email, mitarbeiter.InAbteilung);
         }
 
         public static Mitarbeiter? FromMitarbeiterDTO(MitarbeiterDTO mitarbeiterDTO)
@@ -49,7 +51,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new Mitarbeiter(mitarbeiterDTO.Id, mitarbeiterDTO.Name, mitarbeiterDTO.Vorname, mitarbeiterDTO.Email);
+            return new Mitarbeiter(mitarbeiterDTO.Id, mitarbeiterDTO.Name, mitarbeiterDTO.Vorname, mitarbeiterDTO.Email, mitarbeiterDTO.InAbteilung);
 
         }
 

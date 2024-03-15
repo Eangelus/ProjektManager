@@ -41,6 +41,18 @@ namespace ProjektManager.Services
 
         }
 
+        //public static ObservableCollection<Abteilung> LoadAllAbteilungen()
+        //{
+        //    ObservableCollection<Abteilung> Abteilung = new ObservableCollection<Abteilung>();
+        //    var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+        //    using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+        //    {
+        //        Abteilung = new ObservableCollection<Abteilung>(dbContext.GetAllAbteilung().Select(p => AbteilungDTO.FromAbteilungDTO(p)).ToList());
+        //    }
+        //    return Abteilung;
+
+        //}
+
         public static ObservableCollection<Stundenbuchung> LoadAllStundenbuchungen()
         {
             ObservableCollection<Stundenbuchung> Stundenbuchungen = new ObservableCollection<Stundenbuchung>();

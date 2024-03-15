@@ -16,19 +16,23 @@ namespace ProjektManager.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Abteilungen",
+                name: "Mitarbeiter",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Jobs = table.Column<string>(type: "longtext", nullable: false)
+                    Vorname = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    InAbteilung = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Abteilungen", x => x.Id);
+                    table.PrimaryKey("PK_Mitarbeiter", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -51,31 +55,6 @@ namespace ProjektManager.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projekte", x => x.ProjektNr);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Mitarbeiter",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Vorname = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AbteilungDTOId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Mitarbeiter", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Mitarbeiter_Abteilungen_AbteilungDTOId",
-                        column: x => x.AbteilungDTOId,
-                        principalTable: "Abteilungen",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -161,11 +140,6 @@ namespace ProjektManager.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mitarbeiter_AbteilungDTOId",
-                table: "Mitarbeiter",
-                column: "AbteilungDTOId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Probleme_InitiatorId",
                 table: "Probleme",
                 column: "InitiatorId");
@@ -205,9 +179,6 @@ namespace ProjektManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "Projekte");
-
-            migrationBuilder.DropTable(
-                name: "Abteilungen");
         }
     }
 }

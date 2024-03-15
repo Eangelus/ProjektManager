@@ -23,7 +23,7 @@ namespace ProjektManager.DataBaseAPI
         public DbSet<ProjektDTO> Projekte { get; set; }
         public DbSet<StundenbuchungDTO> Stundenbuchungen { get; set; }
 
-        public DbSet<AbteilungDTO> Abteilungen { get; set; }
+        //public DbSet<AbteilungDTO> Abteilungen { get; set; }
 
         public ProjektDBContext(DbContextOptions options) : base(options)
         {
@@ -58,6 +58,12 @@ namespace ProjektManager.DataBaseAPI
             var erg = Projekte.Include(p => p.Probleme).ThenInclude(p => p.Verantwortlicher).Include(p => p.Probleme).ThenInclude(p => p.Initiator);
             return erg;
         }
+        //public IEnumerable<AbteilungDTO> GetAllAbteilung()
+        //{
+
+        //    var erg = Abteilungen.Include(m => m.Mitarbeiters);
+        //    return erg;
+        //}
 
         public IEnumerable<MitarbeiterDTO> GetAllMitarbeiter()
         {

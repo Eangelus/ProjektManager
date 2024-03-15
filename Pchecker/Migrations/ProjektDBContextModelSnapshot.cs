@@ -22,27 +22,6 @@ namespace ProjektManager.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Jobs")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Abteilungen");
-                });
-
             modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
                 {
                     b.Property<int?>("Id")
@@ -51,10 +30,11 @@ namespace ProjektManager.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<int?>("AbteilungDTOId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("InAbteilung")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -67,8 +47,6 @@ namespace ProjektManager.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AbteilungDTOId");
 
                     b.ToTable("Mitarbeiter");
                 });
@@ -207,13 +185,6 @@ namespace ProjektManager.Migrations
                     b.ToTable("Stundenbuchungen");
                 });
 
-            modelBuilder.Entity("ProjektManager.DTOs.MitarbeiterDTO", b =>
-                {
-                    b.HasOne("ProjektManager.DTOs.AbteilungDTO", null)
-                        .WithMany("Mitarbeiters")
-                        .HasForeignKey("AbteilungDTOId");
-                });
-
             modelBuilder.Entity("ProjektManager.DTOs.ProblemDTO", b =>
                 {
                     b.HasOne("ProjektManager.DTOs.MitarbeiterDTO", "Initiator")
@@ -248,11 +219,6 @@ namespace ProjektManager.Migrations
                     b.Navigation("Mitarbeiter");
 
                     b.Navigation("Projekt");
-                });
-
-            modelBuilder.Entity("ProjektManager.DTOs.AbteilungDTO", b =>
-                {
-                    b.Navigation("Mitarbeiters");
                 });
 
             modelBuilder.Entity("ProjektManager.DTOs.ProjektDTO", b =>

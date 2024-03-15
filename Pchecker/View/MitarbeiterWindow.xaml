@@ -13,7 +13,7 @@
                 <DataGridTextColumn Binding="{Binding Vorname, UpdateSourceTrigger=PropertyChanged}" Header="Vorname"/>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name"/>
                 <DataGridTextColumn Binding="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Header="Email" />
-                <DataGridTextColumn Binding="{Binding Abteilung, UpdateSourceTrigger=PropertyChanged}" Header="Abteilung" />
+                <DataGridTextColumn Binding="{Binding InAbteilung, UpdateSourceTrigger=PropertyChanged}" Header="Abteilung" />
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="Mitarbeiter Liste" HorizontalAlignment="Left" Margin="19,35,0,0" VerticalAlignment="Top" Width="119"/>

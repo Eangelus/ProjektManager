@@ -193,7 +193,7 @@ namespace ProjektManager.Logic
             if(String.IsNullOrEmpty(Name)) return null;
 
 
-            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "");
+            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "", "");
 
             var found = ErstellteMitarbeiter.Exists(p => p.Equals(Name));
             
