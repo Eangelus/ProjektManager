@@ -12,7 +12,7 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(ProjektDBContext))]
-    [Migration("20240315122043_Newinit")]
+    [Migration("20240318110348_Newinit")]
     partial class Newinit
     {
         /// <inheritdoc />

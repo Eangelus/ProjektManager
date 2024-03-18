@@ -21,7 +21,9 @@ namespace ProjektManager.Models
         public Projekt? Projekt { get; set; } = new Projekt();
 
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+
+        public int StundenToView { get; set; }
+        public int MinutenToView { get; set; }
 
 
         public Stundenbuchung()

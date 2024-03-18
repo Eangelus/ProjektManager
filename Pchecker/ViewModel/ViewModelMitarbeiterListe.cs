@@ -23,12 +23,7 @@ namespace ProjektManager.ViewModel
         }
 
 
-        private ObservableCollection<Abteilung> _abteilungen = new ObservableCollection<Abteilung> {new Abteilung { Id = 01, Bezeichung = "Projektleitung", Jobs = new List<string> { "Projektleitung" }
-                                                                                                                  },
-                                                                                                    new Abteilung { Id = 02, Bezeichung = "Konstruktion", Jobs = new List<string> { "Konstruktion", "Dokumentation", "Besprechung (K)", "Beschaffung (K)" } },
-                                                                                                    new Abteilung { Id = 03, Bezeichung = "Elektrotechnik", Jobs = new List<string> { "Programmierung", "E-Plan", "Dokumenation", "Besprechung (E)", "Beschaffung (E)" } },
-                                                                                                    new Abteilung { Id = 04, Bezeichung = "Monatge", Jobs = new List<string> { "Montage mechanisch", "Montage elektronisch", "Montage mechanisch extern", "Monatge elektronisch extern"} }};
-
+        private ObservableCollection<Abteilung> _abteilungen = Abteilung.CreateAllAbteilungen();
         public ObservableCollection<Abteilung> Abteilungen
         {
             get { return _abteilungen; }

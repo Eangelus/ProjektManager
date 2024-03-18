@@ -21,12 +21,14 @@
 
         <toolkit:DateTimePicker x:Name="StartPicker" Margin="10,118,0,0" Height="40" Width="240" HorizontalAlignment="Left" VerticalAlignment="Top"  CultureInfo="de" ValueChanged="StartPicker_ValueChanged" />
         <Button Content="Buchen" HorizontalAlignment="Left" Margin="466,253,0,0" VerticalAlignment="Top" Command="{Binding CreateBuchungCommand}" CommandParameter="{Binding .}"/>
-        <Slider Name="StundenSlider" HorizontalAlignment="Left" Margin="262,120,0,0" VerticalAlignment="Top" Width="233" Maximum="900" Minimum="0" Value="{Binding Stunden, UpdateSourceTrigger=PropertyChanged}" TickFrequency="15"/>
+        <Slider Name="StundenSlider" HorizontalAlignment="Left" Margin="262,120,0,0" VerticalAlignment="Top" Width="233" Maximum="900" Minimum="0" Value="{Binding Stunden, UpdateSourceTrigger=PropertyChanged}" TickFrequency="15" SmallChange="0.15"/>
         <Label Content="Datum und Startzeit:" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top"/>
         <Label Content="Für Projekt:&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26" Width="72"/>
         <Label Content="Mitarbeiter:" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Dauer:" HorizontalAlignment="Left" Margin="262,79,0,0" VerticalAlignment="Top"/>
         <Label Content="{Binding ElementName=StundenSlider, Path=Value, Converter={StaticResource TimeConverter}}" HorizontalAlignment="Left" Margin="354,92,0,0" VerticalAlignment="Top"/>
+        <ComboBox ItemsSource="{Binding ListOfJobs}" SelectedItem="{Binding Details}"  HorizontalAlignment="Left" Margin="10,204,0,0" VerticalAlignment="Top" Width="240"/>
+        <Label Content="Tätigkeit:" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="104"/>
 
     </Grid>
 </Window>

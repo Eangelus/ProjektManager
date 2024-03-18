@@ -64,7 +64,7 @@ namespace ProjektManager.Commands
             }
             
 
-            Stundenbuchung buchung = new Stundenbuchung(null, DateTime.Now, _ViewModelCreateStunden.SelectedMitarbeiter, _ViewModelCreateStunden.Details, _ViewModelCreateStunden.SelectedProjekt, _ViewModelCreateStunden.StartTime, _ViewModelCreateStunden.Stunden);
+            Stundenbuchung buchung = new Stundenbuchung(null, DateTime.Now, _ViewModelCreateStunden.SelectedMitarbeiter, _ViewModelCreateStunden.Details, _ViewModelCreateStunden.SelectedProjekt, _ViewModelCreateStunden.StartTime, (int)_ViewModelCreateStunden.Stunden);
 
 
 

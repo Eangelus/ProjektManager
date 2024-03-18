@@ -13,7 +13,7 @@ namespace ProjektManager.Models
     {
         public Abteilung()
         {
-                
+
         }
 
         public Abteilung(int id, string bezeichnung, List<string> jobs )
@@ -30,7 +30,16 @@ namespace ProjektManager.Models
 
         public ObservableCollection<Mitarbeiter> Mitarbeiters { get; set; } = new ObservableCollection<Mitarbeiter>();
 
-
+        public static ObservableCollection<Abteilung> CreateAllAbteilungen() {
+            ObservableCollection<Abteilung>  Abteilungen = new ObservableCollection<Abteilung> {
+                            new Abteilung { Id = 01, Bezeichung = "Projektleitung", Jobs = new List<string> { "Projektleitung" } },
+                            new Abteilung { Id = 02, Bezeichung = "Konstruktion", Jobs = new List<string> { "Konstruktion", "Dokumentation", "Besprechung (K)", "Beschaffung (K)" } },
+                            new Abteilung { Id = 03, Bezeichung = "Elektrotechnik", Jobs = new List<string> { "Programmierung", "E-Plan", "Dokumenation", "Besprechung (E)", "Beschaffung (E)" } },
+                            new Abteilung { Id = 04, Bezeichung = "Monatge", Jobs = new List<string> { "Montage mechanisch", "Montage elektronisch", "Montage mechanisch extern", "Monatge elektronisch extern"} }
+                            };
+            return Abteilungen;
+        }
+  
 
         public void AddMitarbeiter(Mitarbeiter mitarbeiter)
         {

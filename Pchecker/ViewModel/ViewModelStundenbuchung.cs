@@ -1,5 +1,11 @@
-﻿using ProjektManager.Models;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using LiveChartsCore;
+using ProjektManager.Models;
 using ProjektManager.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
@@ -31,6 +37,10 @@ namespace ProjektManager.ViewModel
                 OnPropertyChanged(nameof(Details));
             }
         }
+
+
+ 
+
 
 
         private double _stunden;
@@ -83,6 +93,7 @@ namespace ProjektManager.ViewModel
             set
             {
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
+                OnPropertyChanged(nameof(AlleStundenbuchungen));
             }
         }
 
@@ -103,9 +114,16 @@ namespace ProjektManager.ViewModel
             }
             set
             {
+                if (value.ProjektNr == "Alle")
+                {
+                    value = null;
+                }
+
                 _selectedProjekt = value;
+                LoadAllStunden();
                 OnPropertyChanged(nameof(SelectedProjekt));
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
+                OnPropertyChanged(nameof(AlleStundenbuchungen));
             }
         }
 
@@ -120,15 +138,23 @@ namespace ProjektManager.ViewModel
             }
             set
             {
+                if( value.Name == "Alle")
+                {
+                    value = null;
+                }
+
                 _selectedMitarbeiter = value;
+                LoadAllStunden();
                 OnPropertyChanged(nameof(SelectedMitarbeiter));
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
+                OnPropertyChanged(nameof(AlleStundenbuchungen));
             }
         }
 
         public void LoadAllMitarbeiter()
         {
             Mitarbeiter.Clear();
+            Mitarbeiter.Add(new Mitarbeiter(null, "Alle", "", "", ""));
             var mitarbeiter = DatabankService.loadAllMitarbeiter();
             foreach (var m in mitarbeiter)
             {
@@ -141,6 +167,7 @@ namespace ProjektManager.ViewModel
         public void LoadAllProjekts()
         {
             ProjekteListe.Clear();
+            ProjekteListe.Add(new Projekt("","Alle", DateTime.Now,"", DateTime.Now, DateTime.Now,  new List<Problem>(), DateTime.Now, null));
             var Projekte = DatabankService.LoadAllProjekte();
             foreach (var p in Projekte)
             {
@@ -155,6 +182,11 @@ namespace ProjektManager.ViewModel
             var Stunden = DatabankService.LoadAllStundenbuchungen();
             foreach (var b in Stunden)
             {
+                var stunden = (int) (b.Stunden / 60);
+                var Minuten = (int)(b.Stunden % 60);
+                b.StundenToView = stunden;
+                b.MinutenToView = Minuten;
+
                 AlleStundenbuchungen.Add(b);
 
             }

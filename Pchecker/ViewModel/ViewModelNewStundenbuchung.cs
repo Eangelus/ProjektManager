@@ -87,7 +87,7 @@ namespace ProjektManager.ViewModel
         }
 
 
-
+        public static ObservableCollection<Abteilung> Abteilungen = new ObservableCollection<Abteilung>();
         public static ObservableCollection<Mitarbeiter> Mitarbeiter = new ObservableCollection<Mitarbeiter>();
 
 
@@ -123,12 +123,45 @@ namespace ProjektManager.ViewModel
             set
             {
                 _selectedMitarbeiter = value;
-
                 OnPropertyChanged(nameof(SelectedMitarbeiter));
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
+                OnPropertyChanged(nameof(ListOfJobs));
+                
 
             }
         }
+
+
+
+        private List<string> _ListofJobs;
+
+        public List<string> ListOfJobs
+        {
+            get
+            {
+                
+                foreach (Abteilung A in Abteilungen)
+                {
+
+                    if (SelectedMitarbeiter.InAbteilung == A.Bezeichung)
+                    {
+                        _ListofJobs = A.Jobs;
+
+                    }
+                }
+                return _ListofJobs;
+            }
+            set
+            {
+                _ListofJobs = value;
+                OnPropertyChanged(nameof(ListOfJobs));
+            }
+        }
+
+
+
+
+
 
         public void LoadAllMitarbeiter()
         {
@@ -157,8 +190,11 @@ namespace ProjektManager.ViewModel
         public ViewModelNewStundenbuchung()
         {
             CreateBuchungCommand = new CreateBuchungCommand(this);
+            Abteilungen = Abteilung.CreateAllAbteilungen();
             LoadAllMitarbeiter();
             LoadAllProjekts();
+
+
         }
 
 

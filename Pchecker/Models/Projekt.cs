@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjektManager.Models
 {
-    public class Projekt  
+    public class Projekt 
     {
 
 

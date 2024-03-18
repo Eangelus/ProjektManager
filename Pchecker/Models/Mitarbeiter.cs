@@ -10,7 +10,7 @@ namespace ProjektManager.Models
 
         public Mitarbeiter() { }
 
-        public Mitarbeiter(int? id,string name, string vorname, string email, string inAbteilung)
+        public Mitarbeiter(int? id,string name, string vorname, string email, string? inAbteilung)
         {
             this.Id = id;
             Name = name;
