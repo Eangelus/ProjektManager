@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjektManager.Migrations
 {
     /// <inheritdoc />
-    public partial class Newinit : Migration
+    public partial class NewIniti : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -115,7 +115,8 @@ namespace ProjektManager.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     MitarbeiterId = table.Column<int>(type: "int", nullable: false),
                     BuchungsDatum = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Stunden = table.Column<double>(type: "double", nullable: false),
+                    Stunden = table.Column<int>(type: "int", nullable: false),
+                    Minuten = table.Column<int>(type: "int", nullable: false),
                     Details = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProjektNr = table.Column<string>(type: "varchar(255)", nullable: true)

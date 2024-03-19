@@ -41,7 +41,7 @@ namespace ProjektManager.ControlElements
             var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
             using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
             {
-                var result = dbContext.UpdateProblem(ProblemDTO.ToProblemDTO(updated));
+                dbContext.UpdateProblem(ProblemDTO.ToProblemDTO(updated));
             }
         }
 

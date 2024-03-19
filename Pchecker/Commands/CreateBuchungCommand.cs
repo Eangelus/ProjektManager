@@ -64,7 +64,7 @@ namespace ProjektManager.Commands
             }
             
 
-            Stundenbuchung buchung = new Stundenbuchung(null, DateTime.Now, _ViewModelCreateStunden.SelectedMitarbeiter, _ViewModelCreateStunden.Details, _ViewModelCreateStunden.SelectedProjekt, _ViewModelCreateStunden.StartTime, (int)_ViewModelCreateStunden.Stunden);
+            Stundenbuchung buchung = new Stundenbuchung(null, DateTime.Now, _ViewModelCreateStunden.SelectedMitarbeiter, _ViewModelCreateStunden.Details, _ViewModelCreateStunden.SelectedProjekt, _ViewModelCreateStunden.StartTime, _ViewModelCreateStunden.Stunden, _ViewModelCreateStunden.Minuten);
 
 
 
@@ -103,7 +103,7 @@ namespace ProjektManager.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            Stundenbuchung buchung = new Stundenbuchung(null, DateTime.Now, _ViewModelCreateStunden.SelectedMitarbeiter, _ViewModelCreateStunden.Details, _ViewModelCreateStunden.SelectedProjekt, _ViewModelCreateStunden.StartTime, _ViewModelCreateStunden.Stunden);
+            Stundenbuchung buchung = new Stundenbuchung(null, DateTime.Now, _ViewModelCreateStunden.SelectedMitarbeiter, _ViewModelCreateStunden.Details, _ViewModelCreateStunden.SelectedProjekt, _ViewModelCreateStunden.StartTime, _ViewModelCreateStunden.Stunden, _ViewModelCreateStunden.Minuten);
 
             bool result = buchung.Mitarbeiter != null  && buchung.Projekt != null && !string.IsNullOrEmpty(buchung.Projekt.ProjektNr) && buchung.StartTime.Ticks != 0 && buchung.Stunden != 0 && base.CanExecute(parameter);
             return result;

@@ -1,4 +1,7 @@
-﻿using ProjektManager.View;
+﻿using ProjektManager.DTOs;
+using ProjektManager.Models;
+using ProjektManager.Services;
+using ProjektManager.View;
 using ProjektManager.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -41,6 +44,19 @@ namespace ProjektManager.ControlElements
             newStundenW.Show();
         }
 
+        private void DataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            var update = (sender as DataGrid).CurrentItem as Stundenbuchung;
+            if(update == null)
+            {
+                return;
+            }
+            DatabankService.Updatetundenbuchungen(update);
+        }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

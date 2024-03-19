@@ -164,6 +164,9 @@ namespace ProjektManager.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Minuten")
+                        .HasColumnType("int");
+
                     b.Property<int>("MitarbeiterId")
                         .HasColumnType("int");
 
@@ -173,8 +176,8 @@ namespace ProjektManager.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<double>("Stunden")
-                        .HasColumnType("double");
+                    b.Property<int>("Stunden")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

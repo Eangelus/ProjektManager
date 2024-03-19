@@ -100,6 +100,16 @@ namespace ProjektManager.DataBaseAPI
             var erg = Stundenbuchungen.Include(pro => pro.Projekt).Include(p => p.Mitarbeiter);
             return erg;
         }
+
+        public StundenbuchungDTO UpdateStunden(StundenbuchungDTO stundenToUpdate)
+        {
+            if (stundenToUpdate == null)
+            {
+            }
+            var update = Stundenbuchungen.Update(stundenToUpdate);
+            base.SaveChanges();
+            return update.Entity;
+        }
     }
 }
 

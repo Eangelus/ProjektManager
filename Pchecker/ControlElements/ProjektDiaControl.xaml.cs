@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office.PowerPoint.Y2021.M06.Main;
+using ProjektManager.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +18,14 @@ using System.Windows.Shapes;
 namespace ProjektManager.ControlElements
 {
     /// <summary>
-    /// Interaction logic for Test.xaml
+    /// Interaction logic for ProjektDiaControl.xaml
     /// </summary>
-    public partial class Test : UserControl
+    public partial class ProjektDiaControl : UserControl
     {
-        public Test()
+        public ProjektDiaControl()
         {
             InitializeComponent();
+            this.DataContext = new ViewModelProjektDia();
         }
     }
 }

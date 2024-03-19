@@ -5,33 +5,62 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjektManager.ControlElements"
              
-             xmlns:vms="clr-namespace:ProjektManager.ViewModel" d:DataContext="{d:DesignInstance Type=vms:ViewModelStundenbuchung }"
+             xmlns:vms="clr-namespace:ProjektManager.ViewModel"
+
+             d:DataContext="{d:DesignInstance Type=vms:ViewModelStundenbuchung }"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="0,27,-172,0" >
         <Image Source="/Resources/jp-logo-4c-hg-frei.png" HorizontalAlignment="Right" Width="142" Height="118" VerticalAlignment="Top"/>
         <ComboBox Margin="0,76,0,0" IsEditable="False"  PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.ProjekteListe}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="ProjektNr"  HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedProjekt, UpdateSourceTrigger=PropertyChanged }"/>
-        <ComboBox Margin="304,76,0,0" IsEditable="False" PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.Mitarbeiter}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"   HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedMitarbeiter, UpdateSourceTrigger=PropertyChanged }"/>
-        <DataGrid IsReadOnly="False" Margin="0,123,0,0" ItemsSource="{Binding FilteredStundenbuchungen, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False"  >
+        <ComboBox Margin="304,76,0,0" IsEditable="False" PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.Mitarbeiter}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"   HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedMitarbeiter, UpdateSourceTrigger=PropertyChanged }" SelectionChanged="ComboBox_SelectionChanged"/>
+        <DataGrid Name="DiaGrid" RowEditEnding="DataGrid_RowEditEnding" AutoGenerateColumns="False"  IsReadOnly="False" Margin="5,117,0,10" ItemsSource="{Binding FilteredStundenbuchungen, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="539">
             <DataGrid.Columns>
 
-                <DataGridTextColumn Binding="{Binding BuchungsDatum, StringFormat=dd.MM.yyyy, UpdateSourceTrigger=PropertyChanged}" Header="Buchungsdatum"></DataGridTextColumn>
+                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="BuchngsDatum" Header="Buchungsdatum">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding BuchungsDatum, StringFormat=dd.MM.yyyy, UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding BuchungsDatum}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+
+                </DataGridTemplateColumn>
                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding Mitarbeiter.Name, UpdateSourceTrigger=PropertyChanged}" Header="Mitarbeiter"></DataGridTextColumn>
                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding Projekt.ProjektNr}" Header="Projekt"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StartTime, StringFormat=dd.MM.yyyy HH:mm:ss, UpdateSourceTrigger=PropertyChanged}" Header="Beginn"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StundenToView, UpdateSourceTrigger=PropertyChanged}" Header="Stunden"></DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding MinutenToView, UpdateSourceTrigger=PropertyChanged}" Header="Minuten"></DataGridTextColumn>
 
-                
+                <DataGridTemplateColumn Header="Beginn" CanUserSort="True" SortMemberPath="AuftrittsDatum">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding StartTime, StringFormat=\{0:dd.MM.yyyy\}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding StartTime}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding Stunden, UpdateSourceTrigger=PropertyChanged}" Header="Stunden"></DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Minuten, UpdateSourceTrigger=PropertyChanged}" Header="Minuten"></DataGridTextColumn>
+
+
 
             </DataGrid.Columns>
 
 
         </DataGrid>
         <Button Content="Zeit erfassen" HorizontalAlignment="Left" Margin="576,76,0,0" Height="25" VerticalAlignment="Top" Click="Button_Click" />
-        <Button Content="Bearbeiten" Height="25" HorizontalAlignment="Left" Margin="671,76,0,0" VerticalAlignment="Top" Command=""/>
+        <Grid Margin="549,118,6,10" Width="417">
+            <local:ProjektDiaControl Margin="0,0,0,0"/>
 
-
+        </Grid>
 
     </Grid>
 </UserControl>

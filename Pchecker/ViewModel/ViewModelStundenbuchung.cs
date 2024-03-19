@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using LiveChartsCore;
+using ProjektManager.ControlElements;
 using ProjektManager.Models;
 using ProjektManager.Services;
 using System.Collections.Generic;
@@ -39,13 +40,27 @@ namespace ProjektManager.ViewModel
         }
 
 
- 
 
 
+        private int _Minuten;
 
-        private double _stunden;
+        public int Minuten
+        {
+            get
+            {
+                return _Minuten;
+            }
+            set
+            {
+                _Minuten = value;
+                OnPropertyChanged(nameof(Minuten));
+            }
+        }
 
-        public double Stunden
+
+        private int _stunden;
+
+        public int Stunden
         {
             get
             {
@@ -70,6 +85,7 @@ namespace ProjektManager.ViewModel
             }
             set
             {
+                _StartTime = value;
                 OnPropertyChanged(nameof(StartTime));
             }
         }
@@ -114,10 +130,7 @@ namespace ProjektManager.ViewModel
             }
             set
             {
-                if (value.ProjektNr == "Alle")
-                {
-                    value = null;
-                }
+
 
                 _selectedProjekt = value;
                 LoadAllStunden();
@@ -138,16 +151,13 @@ namespace ProjektManager.ViewModel
             }
             set
             {
-                if( value.Name == "Alle")
-                {
-                    value = null;
-                }
 
                 _selectedMitarbeiter = value;
-                LoadAllStunden();
+                
                 OnPropertyChanged(nameof(SelectedMitarbeiter));
                 OnPropertyChanged(nameof(FilteredStundenbuchungen));
                 OnPropertyChanged(nameof(AlleStundenbuchungen));
+                LoadAllStunden();
             }
         }
 
@@ -182,10 +192,6 @@ namespace ProjektManager.ViewModel
             var Stunden = DatabankService.LoadAllStundenbuchungen();
             foreach (var b in Stunden)
             {
-                var stunden = (int) (b.Stunden / 60);
-                var Minuten = (int)(b.Stunden % 60);
-                b.StundenToView = stunden;
-                b.MinutenToView = Minuten;
 
                 AlleStundenbuchungen.Add(b);
 

@@ -19,37 +19,34 @@ namespace ProjektManager.DTOs
 
         public DateTime BuchungsDatum { get; set; }
 
-        public double Stunden {  get; set; }
+        public int Stunden {  get; set; }
+
+        public int Minuten { get; set; }
         public string Details { get; set; }
         public ProjektDTO Projekt { get; set; }
         public DateTime StartTime { get; set; }
 
-
-        public static StundenbuchungDTO? ToStundenbuchungDTO(Stundenbuchung? stundenbuchung)
-        {
-            if (stundenbuchung == null)
-            {
-                return null;
-            }
-            return new StundenbuchungDTO(stundenbuchung.Id, stundenbuchung.BuchungsDatum, MitarbeiterDTO.ToMitarbeiterDTO(stundenbuchung.Mitarbeiter), stundenbuchung.Details, ProjektDTO.ToProjektDTO(stundenbuchung.Projekt), stundenbuchung.StartTime, stundenbuchung.Stunden);
-        }
-
-        public static Stundenbuchung? FromStundenbuchungDTO(StundenbuchungDTO stundenbuchungDTO)
-        {
-            if (stundenbuchungDTO == null)
-            {
-                return null;
-            }
-            return new Stundenbuchung(null, stundenbuchungDTO.BuchungsDatum, MitarbeiterDTO.FromMitarbeiterDTO(stundenbuchungDTO.Mitarbeiter),  stundenbuchungDTO.Details, ProjektDTO.FromProjektDTO(stundenbuchungDTO.Projekt), stundenbuchungDTO.StartTime, stundenbuchungDTO.Stunden);
-
-        }
-
         public StundenbuchungDTO()
         {
+            
+        }
+
+        public static StundenbuchungDTO ToStundenbuchungDTO(Stundenbuchung stundenbuchung)
+        {
+
+            return new StundenbuchungDTO(stundenbuchung.Id, stundenbuchung.BuchungsDatum, MitarbeiterDTO.ToMitarbeiterDTO(stundenbuchung.Mitarbeiter), stundenbuchung.Details, ProjektDTO.ToProjektDTO(stundenbuchung.Projekt), stundenbuchung.StartTime, stundenbuchung.Stunden, stundenbuchung.Minuten);
+        }
+
+        public static Stundenbuchung FromStundenbuchungDTO(StundenbuchungDTO stundenbuchungDTO)
+        {
+
+            return new Stundenbuchung(stundenbuchungDTO.Id, stundenbuchungDTO.BuchungsDatum, MitarbeiterDTO.FromMitarbeiterDTO(stundenbuchungDTO.Mitarbeiter),  stundenbuchungDTO.Details, ProjektDTO.FromProjektDTO(stundenbuchungDTO.Projekt), stundenbuchungDTO.StartTime, stundenbuchungDTO.Stunden , stundenbuchungDTO.Minuten);
 
         }
 
-        public StundenbuchungDTO(int? Id, DateTime TagDerBuchung, MitarbeiterDTO Mitarbeiter, string Details, ProjektDTO Projekt, DateTime StartTime, double Stunden)
+
+
+        public StundenbuchungDTO(int? Id, DateTime TagDerBuchung, MitarbeiterDTO Mitarbeiter, string Details, ProjektDTO Projekt, DateTime StartTime, int Stunden , int minuten)
         {
             this.Id = Id;
             this.BuchungsDatum = TagDerBuchung;
@@ -58,6 +55,7 @@ namespace ProjektManager.DTOs
             this.Projekt = Projekt;
             this.StartTime = StartTime;
             this.Stunden = Stunden;
+            this.Minuten = minuten;
         }
     }
 }

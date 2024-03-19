@@ -63,5 +63,19 @@ namespace ProjektManager.Services
             }
             return Stundenbuchungen;
         }
+
+        public static void Updatetundenbuchungen(Stundenbuchung stunden)
+        {
+            
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                
+                   dbContext.UpdateStunden(StundenbuchungDTO.ToStundenbuchungDTO(stunden));
+                
+            }
+           
+        }
+
     }
 }

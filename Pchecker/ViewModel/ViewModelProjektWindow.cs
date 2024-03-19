@@ -100,7 +100,7 @@ namespace ProjektManager.ViewModel
             }
         }
 
-        public void LoadAllProjekte()
+        public ObservableCollection<Projekt> LoadAllProjekte()
         {
 
             Projekte = DatabankService.LoadAllProjekte();
@@ -137,6 +137,7 @@ namespace ProjektManager.ViewModel
                 }
 
             }
+            return Projekte;
         }
 
         public void LoadAllMitarbeiter()

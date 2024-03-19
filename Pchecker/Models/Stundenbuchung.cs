@@ -14,7 +14,8 @@ namespace ProjektManager.Models
 
         public Mitarbeiter? Mitarbeiter { get; set; } = new Mitarbeiter();
 
-        public double Stunden {  get; set; }
+        public int Stunden {  get; set; }
+        public int Minuten { get; set; }
 
         public string Details { get; set; } = String.Empty;
 
@@ -22,8 +23,8 @@ namespace ProjektManager.Models
 
         public DateTime StartTime { get; set; }
 
-        public int StundenToView { get; set; }
-        public int MinutenToView { get; set; }
+
+
 
 
         public Stundenbuchung()
@@ -31,16 +32,16 @@ namespace ProjektManager.Models
             
         }
 
-       public Stundenbuchung(int? Id, DateTime BuchungsDatum, Mitarbeiter? Mitarbeiter,  string Details, Projekt? Projekt, DateTime StartTime, double Stunden)
+       public Stundenbuchung(int? Id, DateTime BuchungsDatum, Mitarbeiter? Mitarbeiter,  string Details, Projekt? Projekt, DateTime StartTime, int Stunden, int Minuten)
         {
             this.Id = Id;
             this.BuchungsDatum = BuchungsDatum;
             this.Mitarbeiter = Mitarbeiter;
-            
             this.Details = Details;
             this.Projekt = Projekt;
             this.StartTime = StartTime;
             this.Stunden = Stunden;
+            this.Minuten = Minuten;
         }
     }
 }

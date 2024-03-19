@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -19,9 +20,55 @@ namespace ProjektManager.ViewModel
         public string mode;
 
 
-        private double _stunden;
+        private double _sliderTime;
 
-        public double Stunden
+        public double SliderTime
+        {
+            get
+            {
+                return _sliderTime;
+            }
+            set
+            {
+                _sliderTime = value;
+                (Stunden, Minuten) = Umrechner(value);
+                OnPropertyChanged(nameof(SliderTime));
+                OnPropertyChanged(nameof(Stunden));
+                OnPropertyChanged(nameof(Minuten));
+                
+            }
+        }
+
+        private static (int stunden, int minuten) Umrechner(double timeTosplit)
+        {
+            
+            
+            int stunden = (int)Math.Round(timeTosplit / 60);
+            int minuten = (int)timeTosplit % 60;
+            return (stunden, minuten);
+        }
+
+
+        private int _Minuten;
+
+        public int Minuten
+        {
+            get
+            {
+                return _Minuten;
+            }
+            set
+            {
+                _Minuten = value;
+                OnPropertyChanged(nameof(Minuten));
+            }
+        }
+
+
+
+        private int _stunden;
+
+        public int Stunden
         {
             get
             {
@@ -112,7 +159,7 @@ namespace ProjektManager.ViewModel
         }
 
 
-        private Mitarbeiter _selectedMitarbeiter = new Mitarbeiter();
+        private Mitarbeiter _selectedMitarbeiter;
 
         public Mitarbeiter SelectedMitarbeiter
         {
@@ -142,7 +189,10 @@ namespace ProjektManager.ViewModel
                 
                 foreach (Abteilung A in Abteilungen)
                 {
-
+                    if(SelectedMitarbeiter == null)
+                    {
+                        SelectedMitarbeiter = new Mitarbeiter();
+                    }
                     if (SelectedMitarbeiter.InAbteilung == A.Bezeichung)
                     {
                         _ListofJobs = A.Jobs;
@@ -187,12 +237,17 @@ namespace ProjektManager.ViewModel
 
         }
 
+
+
+
+
         public ViewModelNewStundenbuchung()
         {
-            CreateBuchungCommand = new CreateBuchungCommand(this);
-            Abteilungen = Abteilung.CreateAllAbteilungen();
+
             LoadAllMitarbeiter();
             LoadAllProjekts();
+            CreateBuchungCommand = new CreateBuchungCommand(this);
+            Abteilungen = Abteilung.CreateAllAbteilungen();
 
 
         }

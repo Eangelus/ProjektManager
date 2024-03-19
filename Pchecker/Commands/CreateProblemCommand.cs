@@ -57,8 +57,8 @@ namespace ProjektManager.Commands
         {
             var windows = Application.Current.Windows;
 
-            Window? problemWindow = null;
-            Window? ProjektWindow = null;
+            Window? problemWindow = new Window();
+            Window? ProjektWindow = new Window();
             foreach (var window in windows)
             {
                 if (window.GetType() == typeof(NewProblemWindow))
@@ -109,8 +109,7 @@ namespace ProjektManager.Commands
                 return;
             }
             MessageBox.Show("Problem wurde Angelegt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
-
-
+            
             (ProjektWindow.DataContext as ViewModelProjektWindow).LoadAllProjekte();
             (ProjektWindow.DataContext as ViewModelProjektWindow).FilterProblems = new ObservableCollection<Problem>(viewModelNewProblem.SelectedProjekt.Probleme);
             (ProjektWindow.DataContext as ViewModelProjektWindow).SearchText = String.Empty;
@@ -147,7 +146,7 @@ namespace ProjektManager.Commands
                     smtpClient.Port = 587;
                     smtpClient.EnableSsl = true;
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    var basicCredentail = new NetworkCredential("t.bernecker@jp-industrieanlagen.de", "TB1982!");
+                    var basicCredentail = new NetworkCredential("jpindustrie\\projekt.info@jp-industrieanlagen.de", "NbV6F8)aYx1Ky9Sq");
                     smtpClient.Credentials = basicCredentail;
                     smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
@@ -166,7 +165,7 @@ namespace ProjektManager.Commands
 
                     using (MailMessage message = new MailMessage())
                     {
-                        MailAddress fromAdress = new MailAddress("t.bernecker@jp-industrieanlagen.de");
+                        MailAddress fromAdress = new MailAddress("projekt.info@jp-industrieanlagen.de");
                         message.From = fromAdress;
                         message.To.Add("t.bernecker@jp-industrieanlagen.de");
                         message.Subject = $"{problem.AuftrittsDatum } + {problem.Initiator} + {problem.Kategorie}";
