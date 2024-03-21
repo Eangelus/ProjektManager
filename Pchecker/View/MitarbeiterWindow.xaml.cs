@@ -29,6 +29,7 @@ namespace ProjektManager.View
         {
             InitializeComponent();
             DataContext = new ViewModelMitarbeiterListe();
+            speicher_btn.Click += this.Button_Click;
             
         }
 
@@ -47,6 +48,28 @@ namespace ProjektManager.View
                 var result = dbContext.Update(MitarbeiterDTO.ToMitarbeiterDTO(updatedMitarbeiter));
                 dbContext.SaveChanges();
             }
+        }
+        
+        
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            foreach(Mitarbeiter updatedMitarbeiter in GridMitarbeiter.Items)
+            {
+
+                var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+                using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+                {
+
+                    var result = dbContext.Update(MitarbeiterDTO.ToMitarbeiterDTO(updatedMitarbeiter));
+                    dbContext.SaveChanges();
+                }
+
+
+            }
+
+            this.Close();
         }
     }
 }

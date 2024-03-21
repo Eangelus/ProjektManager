@@ -11,17 +11,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using ProjektManager.ViewModel;
 namespace ProjektManager.View
 {
     /// <summary>
-    /// Interaktionslogik für MitarbeiterWindow.xaml
+    /// Interaction logic for AuftragsDateien.xaml
     /// </summary>
-    public partial class NewMitarbeiterWindow : Window
+    public partial class AuftragsDateien : Window
     {
-        public NewMitarbeiterWindow()
+        public AuftragsDateien(ViewModelAuftragsdateien vm)
         {
             InitializeComponent();
+            this.DataContext = vm;
         }
     }
 }

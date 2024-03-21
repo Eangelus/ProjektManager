@@ -57,8 +57,8 @@ namespace ProjektManager.Commands
         {
             var windows = Application.Current.Windows;
 
-            Window? problemWindow = new Window();
-            Window? ProjektWindow = new Window();
+            Window problemWindow = new Window();
+            Window ProjektWindow = new Window();
             foreach (var window in windows)
             {
                 if (window.GetType() == typeof(NewProblemWindow))
@@ -109,10 +109,12 @@ namespace ProjektManager.Commands
                 return;
             }
             MessageBox.Show("Problem wurde Angelegt!", "Erfolg", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            ProjektWindow.DataContext = new ViewModelProjektWindow().LoadAllProjekte();
             
-            (ProjektWindow.DataContext as ViewModelProjektWindow).LoadAllProjekte();
-            (ProjektWindow.DataContext as ViewModelProjektWindow).FilterProblems = new ObservableCollection<Problem>(viewModelNewProblem.SelectedProjekt.Probleme);
-            (ProjektWindow.DataContext as ViewModelProjektWindow).SearchText = String.Empty;
+            //(ProjektWindow.DataContext as ViewModelProjektWindow).LoadAllProjekte();
+            ProjektWindow.DataContext = new ViewModelProjektWindow().FilterProblems = new ObservableCollection<Problem>(viewModelNewProblem.SelectedProjekt.Probleme);
+            ProjektWindow.DataContext = new ViewModelProjektWindow().SearchText;
 
             SendEmailForNewProblem(viewModelNewProblem.ListForEmail, problem);
 

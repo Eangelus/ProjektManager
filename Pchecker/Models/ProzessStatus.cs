@@ -20,7 +20,7 @@ namespace ProjektManager.Models
         public const string Vorgang_Abgeschlossen = "Vorgang Abgeschlossen";
         public const string Umsetzung_Beendet = "Umsetzung Beendet";
         public const string Entscheidung = "Entscheidung";
-        public const string Info = "Inforamtiv";
+        public const string Info = "Informativ";
 
         //public static string Problem_Erkannt = "Problem erkannt";
         //public static string Umsetzung_Eingeleitet = "Umsetzung eingeleitet";

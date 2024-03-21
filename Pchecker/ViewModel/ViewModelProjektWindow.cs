@@ -11,6 +11,10 @@ using ProjektManager.DataBaseAPI;
 using ProjektManager.DTOs;
 using SixLabors.Fonts.Unicode;
 using ProjektManager.Services;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Drawing;
+using Irony.Parsing;
+using DocumentFormat.OpenXml.InkML;
 
 namespace ProjektManager.ViewModel
 {
@@ -43,6 +47,15 @@ namespace ProjektManager.ViewModel
             set { projekte = value; OnPropertyChanged(nameof(Projekte)); }
         }
 
+
+        private ObservableCollection<Problem> probleme = DatabankService.LoadAllProbleme();
+
+        public ObservableCollection<Problem> Probleme
+        {
+            get { return probleme; }
+            set { probleme = value; OnPropertyChanged(nameof(Probleme)); }
+        }
+
         private static ObservableCollection<Mitarbeiter> _allMitarbeiter = new ObservableCollection<Mitarbeiter>();
 
         public static ObservableCollection<Mitarbeiter> AllMitarbeiter
@@ -59,6 +72,7 @@ namespace ProjektManager.ViewModel
             OpenWinMitarbeiterCommand = new OpenWinMitarbeiterCommand();
             LoadAllProjekte();
             LoadAllMitarbeiter();
+            LoadAllProblemeWithTime();
         }
 
         private string searchText;
@@ -74,7 +88,11 @@ namespace ProjektManager.ViewModel
 
                 searchText = value;
 
-
+                if(SelectedProjekt == null)
+                {
+                    selectedProjekt = new Projekt();
+                    selectedProjekt.Probleme = Probleme.ToList();
+                }
                 var suche =
                     from p in SelectedProjekt.Probleme
                     where p.Verantwortlicher == null ? false : p.Verantwortlicher.Name.Contains(searchText) ||
@@ -91,7 +109,12 @@ namespace ProjektManager.ViewModel
                     (p.ReTermin == null ? false : p.ReTermin.ToString().Contains(searchText)) ||
                     (p.Thema == null ? false : p.Thema.Contains(searchText))
                     select p;
+
                 suche.ToList();
+                if(searchText == null || searchText.Length == 0)
+                {
+                    suche = SelectedProjekt.Probleme;
+                }
 
                 FilterProblems = new ObservableCollection<Problem>(suche.ToList());
 
@@ -99,6 +122,10 @@ namespace ProjektManager.ViewModel
                 OnPropertyChanged(nameof(SearchText));
             }
         }
+
+
+        
+
 
         public ObservableCollection<Projekt> LoadAllProjekte()
         {
@@ -115,6 +142,7 @@ namespace ProjektManager.ViewModel
 
             foreach (var projekt in Projekte)
             {
+
 
                 foreach (var series in projekt.ChartData)
                 {
@@ -149,7 +177,25 @@ namespace ProjektManager.ViewModel
             {
                 AllMitarbeiter.Add(m);
             }
+           
+        }
 
+
+        public void LoadAllProblemeWithTime()
+        {
+            FilterProblemsTime.Clear();
+            var Probleme = DatabankService.LoadAllProbleme();
+            foreach( var problem in Probleme)
+            {
+                 if(problem.Termin >= DateTime.Now.AddDays(-14))
+                {
+                    FilterProblemsTime.Add(problem);
+                }
+                
+
+            }
+
+            
         }
 
         ObservableCollection<Problem> _filterProblems = new ObservableCollection<Problem>();
@@ -172,6 +218,25 @@ namespace ProjektManager.ViewModel
             }
         }
 
+        ObservableCollection<Problem> _filterProblemsTime = new ObservableCollection<Problem>();
+
+        public ObservableCollection<Problem>? FilterProblemsTime
+        {
+            get
+            {
+                return _filterProblemsTime;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    _filterProblemsTime = new ObservableCollection<Problem> { };
+                    return;
+                }
+                _filterProblemsTime = value;
+                OnPropertyChanged(nameof(FilterProblemsTime));
+            }
+        }
 
 
 

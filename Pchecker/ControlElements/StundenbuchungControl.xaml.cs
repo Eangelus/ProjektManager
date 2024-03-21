@@ -56,6 +56,10 @@ namespace ProjektManager.ControlElements
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ViewModelStundenbuchung test = (this.DataContext as ViewModelStundenbuchung);
+            ViewModelProjektDia viewModelProjektDia = ViewModelProjektDia.Instance;
+            viewModelProjektDia.Update(test.FilteredStundenbuchungen);
+
 
         }
     }

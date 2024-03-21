@@ -10,7 +10,7 @@ namespace ProjektManager.ViewModel
 {
     public class ViewModelMitarbeiterForm: ViewModelBase
     {
-        public EditMode Mode { get; set; } = EditMode.CREATE;
+ 
 
 
         private Mitarbeiter _mitarbeiter;

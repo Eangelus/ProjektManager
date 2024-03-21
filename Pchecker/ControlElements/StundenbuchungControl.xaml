@@ -8,9 +8,8 @@
              xmlns:vms="clr-namespace:ProjektManager.ViewModel"
 
              d:DataContext="{d:DesignInstance Type=vms:ViewModelStundenbuchung }"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="0,27,-172,0" >
+             mc:Ignorable="d" Width="auto" Height="Auto">
+    <Grid Margin="0,0,10,0" >
         <Image Source="/Resources/jp-logo-4c-hg-frei.png" HorizontalAlignment="Right" Width="142" Height="118" VerticalAlignment="Top"/>
         <ComboBox Margin="0,76,0,0" IsEditable="False"  PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.ProjekteListe}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="ProjektNr"  HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedProjekt, UpdateSourceTrigger=PropertyChanged }"/>
         <ComboBox Margin="304,76,0,0" IsEditable="False" PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.Mitarbeiter}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"   HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedMitarbeiter, UpdateSourceTrigger=PropertyChanged }" SelectionChanged="ComboBox_SelectionChanged"/>
@@ -57,8 +56,8 @@
 
         </DataGrid>
         <Button Content="Zeit erfassen" HorizontalAlignment="Left" Margin="576,76,0,0" Height="25" VerticalAlignment="Top" Click="Button_Click" />
-        <Grid Margin="549,118,6,10" Width="417">
-            <local:ProjektDiaControl Margin="0,0,0,0"/>
+        <Grid Margin="576,118,29,10">
+            <local:ProjektDiaControl Margin="10,10,10,10"/>
 
         </Grid>
 

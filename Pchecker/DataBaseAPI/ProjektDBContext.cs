@@ -58,12 +58,12 @@ namespace ProjektManager.DataBaseAPI
             var erg = Projekte.Include(p => p.Probleme).ThenInclude(p => p.Verantwortlicher).Include(p => p.Probleme).ThenInclude(p => p.Initiator);
             return erg;
         }
-        //public IEnumerable<AbteilungDTO> GetAllAbteilung()
-        //{
+        public IEnumerable<ProblemDTO> GetAllProblem()
+        {
 
-        //    var erg = Abteilungen.Include(m => m.Mitarbeiters);
-        //    return erg;
-        //}
+            var erg = Probleme;
+            return erg;
+        }
 
         public IEnumerable<MitarbeiterDTO> GetAllMitarbeiter()
         {

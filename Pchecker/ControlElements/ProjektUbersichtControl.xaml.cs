@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ProjektManager.View;
 
 namespace ProjektManager.ControlElements
 {
@@ -116,6 +117,22 @@ namespace ProjektManager.ControlElements
             }
             var a = (ViewModelProjektWindow)DataContext;
             a.LoadAllProjekte();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var mv = (ViewModelProjektWindow)DataContext;
+            
+            if(mv.SelectedProjekt.Auftraggeber != null || !String.IsNullOrEmpty(mv.SelectedProjekt.Auftraggeber))
+            {
+
+                ViewModelAuftragsdateien vm = new ViewModelAuftragsdateien(mv.SelectedProjekt.Auftraggeber);
+                var window = new AuftragsDateien(vm);
+                window.Show();
+                
+            }
+            else { MessageBox.Show("Bitte wählen sie ein Projekt erst aus!", "^^"); }
+
         }
     }
 }

@@ -7,8 +7,17 @@
         mc:Ignorable="d"
         Title="MitarbeiterWindow" Height="450" Width="800" d:DataContext="{d:DesignInstance Type=viewmodel:ViewModelMitarbeiterListe}">
     <Grid>
-
-        <DataGrid CanUserSortColumns="True"  RowEditEnding="DataGrid_CellEditEnding" CanUserAddRows="False" AutoGenerateColumns="False"  x:Name="GridMitarbeiter" ItemsSource="{Binding Mitarbeiter}"  Height="309" VerticalAlignment="Top" Margin="0,137,0,0">
+        <Image Height="84" Margin="684,-7,5,0" VerticalAlignment="Top" Source="/Resources/jp-logo-4c-hg-frei.png" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <DataGrid CanUserSortColumns="True"  RowEditEnding="DataGrid_CellEditEnding" CanUserAddRows="False" AutoGenerateColumns="False"  x:Name="GridMitarbeiter" ItemsSource="{Binding Mitarbeiter}" Margin="5,82,5,59">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Vorname, UpdateSourceTrigger=PropertyChanged}" Header="Vorname"/>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name"/>
@@ -17,6 +26,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="Mitarbeiter Liste" HorizontalAlignment="Left" Margin="19,35,0,0" VerticalAlignment="Top" Width="119"/>
+        <Button Name="speicher_btn" Content="Speichern" Margin="0,0,19,19" HorizontalAlignment="Right" Width="66" Height="20" VerticalAlignment="Bottom" Click="Button_Click"/>
 
     </Grid>
 </Window>

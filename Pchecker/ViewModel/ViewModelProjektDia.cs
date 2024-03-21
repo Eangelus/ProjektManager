@@ -14,33 +14,34 @@ using ProjektManager.ControlElements;
 using System.Windows.Controls;
 using Axis = LiveChartsCore.SkiaSharpView.Axis;
 using DocumentFormat.OpenXml.Bibliography;
+using System.Collections.ObjectModel;
 
 namespace ProjektManager.ViewModel
 {
-    public partial class ViewModelProjektDia : ObservableObject
+    public class ViewModelProjektDia : ObservableObject
     {
 
         public List<ISeries> Series { get; set; }
 
+        private static ViewModelProjektDia _viewModelProjektDia = null;
+        private static readonly object padlock = new object();
 
-        private ViewModelStundenbuchung _viewModelStundenbuchung = new ViewModelStundenbuchung();
 
-        public ViewModelStundenbuchung ViewModelStB
+        public static ViewModelProjektDia Instance
         {
             get
             {
-
-                return _viewModelStundenbuchung;
-            }
-            set
-            {
-
-
-                _viewModelStundenbuchung = value;
-                OnPropertyChanged(nameof(ViewModelStB));
-
+                lock(padlock)
+                {
+                    if (_viewModelProjektDia == null)
+                    {
+                        _viewModelProjektDia= new ViewModelProjektDia();
+                    }
+                    return _viewModelProjektDia;
+                }
             }
         }
+
 
 
         private List<LiveChartsCore.SkiaSharpView.Axis> _AxisX;
@@ -59,21 +60,19 @@ namespace ProjektManager.ViewModel
         }
 
 
-
-
-        public ViewModelProjektDia()
+        public void Update(ObservableCollection<Stundenbuchung> FilteredStundenbuchungen)
         {
             this._AxisX = new List<Axis>();
 
 
             var StundenDerBuchung = new List<float>();
             var tage = new List<float>();
-            
+
 
 
             var AxisL = new Axis();
             AxisL.Labels = new List<string>();
-            List<Stundenbuchung> SortList = ViewModelStB.FilteredStundenbuchungen.ToList();
+            List<Stundenbuchung> SortList = FilteredStundenbuchungen.ToList();
 
             SortList = SortList.OrderBy(s => s.StartTime).ToList();
 
@@ -85,10 +84,12 @@ namespace ProjektManager.ViewModel
 
                 int day = stundenb.StartTime.Day;
                 int m = stundenb.StartTime.Month;
+                int y = stundenb.StartTime.Year;
 
 
-                var dateInString = day + "," + m;
+                var dateInString = day + "." + m + "." + y;
                 AxisL.Labels.Add(dateInString);
+                tage.Add(day);
             }
 
 
@@ -102,12 +103,12 @@ namespace ProjektManager.ViewModel
             var fx = EasingFunctions.BounceInOut; // this is the function we are going to plot
             var x = 0f;
 
-            //while (x <= 1)
-            //{
-            //    values1.Add(fx(x));
-            //    values2.Add(fx(x - 0.15f));
-            //    x += 0.025f;
-            //}
+            while (x <= 1)
+            {
+                values1.Add(fx(x));
+                values2.Add(fx(x - 0.15f));
+                x += 0.025f;
+            }
 
             var columnSeries1 = new ColumnSeries<float>
             {
@@ -127,7 +128,12 @@ namespace ProjektManager.ViewModel
             columnSeries2.PointMeasured += OnPointMeasured;
 
             Series = new List<ISeries> { columnSeries1, columnSeries2 };
-            
+
+
+        }
+
+        public ViewModelProjektDia()
+        {
 
             
         }

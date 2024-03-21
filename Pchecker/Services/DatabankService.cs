@@ -41,6 +41,18 @@ namespace ProjektManager.Services
 
         }
 
+        public static ObservableCollection<Problem> LoadAllProbleme()
+        {
+            ObservableCollection<Problem> Probleme = new ObservableCollection<Problem>();
+            var _projektDBContextFactory = new ProjektDBContextFactory(App.CONSTRING);
+            using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
+            {
+                Probleme = new ObservableCollection<Problem>(dbContext.GetAllProblem().Select(p => ProblemDTO.FromProblemDTO(p)).ToList());
+            }
+            return Probleme;
+
+        }
+
         //public static ObservableCollection<Abteilung> LoadAllAbteilungen()
         //{
         //    ObservableCollection<Abteilung> Abteilung = new ObservableCollection<Abteilung>();

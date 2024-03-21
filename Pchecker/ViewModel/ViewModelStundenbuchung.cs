@@ -95,11 +95,11 @@ namespace ProjektManager.ViewModel
             get
             {
                 IEnumerable<Stundenbuchung> filtered = new List<Stundenbuchung>(AlleStundenbuchungen);
-                if (SelectedProjekt != null)
+                if (!(SelectedProjekt == null || SelectedProjekt.ProjektNr == "Alle"))
                 {
                     filtered = filtered.Where(x => x.Projekt.ProjektNr == SelectedProjekt.ProjektNr);
                 }
-                if (SelectedMitarbeiter != null)
+                if (!(SelectedMitarbeiter == null || SelectedMitarbeiter.Name == "Alle"))
                 {
                     filtered = filtered.Where(x => x.Mitarbeiter.Id == SelectedMitarbeiter.Id);
                 }
