@@ -17,6 +17,8 @@ namespace ProjektManager.Models
         public int Stunden {  get; set; }
         public int Minuten { get; set; }
 
+        public int MinutenGesamt { get; set; }
+
         public string Details { get; set; } = String.Empty;
 
         public Projekt? Projekt { get; set; } = new Projekt();

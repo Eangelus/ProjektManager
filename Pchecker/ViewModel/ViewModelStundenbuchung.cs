@@ -40,6 +40,22 @@ namespace ProjektManager.ViewModel
         }
 
 
+        private int _MinutenGesamt;
+
+        public int MinutenGesamt
+        {
+            get
+            {
+                return _MinutenGesamt;
+            }
+            set
+            {
+                _MinutenGesamt = _MinutenGesamt = Stunden * 60 + Minuten; 
+                OnPropertyChanged(nameof(MinutenGesamt));
+                
+            }
+        }
+
 
 
         private int _Minuten;
@@ -48,12 +64,15 @@ namespace ProjektManager.ViewModel
         {
             get
             {
+              
                 return _Minuten;
+                
             }
             set
             {
                 _Minuten = value;
                 OnPropertyChanged(nameof(Minuten));
+                
             }
         }
 
@@ -64,12 +83,14 @@ namespace ProjektManager.ViewModel
         {
             get
             {
+               
                 return _stunden;
             }
             set
             {
                 _stunden = value;
                 OnPropertyChanged(nameof(Stunden));
+                
             }
         }
 
@@ -204,6 +225,7 @@ namespace ProjektManager.ViewModel
             LoadAllMitarbeiter();
             LoadAllProjekts();
             LoadAllStunden();
+            
         }
 
 

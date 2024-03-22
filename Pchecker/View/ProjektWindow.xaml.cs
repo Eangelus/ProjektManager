@@ -114,5 +114,17 @@ namespace ProjektManager.View
             var a = (ViewModelProjektWindow)DataContext;
             a.LoadAllProjekte();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Projekt selectedProjekt = ((sender as MenuItem).DataContext as Projekt);
+
+
+            if (selectedProjekt != null)
+            {
+                Window w = new AuftragsDateien(selectedProjekt.ProjektNr);
+                w.Show();
+            }
+        }
     }
 }

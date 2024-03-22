@@ -3,11 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProjektManager.View"
+        xmlns:local="clr-namespace:ProjektManager.View" xmlns:viewmodel="clr-namespace:ProjektManager.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:ViewModelAuftragsdateien}"
         mc:Ignorable="d"
         Title="AuftragsDateien" Height="450" Width="800">
-    <Grid>
-        <DataGrid d:ItemsSource="{Binding ViewModelAuftragsdateien.ListOfFounds}" Margin="10,29,10,10"/>
+    <Grid Margin="15,52,15,15">
+        <DataGrid ItemsSource="{Binding ListOfFounds}" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn 
+                Header="Verzeichnis" IsReadOnly="True"  
+                Binding="{Binding}" 
+                Foreground="Black" 
+                Width="Auto" />
+            </DataGrid.Columns>
+
+        </DataGrid>
+        
 
     </Grid>
 </Window>

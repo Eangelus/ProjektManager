@@ -10,13 +10,17 @@
         Title="MainWindow" 
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid >
         <TabControl>
             <TabItem Header="Projekte">
-                <usercontrol:ProjektUbersichtControl/>
+              
+                    <usercontrol:ProjektUbersichtControl/>
+               
             </TabItem>
             <TabItem Header="Stundenbuchung">
-                <usercontrol:StundenbuchungControl/>
+                
+                    <usercontrol:StundenbuchungControl/>
+               
             </TabItem>
         </TabControl>
     </Grid>

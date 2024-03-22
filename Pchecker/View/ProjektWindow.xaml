@@ -14,7 +14,7 @@
         Title="ProjektWindow" 
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid Height="1168" Width="1868">
         <Grid Margin="393,10,-3,0">
             <TextBox HorizontalAlignment="Left" Margin="125,271,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="254" AutomationProperties.HelpText="Search" Height="24" RenderTransformOrigin="0.498,0.564"/>
             <DataGrid CanUserSortColumns="True"  RowEditEnding="GridProblemeAktivProjekt_RowEditEnding" CanUserAddRows="False"  x:Name="GridProblemeAktivProjekt" ItemsSource="{Binding FilterProblems}"  Margin="48,300,24,0" AutoGenerateColumns="False" Height="446" VerticalAlignment="Top" >
@@ -155,5 +155,6 @@
 
 
         </Grid>
+        
     </Grid>
 </Window>

@@ -72,6 +72,10 @@ namespace ProjektManager.Services
             using (ProjektDBContext dbContext = _projektDBContextFactory.CreateDbContext())
             {
                 Stundenbuchungen = new ObservableCollection<Stundenbuchung>(dbContext.GetAllStundenbuchungen().Select(s => StundenbuchungDTO.FromStundenbuchungDTO(s)).ToList());
+                foreach(Stundenbuchung sb in Stundenbuchungen)
+                {
+                    sb.MinutenGesamt = sb.Stunden * 60 + sb.Minuten;
+                }
             }
             return Stundenbuchungen;
         }

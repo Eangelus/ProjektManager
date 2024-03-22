@@ -123,11 +123,11 @@ namespace ProjektManager.ControlElements
         {
             var mv = (ViewModelProjektWindow)DataContext;
             
-            if(mv.SelectedProjekt.Auftraggeber != null || !String.IsNullOrEmpty(mv.SelectedProjekt.Auftraggeber))
+            if(mv.SelectedProjekt != null )
             {
 
-                ViewModelAuftragsdateien vm = new ViewModelAuftragsdateien(mv.SelectedProjekt.Auftraggeber);
-                var window = new AuftragsDateien(vm);
+                
+                var window = new AuftragsDateien(mv.SelectedProjekt.ProjektNr);
                 window.Show();
                 
             }

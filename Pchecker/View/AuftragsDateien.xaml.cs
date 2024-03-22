@@ -19,10 +19,11 @@ namespace ProjektManager.View
     /// </summary>
     public partial class AuftragsDateien : Window
     {
-        public AuftragsDateien(ViewModelAuftragsdateien vm)
+        public AuftragsDateien(string ProjektNummer)
         {
             InitializeComponent();
-            this.DataContext = vm;
+            this.DataContext = new ViewModelAuftragsdateien(ProjektNummer);
+
         }
     }
 }

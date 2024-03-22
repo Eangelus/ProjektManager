@@ -13,7 +13,7 @@
         <Image Source="/Resources/jp-logo-4c-hg-frei.png" HorizontalAlignment="Right" Width="142" Height="118" VerticalAlignment="Top"/>
         <ComboBox Margin="0,76,0,0" IsEditable="False"  PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.ProjekteListe}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="ProjektNr"  HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedProjekt, UpdateSourceTrigger=PropertyChanged }"/>
         <ComboBox Margin="304,76,0,0" IsEditable="False" PreviewTextInput="ComboBox_PreviewTextInput" ItemsSource="{Binding Source={x:Static vms:ViewModelStundenbuchung.Mitarbeiter}, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name"   HorizontalAlignment="Left" Width="240" Height="25" VerticalAlignment="Top" SelectedItem="{Binding SelectedMitarbeiter, UpdateSourceTrigger=PropertyChanged }" SelectionChanged="ComboBox_SelectionChanged"/>
-        <DataGrid Name="DiaGrid" RowEditEnding="DataGrid_RowEditEnding" AutoGenerateColumns="False"  IsReadOnly="False" Margin="5,117,0,10" ItemsSource="{Binding FilteredStundenbuchungen, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="539">
+        <DataGrid Name="DiaGrid" RowEditEnding="DataGrid_RowEditEnding" AutoGenerateColumns="False"  IsReadOnly="False" Margin="5,117,0,10" ItemsSource="{Binding FilteredStundenbuchungen, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="566">
             <DataGrid.Columns>
 
                 <DataGridTemplateColumn CanUserSort="True" SortMemberPath="BuchngsDatum" Header="Buchungsdatum">
@@ -48,7 +48,7 @@
 
                 <DataGridTextColumn Binding="{Binding Stunden, UpdateSourceTrigger=PropertyChanged}" Header="Stunden"></DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding Minuten, UpdateSourceTrigger=PropertyChanged}" Header="Minuten"></DataGridTextColumn>
-
+                <DataGridTextColumn Binding="{Binding MinutenGesamt, UpdateSourceTrigger=PropertyChanged}" Header="Gesamte Minuten"></DataGridTextColumn>
 
 
             </DataGrid.Columns>
