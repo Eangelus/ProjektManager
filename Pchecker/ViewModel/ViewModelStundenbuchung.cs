@@ -185,7 +185,8 @@ namespace ProjektManager.ViewModel
         public void LoadAllMitarbeiter()
         {
             Mitarbeiter.Clear();
-            Mitarbeiter.Add(new Mitarbeiter(null, "Alle", "", "", ""));
+            ObservableCollection<DateTime> dates = new ObservableCollection<DateTime>();
+            Mitarbeiter.Add(new Mitarbeiter(null, "Alle", "", "", "",dates, 30 ));
             var mitarbeiter = DatabankService.loadAllMitarbeiter();
             foreach (var m in mitarbeiter)
             {

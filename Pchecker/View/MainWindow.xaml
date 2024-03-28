@@ -22,6 +22,11 @@
                     <usercontrol:StundenbuchungControl/>
                
             </TabItem>
+            <TabItem Header="Urlaub">
+
+                <usercontrol:HolyDayController/>
+
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

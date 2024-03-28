@@ -11,6 +11,7 @@ using System.IO;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Collections.ObjectModel;
 
 namespace ProjektManager.Logic
 {
@@ -191,9 +192,9 @@ namespace ProjektManager.Logic
         {
 
             if(String.IsNullOrEmpty(Name)) return null;
+            ObservableCollection<DateTime> dates = new ObservableCollection<DateTime>();
 
-
-            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "", "");
+            MitarbeiterDTO? mitarbeiterDTO = new MitarbeiterDTO(null, Name, "", "", "", dates, 30);
 
             var found = ErstellteMitarbeiter.Exists(p => p.Equals(Name));
             

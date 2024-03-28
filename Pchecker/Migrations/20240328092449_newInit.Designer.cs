@@ -12,8 +12,8 @@ using ProjektManager.DataBaseAPI;
 namespace ProjektManager.Migrations
 {
     [DbContext(typeof(ProjektDBContext))]
-    [Migration("20240319080623_NewIniti")]
-    partial class NewIniti
+    [Migration("20240328092449_newInit")]
+    partial class newInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace ProjektManager.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("Id"));
 
+                    b.Property<int>("AnzDerUrlaubsTage")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -42,6 +45,10 @@ namespace ProjektManager.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UrlaubsTage")
                         .IsRequired()
                         .HasColumnType("longtext");
 

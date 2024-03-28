@@ -1,6 +1,7 @@
 ﻿using ProjektManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.Contracts;
@@ -17,13 +18,15 @@ namespace ProjektManager.DTOs
             
         }
 
-        public MitarbeiterDTO(int? id, string name, string vorname, string email, string Inabteilung)
+        public MitarbeiterDTO(int? id, string name, string vorname, string email, string Inabteilung, ObservableCollection<DateTime>? urlaubsTage, int anzDerUrlaubsTage)
         {
             Id = id;
             Name = name;
             Vorname = vorname;
             Email = email;
             InAbteilung = Inabteilung;
+            UrlaubsTage = urlaubsTage;
+            AnzDerUrlaubsTage = anzDerUrlaubsTage;
         }
 
         [Key]
@@ -36,6 +39,9 @@ namespace ProjektManager.DTOs
         public string Email { get; set; } = String.Empty;
 
         public string InAbteilung { get; set; } = String.Empty;
+        public ObservableCollection<DateTime> UrlaubsTage { get; set; } = new ObservableCollection<DateTime>();
+
+        public int AnzDerUrlaubsTage { get; set; } = 30;
 
         public static MitarbeiterDTO? ToMitarbeiterDTO(Mitarbeiter? mitarbeiter) 
         {
@@ -43,7 +49,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email, mitarbeiter.InAbteilung);
+            return new MitarbeiterDTO(mitarbeiter.Id, mitarbeiter.Name, mitarbeiter.Vorname, mitarbeiter.Email, mitarbeiter.InAbteilung, mitarbeiter.UrlaubsTage, mitarbeiter.AnzDerUrlaubsTage);
         }
 
         public static Mitarbeiter? FromMitarbeiterDTO(MitarbeiterDTO mitarbeiterDTO)
@@ -52,7 +58,7 @@ namespace ProjektManager.DTOs
             {
                 return null;
             }
-            return new Mitarbeiter(mitarbeiterDTO.Id, mitarbeiterDTO.Name, mitarbeiterDTO.Vorname, mitarbeiterDTO.Email, mitarbeiterDTO.InAbteilung);
+            return new Mitarbeiter(mitarbeiterDTO.Id, mitarbeiterDTO.Name, mitarbeiterDTO.Vorname, mitarbeiterDTO.Email, mitarbeiterDTO.InAbteilung, mitarbeiterDTO.UrlaubsTage, mitarbeiterDTO.AnzDerUrlaubsTage);
 
         }
 
